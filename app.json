@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "synchrone",
+    "slug": "synchrone",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
