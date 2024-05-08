@@ -6,8 +6,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import MaskInput from "react-native-mask-input";
+
+import SearchIcon from "../../assets/icons/search.svg";
+import VisibilityIcon from "../../assets/icons/visibility.svg";
+import VisibilityOffIcon from "../../assets/icons/visibility_off.svg";
 
 import { InputProps } from "./types";
 import THEME from "../../global/styles/theme";
@@ -31,10 +34,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
         ]}
       >
         {searchable && (
-          <FontAwesome
-            name="search"
-            size={18}
-            color={editable ? THEME.colors.primary : THEME.colors.gray}
+          <SearchIcon
+            fill={editable ? THEME.colors.primary : THEME.colors.gray}
           />
         )}
 
@@ -60,12 +61,15 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
             activeOpacity={0.5}
             onPress={() => setPasswordHidden(!passwordHidden)}
           >
-            <MaterialIcons
-              style={styles.eyeIcon}
-              name={passwordHidden ? "visibility-off" : "visibility"}
-              size={24}
-              color={editable ? THEME.colors.secondary : THEME.colors.gray}
-            />
+            {passwordHidden ? (
+              <VisibilityIcon
+                fill={editable ? THEME.colors.secondary : THEME.colors.gray}
+              />
+            ) : (
+              <VisibilityOffIcon
+                fill={editable ? THEME.colors.secondary : THEME.colors.gray}
+              />
+            )}
           </TouchableOpacity>
         )}
       </View>
