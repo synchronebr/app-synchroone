@@ -16,14 +16,29 @@ import { InputProps } from "./types";
 import THEME from "../../global/styles/theme";
 
 export const Input = forwardRef<TextInput, InputProps>(function Input(
-  { editable = true, error, label, searchable, secureTextEntry, ...rest },
+  {
+    editable = true,
+    error,
+    errorTextColor,
+    label,
+    labelColor,
+    searchable,
+    secureTextEntry,
+    ...rest
+  },
   ref
 ) {
   const [passwordHidden, setPasswordHidden] = useState(secureTextEntry);
 
   return (
     <>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && (
+        <Text
+          style={[styles.label, { color: labelColor || THEME.colors.dark }]}
+        >
+          {label}
+        </Text>
+      )}
 
       <View
         style={[
@@ -73,14 +88,22 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
           </TouchableOpacity>
         )}
       </View>
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && (
+        <Text
+          style={[
+            styles.errorText,
+            { color: errorTextColor || THEME.colors.danger },
+          ]}
+        >
+          {error}
+        </Text>
+      )}
     </>
   );
 });
 
 const styles = StyleSheet.create({
   label: {
-    color: THEME.colors.dark,
     fontFamily: THEME.fonts.semiBold,
     fontSize: THEME.fontSize.normal,
     marginBottom: 6,
@@ -103,7 +126,6 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   errorText: {
-    color: THEME.colors.danger,
     fontFamily: THEME.fonts.medium,
     fontSize: THEME.fontSize.smallest,
     marginLeft: 8,

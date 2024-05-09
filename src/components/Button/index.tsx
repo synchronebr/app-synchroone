@@ -1,12 +1,20 @@
 import React from "react";
+import { ActivityIndicator } from "react-native";
+import { useTheme } from "styled-components/native";
 
 import { ButtonProps } from "./types";
 import { Container, Title } from "./styles";
 
-export function Button({ title, ...rest }: ButtonProps) {
+export function Button({ loading, title, ...rest }: ButtonProps) {
+  const THEME = useTheme();
+
   return (
     <Container {...rest}>
-      <Title>{title}</Title>
+      {loading ? (
+        <ActivityIndicator color={THEME.colors.light} />
+      ) : (
+        <Title>{title}</Title>
+      )}
     </Container>
   );
 }

@@ -1,5 +1,6 @@
 import React from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { StatusBar } from "react-native";
+import * as NavigationBar from "expo-navigation-bar";
 import {
   useFonts,
   Montserrat_400Regular,
@@ -9,8 +10,11 @@ import {
 import { ThemeProvider } from "styled-components/native";
 
 import THEME from "./src/global/styles/theme";
+import { Login } from "./src/screens/Login";
 
 export default function App() {
+  NavigationBar.setBackgroundColorAsync(THEME.colors.primary);
+
   let [fontsLoaded, fontError] = useFonts({
     Montserrat_400Regular,
     Montserrat_500Medium,
@@ -23,24 +27,8 @@ export default function App() {
 
   return (
     <ThemeProvider theme={THEME}>
-      <View style={styles.container}>
-        <Text style={styles.text}>Synchrone</Text>
-        <StatusBar backgroundColor={THEME.colors.primary} barStyle="default" />
-      </View>
+      <StatusBar backgroundColor={THEME.colors.primary} barStyle="default" />
+      <Login />
     </ThemeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    backgroundColor: THEME.colors.primary,
-    flex: 1,
-    justifyContent: "center",
-  },
-  text: {
-    color: THEME.colors.light,
-    fontFamily: THEME.fonts.semiBold,
-    fontSize: THEME.fontSize.largest,
-  },
-});
