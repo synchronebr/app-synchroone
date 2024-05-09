@@ -10,7 +10,8 @@ import {
 import { ThemeProvider } from "styled-components/native";
 
 import THEME from "./src/global/styles/theme";
-import { Login } from "./src/screens/Login";
+
+import { Splash } from "./src/screens/Splash";
 
 export default function App() {
   NavigationBar.setBackgroundColorAsync(THEME.colors.primary);
@@ -28,7 +29,7 @@ export default function App() {
   return (
     <ThemeProvider theme={THEME}>
       <StatusBar backgroundColor={THEME.colors.primary} barStyle="default" />
-      <Login />
+      <Splash />
     </ThemeProvider>
   );
 }
