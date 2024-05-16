@@ -10,10 +10,11 @@ import MaskInput from "react-native-mask-input";
 
 import SearchIcon from "../../assets/icons/search.svg";
 import VisibilityIcon from "../../assets/icons/visibility.svg";
-import VisibilityOffIcon from "../../assets/icons/visibility_off.svg";
+import VisibilityOffIcon from "../../assets/icons/visibility-off.svg";
+
+import THEME from "../../global/styles/theme";
 
 import { InputProps } from "./types";
-import THEME from "../../global/styles/theme";
 
 export const Input = forwardRef<TextInput, InputProps>(function Input(
   {
