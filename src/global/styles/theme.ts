@@ -17,6 +17,7 @@ export default {
     medium: "Montserrat_400Regular",
     regular: "Roboto_700Bold",
     semiBold: "Montserrat_600SemiBold",
+    bold: "Montserrat_700Bold",
   },
   fontSize: {
     smallest: RFValue(10),
