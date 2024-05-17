@@ -1,9 +1,12 @@
 import React from "react";
 import { useTheme } from "styled-components/native";
+import { RFValue } from "react-native-responsive-fontsize";
 
 import BellRingingIcon from "../../assets/icons/bell-ringing.svg";
 
-import { Container } from "./styles";
+import { TotalNotifications } from "../TotalNotifications";
+
+import { Container, BellRingingIconContainer } from "./styles";
 
 export function TabBarCenterButton() {
   const THEME = useTheme();
@@ -17,7 +20,11 @@ export function TabBarCenterButton() {
         shadowOpacity: 0.2,
       }}
     >
-      <BellRingingIcon />
+      <BellRingingIconContainer>
+        <BellRingingIcon height={RFValue(20)} width={RFValue(20)} />
+
+        <TotalNotifications total={1} />
+      </BellRingingIconContainer>
     </Container>
   );
 }

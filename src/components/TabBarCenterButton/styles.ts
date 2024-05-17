@@ -11,3 +11,7 @@ export const Container = styled.View`
   padding: 10px;
   width: ${RFValue(56)}px;
 `;
+
+export const BellRingingIconContainer = styled.View`
+  padding: ${RFValue(7)}px ${RFValue(7)}px 0 0;
+`;
