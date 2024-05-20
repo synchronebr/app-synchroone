@@ -29,10 +29,10 @@ export function DashboardTab() {
       screenOptions={{
         headerShown: true,
         headerStyle: {
+          backgroundColor: THEME.colors.light,
           elevation: null,
         },
         headerTintColor: THEME.colors.primary,
-
         headerTitleStyle: {
           fontFamily: THEME.fonts.semiBold,
           fontSize: THEME.fontSize.larger,

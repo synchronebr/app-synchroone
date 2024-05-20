@@ -1,12 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 
 import { Auth } from "./auth";
-import { DashboardTab } from "./dashboard-tab";
+import { Dashboard } from "./dashboard";
 
 export function Routes() {
   return (
     <NavigationContainer>
-      <DashboardTab />
+      <Dashboard />
     </NavigationContainer>
   );
 }

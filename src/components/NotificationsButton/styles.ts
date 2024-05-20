@@ -9,7 +9,7 @@ export const Container = styled.TouchableOpacity.attrs({
   border-radius: 16px;
   flex: 1;
   flex-direction: row;
-  gap: 10px;
+  gap: 4px;
   padding: 16px;
 `;
 
@@ -18,6 +18,7 @@ export const IconContainer = styled.TouchableOpacity`
 `;
 
 export const Content = styled.View`
+  flex: 1;
   gap: 2px;
 `;
 
