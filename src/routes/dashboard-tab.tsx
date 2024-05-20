@@ -69,7 +69,8 @@ export function DashboardTab() {
         component={Assets}
         name="Assets"
         options={{
-          headerShown: false,
+          headerTitle: "Ativos Monitorados",
+          headerTitleAlign: "center",
           tabBarIcon: ({ focused }) =>
             focused ? <WaterPumpIcon /> : <WaterPumpOutlineIcon />,
           title: "Ativos",

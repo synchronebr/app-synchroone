@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.colors.light,
     borderRadius: 6,
     borderWidth: 0.5,
+    flex: 1,
     flexDirection: "row",
     paddingHorizontal: 12,
     paddingVertical: 8,

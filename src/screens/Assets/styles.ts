@@ -1,14 +1,23 @@
+import { FlatList } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  align-items: center;
   background-color: ${({ theme }) => theme.colors.light};
   flex: 1;
-  justify-content: center;
 `;
 
-export const Text = styled.Text`
-  color: ${({ theme }) => theme.colors.dark};
-  font-family: ${({ theme }) => theme.fonts.semiBold};
-  font-size: ${({ theme }) => theme.fontSize.larger}px;
+export const Header = styled.View`
+  align-items: center;
+  flex-direction: row;
+  gap: 18px;
+  margin-bottom: 16px;
+  padding: 0 20px;
 `;
+
+export const List = styled.FlatList.attrs({
+  contentContainerStyle: {
+    gap: 8,
+    paddingBottom: 24,
+    paddingHorizontal: 20,
+  },
+})`` as typeof FlatList;
