@@ -6,6 +6,7 @@ import ArrowBackIcon from "../assets/icons/arrow-back.svg";
 
 import { DashboardTab } from "./dashboard-tab";
 import { NotificationDetails } from "../screens/NotificationDetails";
+import { Manuals } from "../screens/Manuals";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -46,6 +47,13 @@ export function Dashboard() {
         name="NotificationDetails"
         options={{
           title: "Detalhes notificação",
+        }}
+      />
+      <Screen
+        component={Manuals}
+        name="Manuals"
+        options={{
+          title: "Acessar Manuais",
         }}
       />
     </Navigator>
