@@ -99,7 +99,8 @@ export function DashboardTab() {
         component={More}
         name="More"
         options={{
-          headerShown: false,
+          headerTitle: "Configurações",
+          headerTitleAlign: "center",
           tabBarIcon: ({ focused }) =>
             focused ? <SettingsBoldIcon /> : <SettingsLinearIcon />,
           title: "Mais",
