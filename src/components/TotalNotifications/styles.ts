@@ -7,7 +7,8 @@ export const Container = styled.View`
   height: 20px;
   justify-content: center;
   position: absolute;
-  right: 0;
+  right: -4px;
+  top: -6px;
   width: 20px;
 `;
 

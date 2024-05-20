@@ -1,5 +1,4 @@
 import styled from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 export const Container = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
@@ -14,7 +13,7 @@ export const Container = styled.TouchableOpacity.attrs({
 `;
 
 export const IconContainer = styled.TouchableOpacity`
-  padding: ${RFValue(4)}px ${RFValue(4)}px 0 0;
+  margin-right: 6px;
 `;
 
 export const Content = styled.View`

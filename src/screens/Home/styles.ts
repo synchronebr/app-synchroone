@@ -22,7 +22,6 @@ export const Title = styled.Text`
 `;
 
 export const NotificationsIconContainer = styled.View`
-  padding: ${RFValue(6)}px ${RFValue(6)}px 0 0;
   position: absolute;
   right: 0;
 `;
