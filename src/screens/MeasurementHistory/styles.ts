@@ -5,6 +5,11 @@ export const Container = styled.View`
   flex: 1;
 `;
 
+export const WeekDayFilterContainer = styled.View`
+  margin-bottom: 8px;
+  padding: 0 20px;
+`;
+
 export const Scroll = styled.ScrollView.attrs({
   contentContainerStyle: {
     gap: 24,

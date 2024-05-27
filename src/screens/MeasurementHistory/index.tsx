@@ -1,12 +1,17 @@
 import React from "react";
 
+import { WeekDayFilter } from "../../components/WeekDayFilter";
 import { HistoryCard } from "../../components/HistoryCard";
 
-import { Container, Scroll } from "./styles";
+import { Container, WeekDayFilterContainer, Scroll } from "./styles";
 
 export function MeasurementHistory() {
   return (
     <Container>
+      <WeekDayFilterContainer>
+        <WeekDayFilter />
+      </WeekDayFilterContainer>
+
       <Scroll>
         <HistoryCard isLastCard type="danger" />
         <HistoryCard type="warning" />
