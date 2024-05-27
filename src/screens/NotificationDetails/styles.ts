@@ -3,8 +3,13 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.colors.light};
   flex: 1;
-  padding: 0 20px;
 `;
+
+export const Scroll = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    paddingHorizontal: 20,
+  },
+})``;
 
 export const Header = styled.View`
   align-items: center;
@@ -38,4 +43,25 @@ export const Divider = styled.View`
   border-color: ${({ theme }) => theme.colors.gray_dark};
   border-width: 0.5px;
   margin: 16px 0;
+`;
+
+export const HistoryCards = styled.View`
+  gap: 16px;
+  margin: 16px 0;
+`;
+
+export const SeeMoreButton = styled.TouchableOpacity.attrs({
+  activeOpacity: 1,
+})``;
+
+export const SeeMore = styled.Text`
+  color: ${({ theme }) => theme.colors.secondary};
+  font-family: ${({ theme }) => theme.fonts.medium};
+  font-size: ${({ theme }) => theme.fontSize.smaller}px;
+  line-height: 18px;
+  text-align: right;
+`;
+
+export const ShareButtonContainer = styled.View`
+  margin-bottom: 32px;
 `;

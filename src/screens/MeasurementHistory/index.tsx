@@ -8,7 +8,7 @@ export function MeasurementHistory() {
   return (
     <Container>
       <Scroll>
-        <HistoryCard type="danger" />
+        <HistoryCard isLastCard type="danger" />
         <HistoryCard type="warning" />
         <HistoryCard type="warning" />
         <HistoryCard type="success" />
