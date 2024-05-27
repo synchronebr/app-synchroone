@@ -11,6 +11,7 @@ export const Container = styled.View`
 
 export const Details = styled.View`
   flex: 1;
+  gap: 8px;
 `;
 
 export const Title = styled.Text``;
@@ -29,3 +30,5 @@ export const IconContainer = styled.View`
   justify-content: center;
   width: ${RFValue(40)}px;
 `;
+
+export const Icon = styled.View``;

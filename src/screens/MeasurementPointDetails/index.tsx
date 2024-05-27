@@ -3,22 +3,21 @@ import { Entypo } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 
-import { AssetDetailsCard } from "../../components/AssetDetailsCard";
-import { MeasurementPointCard } from "../../components/MeasurementPointCard";
+import { LastMeasurementCard } from "../../components/LastMeasurementCard";
 
 import {
   Container,
   Header,
   Image,
   Asset,
+  Detail,
   Title,
   Subtitle,
   Content,
   Text,
-  MeasurementPoints,
 } from "./styles";
 
-export function AssetDetails() {
+export function MeasurementPointDetails() {
   const navigation = useNavigation();
 
   const THEME = useTheme();
@@ -44,25 +43,27 @@ export function AssetDetails() {
         />
 
         <Asset>
-          <Title>Motor Bomba Calderaria 2</Title>
-          <Subtitle>MEBC2</Subtitle>
+          <Detail>
+            <Title>13102</Title>
+            <Subtitle>Medições</Subtitle>
+          </Detail>
+
+          <Detail>
+            <Title>60 min</Title>
+            <Subtitle>Janela</Subtitle>
+          </Detail>
+
+          <Detail>
+            <Title>33:02 min</Title>
+            <Subtitle>Próxima</Subtitle>
+          </Detail>
         </Asset>
       </Header>
 
       <Content>
-        <Text>Detalhes do Ativo</Text>
+        <Text>Última medição</Text>
 
-        <AssetDetailsCard />
-
-        <Text>Pontos de medição</Text>
-
-        <MeasurementPoints>
-          <MeasurementPointCard />
-          <MeasurementPointCard />
-          <MeasurementPointCard />
-          <MeasurementPointCard />
-          <MeasurementPointCard />
-        </MeasurementPoints>
+        <LastMeasurementCard />
       </Content>
     </Container>
   );

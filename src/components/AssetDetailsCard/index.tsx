@@ -1,9 +1,11 @@
 import React from "react";
 import { RFValue } from "react-native-responsive-fontsize";
 
+import { TotalNotifications } from "../TotalNotifications";
+
 import BellRingingIcon from "../../assets/icons/bell-ringing.svg";
 
-import { Container, Details, Title, Text, IconContainer } from "./styles";
+import { Container, Details, Title, Text, IconContainer, Icon } from "./styles";
 
 export function AssetDetailsCard() {
   return (
@@ -15,7 +17,10 @@ export function AssetDetailsCard() {
       </Details>
 
       <IconContainer>
-        <BellRingingIcon height={RFValue(18)} width={RFValue(18)} />
+        <Icon>
+          <BellRingingIcon height={RFValue(18)} width={RFValue(18)} />
+          <TotalNotifications total={1} />
+        </Icon>
       </IconContainer>
     </Container>
   );

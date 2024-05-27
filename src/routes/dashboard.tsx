@@ -6,6 +6,7 @@ import ArrowBackIcon from "../assets/icons/arrow-back.svg";
 
 import { DashboardTab } from "./dashboard-tab";
 import { AssetDetails } from "../screens/AssetDetails";
+import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { NotificationDetails } from "../screens/NotificationDetails";
 import { Manuals } from "../screens/Manuals";
 
@@ -46,6 +47,13 @@ export function Dashboard() {
       <Screen
         component={AssetDetails}
         name="AssetDetails"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={MeasurementPointDetails}
+        name="MeasurementPointDetails"
         options={{
           headerShown: false,
         }}

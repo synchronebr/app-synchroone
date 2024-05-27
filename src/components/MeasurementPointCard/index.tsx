@@ -26,7 +26,10 @@ export function MeasurementPointCard({ ...rest }: MeasurementPointCardProps) {
   const THEME = useTheme();
 
   return (
-    <Container {...rest}>
+    <Container
+      onPress={() => navigation.navigate("MeasurementPointDetails")}
+      {...rest}
+    >
       <Image
         resizeMode="cover"
         source={require("../../assets/images/asset-image.png")}
