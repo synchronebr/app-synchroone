@@ -5,6 +5,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import ArrowBackIcon from "../assets/icons/arrow-back.svg";
 
 import { DashboardTab } from "./dashboard-tab";
+import { AssetDetails } from "../screens/AssetDetails";
 import { NotificationDetails } from "../screens/NotificationDetails";
 import { Manuals } from "../screens/Manuals";
 
@@ -38,6 +39,13 @@ export function Dashboard() {
       <Screen
         component={DashboardTab}
         name="DashboardTab"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={AssetDetails}
+        name="AssetDetails"
         options={{
           headerShown: false,
         }}

@@ -1,10 +1,11 @@
 import React from "react";
 import { useTheme } from "styled-components/native";
+import { useNavigation } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
 
-import { AssetCardProps } from "./types";
+import { AssetCardNavigationProps, AssetCardProps } from "./types";
 import {
   Container,
   Image,
@@ -22,10 +23,12 @@ import {
 } from "./styles";
 
 export function AssetCard({ ...rest }: AssetCardProps) {
+  const navigation = useNavigation<AssetCardNavigationProps>();
+
   const THEME = useTheme();
 
   return (
-    <Container {...rest}>
+    <Container onPress={() => navigation.navigate("AssetDetails")} {...rest}>
       <Image source={require("../../assets/images/asset-image.png")} />
       <Content>
         <Title>Motor Bomba Calderaria 2</Title>
