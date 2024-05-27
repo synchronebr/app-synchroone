@@ -1,10 +1,12 @@
 import React from "react";
 import { Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 import ThermometerIcon from "../../assets/icons/thermometer.svg";
 
+import { LastMeasurementCardNavigationProps } from "./types";
 import {
   Container,
   Details,
@@ -16,10 +18,12 @@ import {
 } from "./styles";
 
 export function LastMeasurementCard() {
+  const navigation = useNavigation<LastMeasurementCardNavigationProps>();
+
   const THEME = useTheme();
 
   return (
-    <Container>
+    <Container onPress={() => navigation.navigate("MeasurementHistory")}>
       <Details>
         <MeasurementHistory>
           <MeasurementHistoryText>Histórico de medições</MeasurementHistoryText>

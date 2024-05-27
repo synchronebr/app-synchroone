@@ -7,6 +7,7 @@ import ArrowBackIcon from "../assets/icons/arrow-back.svg";
 import { DashboardTab } from "./dashboard-tab";
 import { AssetDetails } from "../screens/AssetDetails";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
+import { MeasurementHistory } from "../screens/MeasurementHistory";
 import { NotificationDetails } from "../screens/NotificationDetails";
 import { Manuals } from "../screens/Manuals";
 
@@ -56,6 +57,13 @@ export function Dashboard() {
         name="MeasurementPointDetails"
         options={{
           headerShown: false,
+        }}
+      />
+      <Screen
+        component={MeasurementHistory}
+        name="MeasurementHistory"
+        options={{
+          title: "Histórico de medições",
         }}
       />
       <Screen
