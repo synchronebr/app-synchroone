@@ -11,9 +11,15 @@ export function AssetDetailsCard() {
   return (
     <Container>
       <Details>
-        <Text>Tipo: Tipo</Text>
-        <Text>Marca: Weg Trifásico de 4 polos</Text>
-        <Text>Modelo: W22 IR3 Premium</Text>
+        <Text>
+          <Title>Tipo: </Title>Tipo
+        </Text>
+        <Text>
+          <Title>Marca: </Title>Weg Trifásico de 4 polos
+        </Text>
+        <Text>
+          <Title>Modelo: </Title>W22 IR3 Premium
+        </Text>
       </Details>
 
       <IconContainer>

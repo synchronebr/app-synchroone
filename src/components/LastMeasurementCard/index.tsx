@@ -30,9 +30,15 @@ export function LastMeasurementCard() {
           <Entypo color={THEME.colors.secondary} name="chevron-right" />
         </MeasurementHistory>
 
-        <Text>Velocidade: 1.79 m/s</Text>
-        <Text>Aceleração: 2.32 m/s</Text>
-        <Text>Status: Seguro</Text>
+        <Text>
+          <Title>Velocidade: </Title>1.79 m/s
+        </Text>
+        <Text>
+          <Title>Aceleração: </Title>2.32 m/s
+        </Text>
+        <Text>
+          <Title>Status: </Title>Seguro
+        </Text>
 
         <Temperature>
           <ThermometerIcon height={RFValue(24)} width={RFValue(24)} />

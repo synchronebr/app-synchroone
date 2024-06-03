@@ -14,7 +14,11 @@ export const Details = styled.View`
   gap: 8px;
 `;
 
-export const Title = styled.Text``;
+export const Title = styled.Text`
+  color: ${({ theme }) => theme.colors.primary};
+  font-family: ${({ theme }) => theme.fonts.semiBold};
+  font-size: ${({ theme }) => theme.fontSize.normal}px;
+`;
 
 export const Text = styled.Text`
   color: ${({ theme }) => theme.colors.dark};
