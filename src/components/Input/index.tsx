@@ -1,5 +1,6 @@
 import React, { forwardRef, useState } from "react";
 import {
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: Platform.OS === "android" ? 8 : 12,
   },
   field: {
     flex: 1,

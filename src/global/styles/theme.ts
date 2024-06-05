@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 export default {
@@ -19,10 +20,10 @@ export default {
     bold: "Montserrat_700Bold",
   },
   fontSize: {
-    smallest: RFValue(10),
-    smaller: RFValue(12),
-    normal: RFValue(14),
-    larger: RFValue(16),
-    largest: RFValue(18),
+    smallest: RFValue(Platform.OS === "android" ? 10 : 8),
+    smaller: RFValue(Platform.OS === "android" ? 12 : 10),
+    normal: RFValue(Platform.OS === "android" ? 14 : 11),
+    larger: RFValue(Platform.OS === "android" ? 16 : 13),
+    largest: RFValue(Platform.OS === "android" ? 18 : 16),
   },
 };

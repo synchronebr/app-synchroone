@@ -1,4 +1,5 @@
 import React from "react";
+import { Platform } from "react-native";
 import { useTheme } from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
@@ -9,6 +10,8 @@ import { Container } from "./styles";
 export function QRCodeButton() {
   const THEME = useTheme();
 
+  const heightAndWidth = Platform.OS === "android" ? 20 : 16;
+
   return (
     <Container
       style={{
@@ -18,7 +21,10 @@ export function QRCodeButton() {
         shadowOpacity: 0.2,
       }}
     >
-      <QRCodeScannerIcon height={RFValue(20)} width={RFValue(20)} />
+      <QRCodeScannerIcon
+        height={RFValue(heightAndWidth)}
+        width={RFValue(heightAndWidth)}
+      />
     </Container>
   );
 }

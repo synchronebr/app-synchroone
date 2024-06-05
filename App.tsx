@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
-import { StatusBar } from "react-native";
+import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import {
   useFonts,
@@ -16,7 +16,8 @@ import THEME from "./src/global/styles/theme";
 import { Routes } from "./src/routes";
 
 export default function App() {
-  NavigationBar.setBackgroundColorAsync(THEME.colors.primary);
+  if (Platform.OS === "android")
+    NavigationBar.setBackgroundColorAsync(THEME.colors.primary);
 
   let [fontsLoaded, fontError] = useFonts({
     Montserrat_400Regular,
@@ -31,8 +32,20 @@ export default function App() {
 
   return (
     <ThemeProvider theme={THEME}>
-      <StatusBar backgroundColor={THEME.colors.primary} barStyle="default" />
-      <Routes />
+      <StatusBar
+        backgroundColor={THEME.colors.primary}
+        barStyle="light-content"
+      />
+      <SafeAreaView style={styles.safeArea}>
+        <Routes />
+      </SafeAreaView>
     </ThemeProvider>
   );
 }
+
+export const styles = StyleSheet.create({
+  safeArea: {
+    backgroundColor: THEME.colors.primary,
+    flex: 1,
+  },
+});

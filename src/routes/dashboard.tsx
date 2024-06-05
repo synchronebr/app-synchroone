@@ -1,8 +1,7 @@
+import { Entypo } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
-
-import ArrowBackIcon from "../assets/icons/arrow-back.svg";
 
 import { DashboardTab } from "./dashboard-tab";
 import { AssetDetails } from "../screens/AssetDetails";
@@ -18,22 +17,20 @@ export function Dashboard() {
   return (
     <Navigator
       screenOptions={{
+        headerBackTitleVisible: false,
+        headerShadowVisible: false,
         headerShown: true,
         headerStyle: {
           backgroundColor: THEME.colors.light,
           elevation: null,
         },
         headerBackImage: () => (
-          <ArrowBackIcon
-            style={{ marginLeft: 8 }}
-            height={RFValue(16)}
-            width={RFValue(10)}
-          />
+          <Entypo color={THEME.colors.primary} name="chevron-left" size={28} />
         ),
         headerTintColor: THEME.colors.primary,
         headerTitleStyle: {
           fontFamily: THEME.fonts.semiBold,
-          fontSize: THEME.fontSize.larger,
+          fontSize: THEME.fontSize.normal,
           lineHeight: RFValue(24),
         },
       }}

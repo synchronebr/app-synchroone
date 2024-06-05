@@ -27,6 +27,7 @@ export function DashboardTab() {
   return (
     <Navigator
       screenOptions={{
+        headerShadowVisible: false,
         headerShown: true,
         headerStyle: {
           backgroundColor: THEME.colors.light,
@@ -35,7 +36,7 @@ export function DashboardTab() {
         headerTintColor: THEME.colors.primary,
         headerTitleStyle: {
           fontFamily: THEME.fonts.semiBold,
-          fontSize: THEME.fontSize.larger,
+          fontSize: THEME.fontSize.normal,
           lineHeight: RFValue(24),
           marginLeft: 8,
         },

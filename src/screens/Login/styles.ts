@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
@@ -15,7 +16,7 @@ export const Scroll = styled.ScrollView.attrs({
 export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.light};
   font-family: ${({ theme }) => theme.fonts.semiBold};
-  font-size: ${RFValue(48)}px;
+  font-size: ${RFValue(Platform.OS === "android" ? 48 : 36)}px;
   margin: ${RFValue(96)}px 0;
   text-align: center;
 `;
