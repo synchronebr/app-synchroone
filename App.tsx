@@ -9,6 +9,7 @@ import {
   Montserrat_600SemiBold,
   Montserrat_700Bold,
 } from "@expo-google-fonts/montserrat";
+import { ToastProvider } from "react-native-toast-notifications";
 import { ThemeProvider } from "styled-components/native";
 
 import THEME from "./src/global/styles/theme";
@@ -32,13 +33,24 @@ export default function App() {
 
   return (
     <ThemeProvider theme={THEME}>
-      <StatusBar
-        backgroundColor={THEME.colors.primary}
-        barStyle="light-content"
-      />
-      <SafeAreaView style={styles.safeArea}>
-        <Routes />
-      </SafeAreaView>
+      <ToastProvider
+        animationDuration={100}
+        duration={3500}
+        placement="top"
+        textStyle={{
+          fontFamily: THEME.fonts.medium,
+          fontSize: THEME.fontSize.smaller,
+          textAlign: "center",
+        }}
+      >
+        <StatusBar
+          backgroundColor={THEME.colors.primary}
+          barStyle="light-content"
+        />
+        <SafeAreaView style={styles.safeArea}>
+          <Routes />
+        </SafeAreaView>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

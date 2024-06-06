@@ -1,18 +1,36 @@
 import React from "react";
+import { Linking } from "react-native";
 import { useTheme } from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
+import { Toast } from "react-native-toast-notifications";
 
 import WhatsAppIcon from "../../assets/icons/whatsapp.svg";
 import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
 
-import { WhatsAppButtonProps } from "./types";
 import { Container, Content, Title, Subtitle } from "./styles";
 
-export function WhatsAppButton({ ...rest }: WhatsAppButtonProps) {
+export function WhatsAppButton() {
   const THEME = useTheme();
 
+  async function handleOpenWhatsApp() {
+    const phoneNumber = "+5547992123443";
+    const url = `whatsapp://send?phone=${phoneNumber}`;
+
+    try {
+      const supported = await Linking.canOpenURL(url);
+
+      if (supported) {
+        return Linking.openURL(url);
+      } else {
+        Toast.show("O WhatsApp não está instalado no teu dispositivo.");
+      }
+    } catch (error) {
+      Toast.show("Erro ao abrir o WhatsApp.");
+    }
+  }
+
   return (
-    <Container {...rest}>
+    <Container onPress={handleOpenWhatsApp}>
       <WhatsAppIcon height={RFValue(28)} width={RFValue(28)} />
 
       <Content>
