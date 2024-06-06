@@ -8,7 +8,10 @@ export const Container = styled.TouchableOpacity.attrs({
   border-color: ${({ theme }) => theme.colors.gray};
   flex-direction: row;
   gap: 16px;
-  padding: 0 4px 16px 4px;
+  padding: 8px 4px 16px 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Title = styled.Text`

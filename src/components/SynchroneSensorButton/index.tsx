@@ -24,7 +24,7 @@ export function SynchroneSensorButton({
       <Content>
         <Title isActive={isActive}>
           Sensor{"\n"}
-          Synchrone
+          Synchroone
         </Title>
 
         <Subtitle isActive={isActive}>

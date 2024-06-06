@@ -51,7 +51,7 @@ export function Login() {
   return (
     <Container>
       <Scroll>
-        <Title>Synchrone</Title>
+        <Title>Synchroone</Title>
 
         <Form>
           <InputWrapper>

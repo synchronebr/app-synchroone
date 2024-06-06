@@ -25,7 +25,7 @@ export function Home() {
   return (
     <Container>
       <Header>
-        <Title>Synchrone</Title>
+        <Title>Synchroone</Title>
 
         <NotificationsIconContainer>
           <NotificationsIcon height={RFValue(22)} width={RFValue(22)} />
@@ -35,7 +35,7 @@ export function Home() {
 
       <GreetingsContainer>
         <BlueLogoIcon width={RFValue(46)} height={RFValue(68)} />
-        <GreetingsMessage>Bem-vindo ao Synchrone!</GreetingsMessage>
+        <GreetingsMessage>Bem-vindo ao Synchroone!</GreetingsMessage>
       </GreetingsContainer>
 
       <Buttons>
