@@ -14,4 +14,5 @@ export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.light};
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.normal}px;
+  text-align: center;
 `;
