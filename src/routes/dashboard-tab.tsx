@@ -6,6 +6,7 @@ import HomeSolidIcon from "../assets/icons/home-solid.svg";
 import HomeOutlineIcon from "../assets/icons/home-outline.svg";
 import WaterPumpIcon from "../assets/icons/water-pump.svg";
 import WaterPumpOutlineIcon from "../assets/icons/water-pump-outline.svg";
+import TuneIcon from "../assets/icons/tune.svg";
 import ChartPieFilledIcon from "../assets/icons/chart-pie-filled.svg";
 import ChartPieIcon from "../assets/icons/chart-pie.svg";
 import SettingsBoldIcon from "../assets/icons/settings-bold.svg";
@@ -17,7 +18,7 @@ import { TabBarCenterButton } from "../components/TabBarCenterButton";
 import { Home } from "../screens/Home";
 import { Assets } from "../screens/Assets";
 import { Analyses } from "../screens/Analyses";
-import { Notifications } from "../screens/Notifications";
+import { AlertsHistory } from "../screens/AlertsHistory";
 import { More } from "../screens/More";
 
 export function DashboardTab() {
@@ -34,6 +35,7 @@ export function DashboardTab() {
           elevation: null,
         },
         headerTintColor: THEME.colors.primary,
+        headerTitleAlign: "center",
         headerTitleStyle: {
           fontFamily: THEME.fonts.semiBold,
           fontSize: THEME.fontSize.normal,
@@ -70,21 +72,29 @@ export function DashboardTab() {
         component={Assets}
         name="Assets"
         options={{
+          headerRight: () => <QRCodeButton />,
           headerTitle: "Ativos Monitorados",
-          headerTitleAlign: "center",
           tabBarIcon: ({ focused }) =>
             focused ? <WaterPumpIcon /> : <WaterPumpOutlineIcon />,
           title: "Ativos",
         }}
       />
       <Screen
-        component={Notifications}
-        name="Notifications"
+        component={AlertsHistory}
+        name="AlertsHistory"
         options={{
-          headerRight: () => <QRCodeButton />,
-          headerTitle: "Notificações",
+          headerRight: () => (
+            <TuneIcon
+              style={{ marginRight: 20 }}
+              height={RFValue(18)}
+              width={RFValue(18)}
+            />
+          ),
+          headerTitle: "Histórico de Alertas",
           tabBarLabel: "",
-          tabBarIcon: () => <TabBarCenterButton />,
+          tabBarIcon: ({ focused }) => (
+            <TabBarCenterButton isFocused={focused} />
+          ),
         }}
       />
       <Screen
@@ -102,7 +112,6 @@ export function DashboardTab() {
         name="More"
         options={{
           headerTitle: "Configurações",
-          headerTitleAlign: "center",
           tabBarIcon: ({ focused }) =>
             focused ? <SettingsBoldIcon /> : <SettingsLinearIcon />,
           title: "Mais",

@@ -3,12 +3,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
+import { QRCodeButton } from "../components/QRCodeButton";
+
 import { DashboardTab } from "./dashboard-tab";
 import { AssetDetails } from "../screens/AssetDetails";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
 import { NotificationDetails } from "../screens/NotificationDetails";
 import { Manuals } from "../screens/Manuals";
+import { Notifications } from "../screens/Notifications";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -40,6 +43,14 @@ export function Dashboard() {
         name="DashboardTab"
         options={{
           headerShown: false,
+        }}
+      />
+      <Screen
+        component={Notifications}
+        name="Notifications"
+        options={{
+          headerRight: () => <QRCodeButton />,
+          title: "Notificações",
         }}
       />
       <Screen

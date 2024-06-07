@@ -3,12 +3,14 @@ import { useTheme } from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 import BellRingingIcon from "../../assets/icons/bell-ringing.svg";
+import BellRingingFilledIcon from "../../assets/icons/bell-ringing-filled.svg";
 
 import { TotalNotifications } from "../TotalNotifications";
 
+import { TabBarCenterButtonProps } from "./types";
 import { Container, BellRingingIconContainer } from "./styles";
 
-export function TabBarCenterButton() {
+export function TabBarCenterButton({ isFocused }: TabBarCenterButtonProps) {
   const THEME = useTheme();
 
   return (
@@ -21,7 +23,11 @@ export function TabBarCenterButton() {
       }}
     >
       <BellRingingIconContainer>
-        <BellRingingIcon height={RFValue(20)} width={RFValue(20)} />
+        {isFocused ? (
+          <BellRingingFilledIcon height={RFValue(24)} width={RFValue(24)} />
+        ) : (
+          <BellRingingIcon height={RFValue(24)} width={RFValue(24)} />
+        )}
 
         <TotalNotifications total={1} />
       </BellRingingIconContainer>

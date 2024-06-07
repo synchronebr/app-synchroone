@@ -21,7 +21,9 @@ export const Title = styled.Text`
   text-align: center;
 `;
 
-export const NotificationsIconContainer = styled.View`
+export const NotificationsIconContainer = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})`
   position: absolute;
   right: 0;
 `;

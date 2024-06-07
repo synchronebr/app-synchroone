@@ -8,7 +8,7 @@ export const Container = styled.View`
 
 export const TuneIconContainer = styled.View`
   align-items: flex-end;
-  margin: 12px 0;
+  margin: 0 0 12px 0;
   padding: 0 20px;
 `;
 

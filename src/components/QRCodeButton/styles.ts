@@ -1,4 +1,3 @@
-import { Platform } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.TouchableOpacity.attrs({
@@ -9,5 +8,5 @@ export const Container = styled.TouchableOpacity.attrs({
   border-radius: 128px;
   justify-content: center;
   margin-right: 20px;
-  padding: ${Platform.OS === "android" ? 10 : 8}px;
+  padding: 8px;
 `;
