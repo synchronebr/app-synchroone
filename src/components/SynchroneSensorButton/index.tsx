@@ -1,34 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
+import { useCameraPermissions } from "expo-camera";
 import { useTheme } from "styled-components/native";
+import { useNavigation } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 import SensorsIcon from "../../assets/icons/sensors.svg";
 
-import { SynchroneSensorButtonProps } from "./types";
 import { Container, Content, Title, Subtitle } from "./styles";
 
-export function SynchroneSensorButton({
-  isActive,
-  ...rest
-}: SynchroneSensorButtonProps) {
+export function SynchroneSensorButton() {
+  const [isActive, setIsActive] = useState(false);
+  const [, requestPermission] = useCameraPermissions();
+
+  const navigation = useNavigation();
   const THEME = useTheme();
 
+  const iconSize = RFValue(32);
+
+  async function getCameraPermission() {
+    const { granted } = await requestPermission();
+
+    if (granted) navigation.navigate("QRCodeScanner" as never);
+  }
+
   return (
-    <Container isActive={isActive} {...rest}>
+    <Container onPress={getCameraPermission} isActive={isActive}>
       <SensorsIcon
-        height={RFValue(32)}
+        height={iconSize}
         fill={isActive ? THEME.colors.light : THEME.colors.gray_dark}
-        width={RFValue(32)}
+        width={iconSize}
       />
 
       <Content>
         <Title isActive={isActive}>
-          Sensor{"\n"}
-          Synchroone
+          Configurar{"\n"}
+          Sensor
         </Title>
 
         <Subtitle isActive={isActive}>
-          {isActive ? "Ativado" : "Aperte para ativar"}
+          {isActive ? "Ativado" : "Ler o QR Code"}
         </Subtitle>
       </Content>
     </Container>

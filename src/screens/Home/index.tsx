@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useNavigation } from "@react-navigation/native";
 
@@ -21,9 +21,9 @@ import {
 } from "./styles";
 
 export function Home() {
-  const [isSensorActive, setIsSensorActive] = useState(false);
-
   const navigation = useNavigation();
+
+  const notificationsIconSize = RFValue(22);
 
   return (
     <Container>
@@ -33,7 +33,10 @@ export function Home() {
         <NotificationsIconContainer
           onPress={() => navigation.navigate("Notifications" as never)}
         >
-          <NotificationsIcon height={RFValue(22)} width={RFValue(22)} />
+          <NotificationsIcon
+            height={notificationsIconSize}
+            width={notificationsIconSize}
+          />
           <TotalNotifications total={5} />
         </NotificationsIconContainer>
       </Header>
@@ -44,10 +47,7 @@ export function Home() {
       </GreetingsContainer>
 
       <Buttons>
-        <SynchroneSensorButton
-          isActive={isSensorActive}
-          onPress={() => setIsSensorActive(!isSensorActive)}
-        />
+        <SynchroneSensorButton />
         <NotificationsButton />
       </Buttons>
 

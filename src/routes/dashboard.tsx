@@ -6,6 +6,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { QRCodeButton } from "../components/QRCodeButton";
 
 import { DashboardTab } from "./dashboard-tab";
+import { QRCodeScanner } from "../screens/QRCodeScanner";
 import { AssetDetails } from "../screens/AssetDetails";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
@@ -43,6 +44,20 @@ export function Dashboard() {
         name="DashboardTab"
         options={{
           headerShown: false,
+        }}
+      />
+      <Screen
+        component={QRCodeScanner}
+        name="QRCodeScanner"
+        options={{
+          headerBackImage: () => (
+            <Entypo color={THEME.colors.light} name="chevron-left" size={28} />
+          ),
+          headerStyle: {
+            backgroundColor: THEME.colors.primary,
+          },
+          headerTintColor: THEME.colors.light,
+          headerTitle: "Leitor de QR Code",
         }}
       />
       <Screen
