@@ -18,6 +18,7 @@ import {
   GreetingsContainer,
   GreetingsMessage,
   Buttons,
+  BluetoothManagerButton,
 } from "./styles";
 
 export function Home() {
@@ -52,6 +53,12 @@ export function Home() {
       </Buttons>
 
       <WhatsAppButton />
+
+      <BluetoothManagerButton
+        onPress={() => navigation.navigate("BluetoothManager" as never)}
+      >
+        <Title>Gerenciador Bluetooth</Title>
+      </BluetoothManagerButton>
     </Container>
   );
 }

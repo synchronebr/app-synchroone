@@ -7,6 +7,7 @@ import { QRCodeButton } from "../components/QRCodeButton";
 
 import { DashboardTab } from "./dashboard-tab";
 import { QRCodeScanner } from "../screens/QRCodeScanner";
+import { BluetoothManager } from "../screens/BluetoothManager";
 import { AssetDetails } from "../screens/AssetDetails";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
@@ -58,6 +59,20 @@ export function Dashboard() {
           },
           headerTintColor: THEME.colors.light,
           headerTitle: "Leitor de QR Code",
+        }}
+      />
+      <Screen
+        component={BluetoothManager}
+        name="BluetoothManager"
+        options={{
+          headerBackImage: () => (
+            <Entypo color={THEME.colors.light} name="chevron-left" size={28} />
+          ),
+          headerStyle: {
+            backgroundColor: THEME.colors.primary,
+          },
+          headerTintColor: THEME.colors.light,
+          headerTitle: "Gerenciador Bluetooth",
         }}
       />
       <Screen
