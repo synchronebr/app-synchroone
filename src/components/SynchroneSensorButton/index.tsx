@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCameraPermissions } from "expo-camera";
+import { Camera } from "expo-camera";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
@@ -10,7 +10,7 @@ import { Container, Content, Title, Subtitle } from "./styles";
 
 export function SynchroneSensorButton() {
   const [isActive, setIsActive] = useState(false);
-  const [, requestPermission] = useCameraPermissions();
+  const [, requestPermission] = Camera.useCameraPermissions();
 
   const navigation = useNavigation();
   const THEME = useTheme();

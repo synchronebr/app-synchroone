@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { useCameraPermissions } from "expo-camera";
+import { Camera } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
@@ -11,7 +11,7 @@ import THEME from "../../global/styles/theme";
 import { Container } from "./styles";
 
 export function QRCodeButton() {
-  const [, requestPermission] = useCameraPermissions();
+  const [, requestPermission] = Camera.useCameraPermissions();
 
   const navigation = useNavigation();
 

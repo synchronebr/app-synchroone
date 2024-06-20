@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../../components/Button";
 
@@ -32,10 +33,15 @@ export function QRCodeScanner() {
   return (
     <Container>
       <Camera
-        barcodeScannerSettings={{
-          barcodeTypes: ["qr"],
+        style={{
+          alignItems: "center",
+          flex: 1,
+          justifyContent: "center",
         }}
-        onBarcodeScanned={({ data }) => setScannerData(data)}
+        barCodeScannerSettings={{
+          barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+        }}
+        onBarCodeScanned={({ data }) => setScannerData(data)}
       >
         <Scanner source={require("../../assets/images/qr-code-scanner.png")} />
       </Camera>

@@ -1,4 +1,4 @@
-import { CameraView } from "expo-camera";
+import { Camera as ExpoCamera } from "expo-camera";
 import styled from "styled-components/native";
 
 const imagesSizes = 300;
@@ -9,7 +9,7 @@ export const Container = styled.View`
   justify-content: center;
 `;
 
-export const Camera = styled(CameraView)`
+export const Camera = styled(ExpoCamera)`
   align-items: center;
   flex: 1;
   justify-content: center;
