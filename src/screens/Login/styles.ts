@@ -11,6 +11,7 @@ export const Scroll = styled.ScrollView.attrs({
   contentContainerStyle: {
     paddingHorizontal: RFValue(20),
   },
+  keyboardShouldPersistTaps: "always",
 })``;
 
 export const Title = styled.Text`

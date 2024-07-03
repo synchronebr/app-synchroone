@@ -1,11 +1,16 @@
 import React, { useRef, useState } from "react";
-import { TextInput } from "react-native";
+import { KeyboardAvoidingView, TextInput } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useTheme } from "styled-components/native";
 import * as yup from "yup";
+import { Toast } from "react-native-toast-notifications";
 
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
+
+import { useAuth } from "../../hooks/useAuth";
 
 import { FormData } from "./types";
 import {
@@ -16,14 +21,16 @@ import {
   InputWrapper,
   ButtonWrapper,
 } from "./styles";
-import { useTheme } from "styled-components/native";
 
 export function Login() {
   const [isLogginIn, setIsLoggingIn] = useState(false);
 
   const passwordInputRef = useRef<TextInput>();
+  const navigation = useNavigation();
 
   const THEME = useTheme();
+
+  const { login } = useAuth();
 
   const schema = yup.object().shape({
     email: yup
@@ -45,74 +52,89 @@ export function Login() {
   async function handleLogin(formData: FormData) {
     setIsLoggingIn(true);
 
-    setIsLoggingIn(false);
+    try {
+      await login(formData);
+
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Dashboard" as never }],
+      });
+    } catch (error) {
+      Toast.show(
+        "Ocorreu um erro ao fazer login. Por favor, verifique suas credenciais e tente novamente.",
+        { type: "danger" }
+      );
+      setIsLoggingIn(false);
+    }
   }
 
   return (
     <Container>
       <Scroll>
-        <Title>Synchroone</Title>
+        <KeyboardAvoidingView behavior="position">
+          <Title>Synchroone</Title>
 
-        <Form>
-          <InputWrapper>
-            <Controller
-              name="email"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <>
-                  <Input
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    editable={!isLogginIn}
-                    error={errors?.email?.message}
-                    errorTextColor={THEME.colors.light}
-                    label="E-mail"
-                    labelColor={THEME.colors.light}
-                    onChangeText={onChange}
-                    onSubmitEditing={() => passwordInputRef.current.focus()}
-                    placeholder="Insira seu e-mail"
-                    value={value}
-                  />
-                </>
-              )}
-            />
-          </InputWrapper>
+          <Form>
+            <InputWrapper>
+              <Controller
+                name="email"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <>
+                    <Input
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      editable={!isLogginIn}
+                      error={errors?.email?.message}
+                      errorTextColor={THEME.colors.light}
+                      label="E-mail"
+                      labelColor={THEME.colors.light}
+                      onChangeText={onChange}
+                      onSubmitEditing={() => passwordInputRef.current.focus()}
+                      placeholder="Insira seu e-mail"
+                      value={value}
+                    />
+                  </>
+                )}
+              />
+            </InputWrapper>
 
-          <InputWrapper>
-            <Controller
-              name="password"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <>
-                  <Input
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    editable={!isLogginIn}
-                    error={errors?.password?.message}
-                    errorTextColor={THEME.colors.light}
-                    label="Senha"
-                    labelColor={THEME.colors.light}
-                    onChangeText={onChange}
-                    onSubmitEditing={handleSubmit(handleLogin)}
-                    placeholder="Insira sua senha"
-                    secureTextEntry
-                    ref={passwordInputRef}
-                    value={value}
-                  />
-                </>
-              )}
-            />
-          </InputWrapper>
+            <InputWrapper>
+              <Controller
+                name="password"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <>
+                    <Input
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      editable={!isLogginIn}
+                      error={errors?.password?.message}
+                      errorTextColor={THEME.colors.light}
+                      label="Senha"
+                      labelColor={THEME.colors.light}
+                      onChangeText={onChange}
+                      onSubmitEditing={handleSubmit(handleLogin)}
+                      placeholder="Insira sua senha"
+                      secureTextEntry
+                      ref={passwordInputRef}
+                      value={value}
+                    />
+                  </>
+                )}
+              />
+            </InputWrapper>
 
-          <ButtonWrapper>
-            <Button
-              disabled={isLogginIn}
-              loading={isLogginIn}
-              onPress={handleSubmit(handleLogin)}
-              title="Entrar"
-            />
-          </ButtonWrapper>
-        </Form>
+            <ButtonWrapper>
+              <Button
+                disabled={isLogginIn}
+                loading={isLogginIn}
+                onPress={handleSubmit(handleLogin)}
+                title="Entrar"
+              />
+            </ButtonWrapper>
+          </Form>
+        </KeyboardAvoidingView>
       </Scroll>
     </Container>
   );

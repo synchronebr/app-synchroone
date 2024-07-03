@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { ActivityIndicator } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 
 import Logo from "../../assets/icons/logo.svg";
+
+import { useAuth } from "../../hooks/useAuth";
 
 import { Container, Content } from "./styles";
 
@@ -11,13 +14,29 @@ export function Splash() {
   const navigation = useNavigation();
   const THEME = useTheme();
 
-  useEffect(() => {
-    setTimeout(() => {
+  const { AUTH_TOKEN_STORAGE_KEY, USER_STORAGE_KEY, setUser } = useAuth();
+
+  async function getToken() {
+    const token = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
+    const userData = await AsyncStorage.getItem(USER_STORAGE_KEY);
+
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+
       navigation.reset({
         index: 0,
         routes: [{ name: "Dashboard" as never }],
       });
-    }, 1500);
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Auth" as never }],
+      });
+    }
+  }
+
+  useEffect(() => {
+    getToken();
   }, []);
 
   return (

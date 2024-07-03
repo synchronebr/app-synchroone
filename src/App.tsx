@@ -9,12 +9,14 @@ import {
   Montserrat_600SemiBold,
   Montserrat_700Bold,
 } from "@expo-google-fonts/montserrat";
-import { ToastProvider } from "react-native-toast-notifications";
 import { ThemeProvider } from "styled-components/native";
+import { ToastProvider } from "react-native-toast-notifications";
+import { RFValue } from "react-native-responsive-fontsize";
 
-import THEME from "./src/global/styles/theme";
+import THEME from "./global/styles/theme";
 
-import { Routes } from "./src/routes";
+import { AuthProvider } from "./hooks/useAuth";
+import { Routes } from "./routes";
 
 export default function App() {
   if (Platform.OS === "android")
@@ -43,13 +45,30 @@ export default function App() {
           textAlign: "center",
         }}
       >
-        <StatusBar
-          backgroundColor={THEME.colors.primary}
-          barStyle="light-content"
-        />
-        <SafeAreaView style={styles.safeArea}>
-          <Routes />
-        </SafeAreaView>
+        <ToastProvider
+          animationDuration={100}
+          animationType="zoom-in"
+          duration={3500}
+          placement="top"
+          textStyle={{
+            fontSize: RFValue(12),
+            fontFamily: THEME.fonts.medium,
+            textAlign: "center",
+          }}
+          dangerColor={THEME.colors.danger}
+          successColor={THEME.colors.success}
+          warningColor={THEME.colors.warning}
+        >
+          <AuthProvider>
+            <StatusBar
+              backgroundColor={THEME.colors.primary}
+              barStyle="light-content"
+            />
+            <SafeAreaView style={styles.safeArea}>
+              <Routes />
+            </SafeAreaView>
+          </AuthProvider>
+        </ToastProvider>
       </ToastProvider>
     </ThemeProvider>
   );
