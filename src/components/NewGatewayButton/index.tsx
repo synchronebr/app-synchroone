@@ -4,11 +4,11 @@ import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
-import SensorsIcon from "../../assets/icons/sensors.svg";
+import GatewayIcon from "../../assets/icons/wireless.svg";
 
 import { Container, Content, Title, Subtitle } from "./styles";
 
-export function SynchroneSensorButton() {
+export function NewGatewayButton() {
   const [, requestPermission] = Camera.useCameraPermissions();
 
   const navigation = useNavigation();
@@ -24,14 +24,14 @@ export function SynchroneSensorButton() {
 
   return (
     <Container onPress={getCameraPermission}>
-      <SensorsIcon
+      <GatewayIcon
         height={iconSize}
         fill={THEME.colors.secondary}
         width={iconSize}
       />
 
       <Content>
-        <Title>Novo Sensor</Title>
+        <Title>Novo Gateway</Title>
 
         <Subtitle>Aperte para ativar</Subtitle>
       </Content>

@@ -24,6 +24,7 @@ export const Title = styled.Text`
 `;
 
 export const Subtitle = styled.Text`
+  color: ${({ theme }) => theme.colors.gray_dark};
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.smallest}px;
   line-height: 15px;

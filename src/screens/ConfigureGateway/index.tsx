@@ -1,43 +1,34 @@
 import React, { useRef, useState } from "react";
 import { KeyboardAvoidingView, TextInput } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useTheme } from "styled-components/native";
 import * as yup from "yup";
-import { Toast } from "react-native-toast-notifications";
 
+import WifiIcon from "../../assets/icons/wifi.svg";
+import NetworkIcon from "../../assets/icons/network.svg";
+import NetworkCableIcon from "../../assets/icons/network-cable.svg";
+
+import { ConnectionTypeButton } from "../../components/ConnectionTypeButton";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
-
-import { useAuth } from "../../hooks/useAuth";
 
 import { FormData } from "./types";
 import {
   Scroll,
   Container,
-  Title,
-  Form,
+  ConnectionButtons,
+  Inputs,
   InputWrapper,
   ButtonWrapper,
 } from "./styles";
 
-export function Login() {
-  const [isLogginIn, setIsLoggingIn] = useState(false);
+export function ConfigureGateway() {
+  const [isActive, setIsActive] = useState<string | number>(null);
 
   const passwordInputRef = useRef<TextInput>();
-  const navigation = useNavigation();
-
-  const THEME = useTheme();
-
-  const { login } = useAuth();
 
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .trim()
-      .required("E-mail obrigatório.")
-      .email("E-mail inválido."),
+    ssid: yup.string().trim().required("SSID obrigatório."),
     password: yup.string().trim().required("Senha obrigatória."),
   });
 
@@ -49,49 +40,50 @@ export function Login() {
     resolver: yupResolver(schema),
   });
 
-  async function handleLogin(formData: FormData) {
-    setIsLoggingIn(true);
-
-    try {
-      await login(formData);
-
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Dashboard" as never }],
-      });
-    } catch (error) {
-      Toast.show(
-        "Ocorreu um erro ao fazer login. Por favor, verifique suas credenciais e tente novamente.",
-        { type: "danger" }
-      );
-      setIsLoggingIn(false);
-    }
+  function handleAdvance(formData: FormData) {
+    console.log(formData);
   }
 
   return (
     <Scroll>
       <Container>
         <KeyboardAvoidingView behavior="position">
-          <Title>Synchroone</Title>
+          <ConnectionButtons>
+            <ConnectionTypeButton
+              onPress={() => setIsActive(1)}
+              icon={WifiIcon}
+              title="WI-FI"
+              isActive={isActive === 1}
+            />
+            <ConnectionTypeButton
+              onPress={() => setIsActive(2)}
+              icon={NetworkIcon}
+              title="4G"
+              isActive={isActive === 2}
+            />
+            <ConnectionTypeButton
+              onPress={() => setIsActive(3)}
+              icon={NetworkCableIcon}
+              title="Cabo"
+              isActive={isActive === 3}
+            />
+          </ConnectionButtons>
 
-          <Form>
+          <Inputs>
             <InputWrapper>
               <Controller
-                name="email"
+                name="ssid"
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <>
                     <Input
                       autoCapitalize="none"
                       autoCorrect={false}
-                      editable={!isLogginIn}
-                      error={errors?.email?.message}
-                      errorTextColor={THEME.colors.light}
-                      label="E-mail"
-                      labelColor={THEME.colors.light}
+                      error={errors?.ssid?.message}
+                      label="SSID"
                       onChangeText={onChange}
                       onSubmitEditing={() => passwordInputRef.current.focus()}
-                      placeholder="Insira seu e-mail"
+                      placeholder="SSID"
                       value={value}
                     />
                   </>
@@ -101,39 +93,30 @@ export function Login() {
 
             <InputWrapper>
               <Controller
-                name="password"
+                name="ssid"
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <>
                     <Input
                       autoCapitalize="none"
                       autoCorrect={false}
-                      editable={!isLogginIn}
                       error={errors?.password?.message}
-                      errorTextColor={THEME.colors.light}
                       label="Senha"
-                      labelColor={THEME.colors.light}
                       onChangeText={onChange}
-                      onSubmitEditing={handleSubmit(handleLogin)}
-                      placeholder="Insira sua senha"
-                      secureTextEntry
+                      onSubmitEditing={handleSubmit(handleAdvance)}
                       ref={passwordInputRef}
+                      placeholder="Senha"
                       value={value}
                     />
                   </>
                 )}
               />
             </InputWrapper>
+          </Inputs>
 
-            <ButtonWrapper>
-              <Button
-                disabled={isLogginIn}
-                loading={isLogginIn}
-                onPress={handleSubmit(handleLogin)}
-                title="Entrar"
-              />
-            </ButtonWrapper>
-          </Form>
+          <ButtonWrapper>
+            <Button onPress={handleSubmit(handleAdvance)} title="Avançar" />
+          </ButtonWrapper>
         </KeyboardAvoidingView>
       </Container>
     </Scroll>

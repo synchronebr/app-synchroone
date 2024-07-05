@@ -7,7 +7,7 @@ import BlueLogoIcon from "../../assets/icons/blue-logo.svg";
 
 import { TotalNotifications } from "../../components/TotalNotifications";
 import { SynchroneSensorButton } from "../../components/SynchroneSensorButton";
-import { NotificationsButton } from "../../components/NotificationsButton";
+import { NewGatewayButton } from "../../components/NewGatewayButton";
 import { WhatsAppButton } from "../../components/WhatsAppButton";
 
 import {
@@ -18,7 +18,6 @@ import {
   GreetingsContainer,
   GreetingsMessage,
   Buttons,
-  BluetoothManagerButton,
 } from "./styles";
 
 export function Home() {
@@ -49,16 +48,10 @@ export function Home() {
 
       <Buttons>
         <SynchroneSensorButton />
-        <NotificationsButton />
+        <NewGatewayButton />
       </Buttons>
 
       <WhatsAppButton />
-
-      <BluetoothManagerButton
-        onPress={() => navigation.navigate("BluetoothManager" as never)}
-      >
-        <Title>Gerenciador Bluetooth</Title>
-      </BluetoothManagerButton>
     </Container>
   );
 }

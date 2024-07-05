@@ -51,9 +51,3 @@ export const Buttons = styled.View`
   gap: 8px;
   margin-bottom: 16px;
 `;
-
-export const BluetoothManagerButton = styled.TouchableOpacity.attrs({
-  activeOpacity: 0.7,
-})`
-  margin-top: 16px;
-`;

@@ -7,6 +7,7 @@ import { QRCodeButton } from "../components/QRCodeButton";
 
 import { DashboardTab } from "./dashboard-tab";
 import { QRCodeScanner } from "../screens/QRCodeScanner";
+import { ConfigureGateway } from "../screens/ConfigureGateway";
 import { BluetoothManager } from "../screens/BluetoothManager";
 import { AssetDetails } from "../screens/AssetDetails";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
@@ -59,6 +60,14 @@ export function Dashboard() {
           },
           headerTintColor: THEME.colors.light,
           headerTitle: "Leitor de QR Code",
+        }}
+      />
+      <Screen
+        component={ConfigureGateway}
+        name="ConfigureGateway"
+        options={{
+          headerTitle: "Configurar Gateway",
+          headerTitleAlign: "center",
         }}
       />
       <Screen
