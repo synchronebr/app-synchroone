@@ -23,7 +23,9 @@ export function NewGatewayButton() {
   }
 
   return (
-    <Container onPress={getCameraPermission}>
+    <Container
+      onPress={() => navigation.navigate("ConfigureParameters" as never)}
+    >
       <GatewayIcon
         height={iconSize}
         fill={THEME.colors.secondary}

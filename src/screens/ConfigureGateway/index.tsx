@@ -93,7 +93,7 @@ export function ConfigureGateway() {
 
             <InputWrapper>
               <Controller
-                name="ssid"
+                name="password"
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <>

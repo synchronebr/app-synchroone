@@ -7,6 +7,7 @@ import { QRCodeButton } from "../components/QRCodeButton";
 
 import { DashboardTab } from "./dashboard-tab";
 import { QRCodeScanner } from "../screens/QRCodeScanner";
+import { ConfigureParameters } from "../screens/ConfigureParameters";
 import { ConfigureGateway } from "../screens/ConfigureGateway";
 import { BluetoothManager } from "../screens/BluetoothManager";
 import { AssetDetails } from "../screens/AssetDetails";
@@ -60,6 +61,14 @@ export function Dashboard() {
           },
           headerTintColor: THEME.colors.light,
           headerTitle: "Leitor de QR Code",
+        }}
+      />
+      <Screen
+        component={ConfigureParameters}
+        name="ConfigureParameters"
+        options={{
+          headerTitle: "Configurar Parâmetros",
+          headerTitleAlign: "center",
         }}
       />
       <Screen
