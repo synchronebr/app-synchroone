@@ -1,4 +1,3 @@
-import { FlatList } from "react-native";
 import styled from "styled-components/native";
 
 export const BluetoothOffContainer = styled.View`
@@ -17,22 +16,11 @@ export const BluetoothOffMessage = styled.Text`
 `;
 
 export const Container = styled.View`
+  align-items: center;
   background-color: ${({ theme }) => theme.colors.light};
   flex: 1;
-`;
-
-export const List = styled.FlatList.attrs({
-  contentContainerStyle: {
-    gap: 8,
-    paddingHorizontal: 16,
-    marginTop: 16,
-  },
-})`` as typeof FlatList;
-
-export const Divider = styled.View`
-  height: 0.5px;
-  background-color: ${({ theme }) => theme.colors.gray_dark};
-  width: 100%;
+  justify-content: center;
+  padding: 0 32px;
 `;
 
 export const ConnectingInfo = styled.View`

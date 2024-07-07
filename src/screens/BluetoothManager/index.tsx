@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { ActivityIndicator, PermissionsAndroid, Platform } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 import { BleManager, Device } from "react-native-ble-plx";
 import { Toast } from "react-native-toast-notifications";
 
-import { BluetoothDevice } from "../../components/BluetoothDevice";
-
+import { BluetoothManagerRouteProps } from "./types";
 import {
   BluetoothOffContainer,
   BluetoothOffMessage,
   Container,
-  Divider,
-  List,
   ConnectingInfo,
   Text,
 } from "./styles";
@@ -20,50 +19,16 @@ export function BluetoothManager() {
   const [isBluetoothOn, setIsBluetoothOn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [manager] = useState(new BleManager());
-  const [devices, setDevices] = useState<Device[]>([]);
   const [connecting, setConnecting] = useState(false);
   const [connectedDevice, setConnectedDevice] = useState(null);
 
+  const route = useRoute();
   const THEME = useTheme();
 
-  async function scanDevices() {
-    try {
-      setIsLoading(true);
-      setDevices([]);
-      setConnectedDevice(null);
-
-      manager.startDeviceScan(null, null, (error, device) => {
-        if (error) {
-          Toast.show(
-            "Erro ao escanear dispositivos Bluetooth. Verifique e tente novamente."
-          );
-          setIsLoading(false);
-          return;
-        }
-
-        setDevices((prevDevices) => {
-          if (!prevDevices.some((d) => d.id === device.id)) {
-            return [...prevDevices, device];
-          }
-          return prevDevices;
-        });
-      });
-
-      setTimeout(() => {
-        manager.stopDeviceScan();
-        setIsLoading(false);
-      }, 5000);
-    } catch (error) {
-      Toast.show(
-        "Erro ao escanear dispositivos Bluetooth. Verifique e tente novamente."
-      );
-      setIsLoading(false);
-    }
-  }
+  const params: BluetoothManagerRouteProps =
+    route.params as BluetoothManagerRouteProps;
 
   async function connectDevice(device: Device) {
-    if (device.id === connectedDevice?.id) return;
-
     setConnecting(true);
 
     try {
@@ -76,6 +41,38 @@ export function BluetoothManager() {
       );
     } finally {
       setConnecting(false);
+    }
+  }
+
+  async function scanDevices() {
+    try {
+      setIsLoading(true);
+      setConnectedDevice(null);
+
+      manager.startDeviceScan(null, null, (error, device) => {
+        if (error) {
+          Toast.show(
+            "Erro ao escanear dispositivos Bluetooth. Verifique e tente novamente."
+          );
+          setIsLoading(false);
+          return;
+        }
+
+        if (device.name === params.bluetoothDeviceName) {
+          manager.stopDeviceScan();
+          connectDevice(device);
+        }
+      });
+
+      setTimeout(() => {
+        manager.stopDeviceScan();
+        setIsLoading(false);
+      }, 5000);
+    } catch (error) {
+      Toast.show(
+        "Erro ao escanear dispositivos Bluetooth. Verifique e tente novamente."
+      );
+      setIsLoading(false);
     }
   }
 
@@ -128,25 +125,39 @@ export function BluetoothManager() {
 
   return (
     <Container>
-      <List
-        data={devices}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <Divider />}
-        renderItem={({ item }) => (
-          <BluetoothDevice
-            disabled={connecting}
-            onPress={() => connectDevice(item)}
-            isConnected={connectedDevice?.id === item.id}
-            device={item}
-          />
-        )}
-      />
+      {isLoading && (
+        <ConnectingInfo>
+          <Text>Procurando dispositivos Bluetooth. Por favor, aguarde...</Text>
+          <ActivityIndicator color={THEME.colors.primary} />
+        </ConnectingInfo>
+      )}
 
       {connecting && (
         <ConnectingInfo>
-          <Text>Conectando no dispositivo ...</Text>
+          <Text>Conectando ao dispositivo. Por favor, aguarde ...</Text>
           <ActivityIndicator color={THEME.colors.primary} />
         </ConnectingInfo>
+      )}
+
+      {!isLoading && !connectedDevice && (
+        <Text>Nenhum dispositivo Synchrone encontrado.</Text>
+      )}
+
+      {connectedDevice && (
+        <>
+          <FontAwesome
+            style={{
+              marginBottom: 16,
+            }}
+            name="bluetooth"
+            size={128}
+            color={THEME.colors.success}
+          />
+          <Text>
+            Conectado no dispositivo{"\n"}
+            {connectedDevice.name}
+          </Text>
+        </>
       )}
     </Container>
   );
