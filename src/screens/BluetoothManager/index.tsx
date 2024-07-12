@@ -4,6 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 import { BleManager, Device } from "react-native-ble-plx";
+import { Buffer } from "buffer";
 import { Toast } from "react-native-toast-notifications";
 
 import { BluetoothManagerRouteProps } from "./types";
@@ -28,13 +29,43 @@ export function BluetoothManager() {
   const params: BluetoothManagerRouteProps =
     route.params as BluetoothManagerRouteProps;
 
+  async function sendCommand(
+    device: Device,
+    serviceUUID: string,
+    characteristicUUID: string
+  ) {
+    try {
+      const base64Command = Buffer.from("SSYNK-OK").toString("base64");
+
+      await device.writeCharacteristicWithResponseForService(
+        serviceUUID,
+        characteristicUUID,
+        base64Command
+      );
+
+      Toast.show("Commando enviado com sucesso!");
+    } catch (error) {
+      console.log(error);
+      Toast.show("Erro ao conectar dispositivo");
+    }
+  }
+
   async function connectDevice(device: Device) {
     setConnecting(true);
 
     try {
       const connectedDevice = await device.connect();
+      await connectedDevice.discoverAllServicesAndCharacteristics();
+      const services = await connectedDevice.services();
+      const serviceUUID = services[0].uuid;
+      const characteristics = await connectedDevice.characteristicsForService(
+        serviceUUID
+      );
+      const characteristicUUID = characteristics[0].uuid;
 
       setConnectedDevice(connectedDevice);
+
+      await sendCommand(connectedDevice, serviceUUID, characteristicUUID);
     } catch (error) {
       Toast.show(
         `Falha ao conectar ao dispositivo Bluetooth ${device.name}. Verifique e tente novamente.`
