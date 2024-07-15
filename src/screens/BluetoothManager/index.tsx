@@ -15,13 +15,18 @@ import {
   ConnectingInfo,
   Text,
 } from "./styles";
+import { ButtonWrapper } from "../Login/styles";
+import { Button } from "../../components/Button";
+
+const serviceUUID = "ab0828b1-198e-4351-b779-901fa0e0371e";
+const characteristicUUID = "4ac8a682-9736-4e5d-932b-e9b31405049c";
 
 export function BluetoothManager() {
   const [isBluetoothOn, setIsBluetoothOn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [manager] = useState(new BleManager());
   const [connecting, setConnecting] = useState(false);
-  const [connectedDevice, setConnectedDevice] = useState(null);
+  const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
 
   const route = useRoute();
   const THEME = useTheme();
@@ -30,43 +35,49 @@ export function BluetoothManager() {
     route.params as BluetoothManagerRouteProps;
 
   async function sendCommand(
-    device: Device,
-    serviceUUID: string,
-    characteristicUUID: string
+    device: Device
   ) {
     try {
-      const base64Command = Buffer.from("SSYNK-OK").toString("base64");
+      const base64Command = Buffer.from("BLE-IN").toString("base64");
 
-      await device.writeCharacteristicWithResponseForService(
+      const response = await device.writeCharacteristicWithResponseForService(
         serviceUUID,
         characteristicUUID,
         base64Command
       );
-
-      Toast.show("Commando enviado com sucesso!");
+      
+      console.log(response);
+      Toast.show("Comando enviado com sucesso!");
     } catch (error) {
       console.log(error);
       Toast.show("Erro ao conectar dispositivo");
     }
   }
 
+  async function sendCommandTest() {
+    if (!await connectedDevice.isConnected()) {
+      await connectedDevice.connect()
+    } 
+    
+    await connectedDevice.discoverAllServicesAndCharacteristics();
+    const services = await connectedDevice.services();
+    const serviceUUID = services[0].uuid;
+    const characteristics = await connectedDevice.characteristicsForService(
+      serviceUUID
+    );
+    const characteristicUUID = characteristics[0].uuid;
+    sendCommand(connectedDevice)
+  }
+
   async function connectDevice(device: Device) {
     setConnecting(true);
-
     try {
-      const connectedDevice = await device.connect();
-      await connectedDevice.discoverAllServicesAndCharacteristics();
-      const services = await connectedDevice.services();
-      const serviceUUID = services[0].uuid;
-      const characteristics = await connectedDevice.characteristicsForService(
-        serviceUUID
-      );
-      const characteristicUUID = characteristics[0].uuid;
-
-      setConnectedDevice(connectedDevice);
-
-      await sendCommand(connectedDevice, serviceUUID, characteristicUUID);
+      await device.connect();
+      await device.discoverAllServicesAndCharacteristics();
+      setConnectedDevice(device);
+      console.log(`Conectado ao dispositivo: ${device.name}`);
     } catch (error) {
+      console.log(error);
       Toast.show(
         `Falha ao conectar ao dispositivo Bluetooth ${device.name}. Verifique e tente novamente.`
       );
@@ -82,6 +93,7 @@ export function BluetoothManager() {
 
       manager.startDeviceScan(null, null, (error, device) => {
         if (error) {
+          console.log(error);
           Toast.show(
             "Erro ao escanear dispositivos Bluetooth. Verifique e tente novamente."
           );
@@ -100,6 +112,7 @@ export function BluetoothManager() {
         setIsLoading(false);
       }, 5000);
     } catch (error) {
+      console.log(error);
       Toast.show(
         "Erro ao escanear dispositivos Bluetooth. Verifique e tente novamente."
       );
@@ -141,6 +154,10 @@ export function BluetoothManager() {
         setIsBluetoothOn(false);
       }
     }, true);
+    return () => {
+      subscription.remove();
+      manager.destroy();
+    };
   }, [manager]);
 
   if (!isBluetoothOn) {
@@ -158,20 +175,25 @@ export function BluetoothManager() {
     <Container>
       {isLoading && (
         <ConnectingInfo>
-          <Text>Procurando dispositivos Bluetooth. Por favor, aguarde...</Text>
+          <Text>Procurando dispositivo {params.bluetoothDeviceName}. Por favor, aguarde...</Text>
           <ActivityIndicator color={THEME.colors.primary} />
         </ConnectingInfo>
       )}
 
       {connecting && (
         <ConnectingInfo>
-          <Text>Conectando ao dispositivo. Por favor, aguarde ...</Text>
+          <Text>Conectando ao dispositivo {params.bluetoothDeviceName}. Por favor, aguarde ...</Text>
           <ActivityIndicator color={THEME.colors.primary} />
         </ConnectingInfo>
       )}
 
       {!isLoading && !connectedDevice && (
-        <Text>Nenhum dispositivo Synchrone encontrado.</Text>
+        <>
+          <Text>Nenhum dispositivo Synchrone encontrado.</Text>
+          <ButtonWrapper>
+            <Button title="Tentar novamente" onPress={() => scanDevices()} />
+          </ButtonWrapper>
+        </>
       )}
 
       {connectedDevice && (
@@ -188,6 +210,14 @@ export function BluetoothManager() {
             Conectado no dispositivo{"\n"}
             {connectedDevice.name}
           </Text>
+
+          <ButtonWrapper>
+            <Button title="Enviar comando" onPress={()=> sendCommandTest()} />
+          </ButtonWrapper>
+
+          <ButtonWrapper>
+            <Button title="Reconectar" onPress={() => scanDevices()} />
+          </ButtonWrapper>
         </>
       )}
     </Container>
