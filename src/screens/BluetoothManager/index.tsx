@@ -35,10 +35,11 @@ export function BluetoothManager() {
     route.params as BluetoothManagerRouteProps;
 
   async function sendCommand(
-    device: Device
+    device: Device,
+    command: string,
   ) {
     try {
-      const base64Command = Buffer.from("BLE-IN").toString("base64");
+      const base64Command = Buffer.from(command).toString("base64");
 
       const response = await device.writeCharacteristicWithResponseForService(
         serviceUUID,
@@ -46,7 +47,8 @@ export function BluetoothManager() {
         base64Command
       );
       
-      console.log(response);
+      console.log(command)
+      // console.log(response);
       Toast.show("Comando enviado com sucesso!");
     } catch (error) {
       console.log(error);
@@ -66,7 +68,19 @@ export function BluetoothManager() {
       serviceUUID
     );
     const characteristicUUID = characteristics[0].uuid;
-    sendCommand(connectedDevice)
+    sendCommand(connectedDevice, "SSYNC-OK");
+    // sendCommand(connectedDevice, `SN:${params.bluetoothDeviceName}`);
+    sendCommand(connectedDevice, "SN:150993");
+    sendCommand(connectedDevice, "PASS:150993");
+    sendCommand(connectedDevice, "SYNC-TD:10");
+    sendCommand(connectedDevice, "SYNC-STH:100");
+    sendCommand(connectedDevice, "SYNC-SM:10");
+    sendCommand(connectedDevice, "SYNC-SI:100");
+    sendCommand(connectedDevice, "SYNC-SME:10");
+    sendCommand(connectedDevice, "SYNC-SB:10");
+    sendCommand(connectedDevice, "SYNC-TPB:10");
+    sendCommand(connectedDevice, "SYNC-TBLE:30");
+    sendCommand(connectedDevice, "SYNC-FINISH");
   }
 
   async function connectDevice(device: Device) {

@@ -6,19 +6,24 @@ import { TotalNotifications } from "../TotalNotifications";
 import BellRingingIcon from "../../assets/icons/bell-ringing.svg";
 
 import { Container, Details, Title, Text, IconContainer, Icon } from "./styles";
+import { IPiece } from "../../services/dtos/IPiece";
 
-export function AssetDetailsCard() {
+interface IAssetDetailsCard {
+  piece: IPiece;
+}
+
+export function AssetDetailsCard({ piece }: IAssetDetailsCard) {
   return (
     <Container>
       <Details>
         <Text>
-          <Title>Tipo: </Title>Tipo
+          <Title>Tipo: </Title>{piece?.pieceType.description}
         </Text>
         <Text>
-          <Title>Marca: </Title>Weg Trifásico de 4 polos
+          <Title>Marca: </Title>{piece?.brand}
         </Text>
         <Text>
-          <Title>Modelo: </Title>W22 IR3 Premium
+          <Title>Modelo: </Title>{piece?.model}
         </Text>
       </Details>
 

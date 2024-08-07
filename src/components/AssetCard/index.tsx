@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
@@ -21,21 +21,47 @@ import {
   WarningElipse,
   SuccessElipse,
 } from "./styles";
+import { IReading } from "../../services/dtos/IReading";
 
-export function AssetCard({ ...rest }: AssetCardProps) {
+export function AssetCard({ item, ...rest }: AssetCardProps) {
   const navigation = useNavigation<AssetCardNavigationProps>();
+  const [isLoadingReadings, setIsLoadingReadings] = useState(false)
+  const [readings, setReadings] = useState([])
 
   const THEME = useTheme();
 
+  const buildReadings = async () => {
+    setIsLoadingReadings(true);
+    const items = [] as IReading[];
+    if (item.measuringPoints) {
+      const mapMP = item.measuringPoints.map(mp => {
+        mp.readings?.map(reading => {
+          items.push(reading);
+        });
+      })
+      await Promise.all(mapMP);
+
+      items.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
+      setReadings(items);
+    }
+  }
+
+  useEffect(() => {
+    buildReadings()
+  }, [])
+
+
   return (
-    <Container onPress={() => navigation.navigate("AssetDetails")} {...rest}>
-      <Image source={require("../../assets/images/asset-image.png")} />
+    <Container onPress={() => navigation.navigate("AssetDetails", { id: item.id })} {...rest}>
+      <Image 
+        source={require("../../assets/images/asset-image.png")} 
+      />
       <Content>
-        <Title>Motor Bomba Calderaria 2</Title>
+        <Title>{item.description}</Title>
 
-        <Subtitle>Bomba hidráulica</Subtitle>
+        <Subtitle>{item.machine.name}</Subtitle>
 
-        <Text>5 sensores</Text>
+        {/* <Text>5 sensores</Text> */}
 
         <LastMeasurementInfo>
           <LastMeasurementText>Últimas medições:</LastMeasurementText>
@@ -44,16 +70,13 @@ export function AssetCard({ ...rest }: AssetCardProps) {
         </LastMeasurementInfo>
 
         <Elipses>
-          <DangerElipse />
-          <DangerElipse />
-          <DangerElipse />
-          <WarningElipse />
-          <WarningElipse />
-          <WarningElipse />
-          <WarningElipse />
-          <SuccessElipse />
-          <SuccessElipse />
-          <SuccessElipse />
+          {readings?.slice(0, 8).map(reading => (
+            <>
+            {reading.securityStatus === 'S' && (<SuccessElipse />)}
+            {reading.securityStatus === 'W' && (<WarningElipse />)}
+            {reading.securityStatus === 'D' && (<DangerElipse />)}
+            </>
+          ))}
         </Elipses>
       </Content>
 

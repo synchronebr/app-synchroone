@@ -14,7 +14,7 @@ export function NewGatewayButton() {
   const navigation = useNavigation();
   const THEME = useTheme();
 
-  const iconSize = RFValue(32);
+  const iconSize = RFValue(28);
 
   async function getCameraPermission() {
     const { granted } = await requestPermission();

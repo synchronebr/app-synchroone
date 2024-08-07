@@ -21,3 +21,10 @@ export const List = styled.FlatList.attrs({
     paddingHorizontal: 20,
   },
 })`` as typeof FlatList;
+
+export const Content = styled.View`
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 0 20px;
+`;

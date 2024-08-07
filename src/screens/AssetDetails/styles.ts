@@ -1,3 +1,4 @@
+import { FlatList } from "react-native-gesture-handler";
 import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 
@@ -38,11 +39,9 @@ export const Subtitle = styled.Text`
   text-align: center;
 `;
 
-export const Content = styled.ScrollView.attrs({
-  contentContainerStyle: {
-    paddingHorizontal: 20,
-  },
-})``;
+export const Content = styled.View`
+  padding: 18px;
+`;
 
 export const Text = styled.Text`
   color: ${({ theme }) => theme.colors.dark};
@@ -52,7 +51,9 @@ export const Text = styled.Text`
   margin: 16px 0;
 `;
 
-export const MeasurementPoints = styled.View`
-  gap: 8px;
-  margin-bottom: 24px;
-`;
+export const List = styled.FlatList.attrs({
+  contentContainerStyle: {
+    gap: 8,
+    paddingBottom: 24,
+  },
+})`` as typeof FlatList;

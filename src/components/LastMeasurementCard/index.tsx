@@ -16,8 +16,14 @@ import {
   Text,
   Temperature,
 } from "./styles";
+import { IMeasuringPoint } from "../../services/dtos/IMeasuringPoint";
+import { getStatusDescription } from "../../utils/getStatusDescription";
 
-export function LastMeasurementCard() {
+interface ILastMeasurementCard {
+  item: IMeasuringPoint;
+}
+
+export function LastMeasurementCard({ item }: ILastMeasurementCard) {
   const navigation = useNavigation<LastMeasurementCardNavigationProps>();
 
   const THEME = useTheme();
@@ -31,18 +37,18 @@ export function LastMeasurementCard() {
         </MeasurementHistory>
 
         <Text>
-          <Title>Velocidade: </Title>1.79 m/s
+          <Title>Velocidade: </Title> {item.readings.length > 0 ? (`${item.readings[0]?.vibrationAbsolute} m/s`) : (`0`)} 
         </Text>
         <Text>
-          <Title>Aceleração: </Title>2.32 m/s
+          <Title>Aceleração: </Title>{item.readings.length > 0 ? (`${item.readings[0]?.accelarationAbsolute} m/s`) : (`0`)} 
         </Text>
         <Text>
-          <Title>Status: </Title>Seguro
+          <Title>Status: </Title>{item.readings.length > 0 ? (<>{getStatusDescription(item.readings[0]?.securityStatus)}</>) : ('-')}
         </Text>
 
         <Temperature>
           <ThermometerIcon height={RFValue(24)} width={RFValue(24)} />
-          <Title>43°C</Title>
+          <Title>{item.readings.length > 0 ? (`${item.readings[0]?.accelarationAbsolute} °C`) : ('-')}</Title>
         </Temperature>
       </Details>
     </Container>

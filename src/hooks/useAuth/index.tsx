@@ -33,10 +33,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (response.status === 200) {
       const { refreshToken, token, user } = data;
 
-      await AsyncStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
-
-      await AsyncStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, refreshToken);
-
+      await AsyncStorage.setItem(AUTH_TOKEN_STORAGE_KEY, JSON.stringify(token));
+      await AsyncStorage.setItem(
+        REFRESH_TOKEN_STORAGE_KEY,
+        JSON.stringify(refreshToken)
+      );
       await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
 
       setUser(user);

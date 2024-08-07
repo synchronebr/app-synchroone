@@ -20,10 +20,10 @@ export default {
     bold: "Montserrat_700Bold",
   },
   fontSize: {
-    smallest: RFValue(Platform.OS === "android" ? 10 : 8),
-    smaller: RFValue(Platform.OS === "android" ? 12 : 10),
-    normal: RFValue(Platform.OS === "android" ? 14 : 11),
-    larger: RFValue(Platform.OS === "android" ? 16 : 13),
-    largest: RFValue(Platform.OS === "android" ? 18 : 16),
+    smallest: RFValue(Platform.OS === "android" ? 8 : 6),
+    smaller: RFValue(Platform.OS === "android" ? 10 : 8),
+    normal: RFValue(Platform.OS === "android" ? 12 : 10),
+    larger: RFValue(Platform.OS === "android" ? 14 : 12),
+    largest: RFValue(Platform.OS === "android" ? 16 : 14),
   },
 };

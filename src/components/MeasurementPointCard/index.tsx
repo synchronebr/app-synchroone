@@ -19,15 +19,20 @@ import {
   LastMeasurementInfo,
   LastMeasurementTextInfo,
 } from "./styles";
+import { IMeasuringPoint } from "../../services/dtos/IMeasuringPoint";
 
-export function MeasurementPointCard({ ...rest }: MeasurementPointCardProps) {
+interface IMeasurementPointCard extends MeasurementPointCardProps {
+  item: IMeasuringPoint;
+}
+
+export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
   const navigation = useNavigation<MeasurementPointCardNavigationProps>();
 
   const THEME = useTheme();
 
   return (
     <Container
-      onPress={() => navigation.navigate("MeasurementPointDetails")}
+      onPress={() => navigation.navigate("MeasurementPointDetails", { id: item.id, item })}
       {...rest}
     >
       <Image
@@ -36,12 +41,12 @@ export function MeasurementPointCard({ ...rest }: MeasurementPointCardProps) {
       />
 
       <Content>
-        <Title>Rolamento Traseiro</Title>
+        <Title>{item.name}</Title>
 
         <Subtitle>Descrição</Subtitle>
 
         <LastMeasurementInfo>
-          <Text>60min</Text>
+          <Text>{item?.device?.readingWindow} min</Text>
 
           <LastMeasurementTextInfo>Seguro</LastMeasurementTextInfo>
         </LastMeasurementInfo>
