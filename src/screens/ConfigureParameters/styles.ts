@@ -33,3 +33,10 @@ export const MinutesInterval = styled.View`
 export const ButtonWrapper = styled.View`
   margin-bottom: 32px;
 `;
+
+export const Content = styled.View`
+  padding: 18px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;

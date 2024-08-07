@@ -21,7 +21,7 @@ export function QRCodeButton() {
   async function getCameraPermission() {
     const { granted } = await requestPermission();
 
-    if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: '' });
+    if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'BluetoothManager' });
   }
 
   return (

@@ -5,11 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { QRCodeScannerNavigationProps } from "./types";
 import { Container, Camera, Scanner } from "./styles";
 
-interface IQRCodeScanner {
-  nextPage: string;
-}
-
-export function QRCodeScanner({ nextPage }: IQRCodeScanner) {
+export function QRCodeScanner({ route }) {
   const navigation = useNavigation<QRCodeScannerNavigationProps>();
 
   function onScannerData(data: string) {
@@ -17,8 +13,10 @@ export function QRCodeScanner({ nextPage }: IQRCodeScanner) {
       bluetoothDeviceName: data,
     };
 
-    navigation.navigate(nextPage, scannerData);
+    navigation.navigate(route.params.nextPage, scannerData);
   }
+
+  console.log(route);
 
   return (
     <Container>

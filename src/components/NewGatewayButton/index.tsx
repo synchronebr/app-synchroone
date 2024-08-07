@@ -7,11 +7,12 @@ import { RFValue } from "react-native-responsive-fontsize";
 import GatewayIcon from "../../assets/icons/wireless.svg";
 
 import { Container, Content, Title, Subtitle } from "./styles";
+import { QRCodeNavigationProps } from "./types";
 
 export function NewGatewayButton() {
   const [, requestPermission] = Camera.useCameraPermissions();
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<QRCodeNavigationProps>();
   const THEME = useTheme();
 
   const iconSize = RFValue(28);
@@ -19,12 +20,12 @@ export function NewGatewayButton() {
   async function getCameraPermission() {
     const { granted } = await requestPermission();
 
-    if (granted) navigation.navigate("QRCodeScanner" as never);
+    if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'BluetoothManager' });
   }
 
   return (
     <Container
-      onPress={() => navigation.navigate("ConfigureParameters" as never)}
+      onPress={() => navigation.navigate("ConfigureParameters" as never, { nextPage: ''})}
     >
       <GatewayIcon
         height={iconSize}

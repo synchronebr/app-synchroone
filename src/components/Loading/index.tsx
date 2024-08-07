@@ -4,12 +4,17 @@ import { useTheme } from "styled-components/native";
 
 import { Container } from "./styles";
 
-export function Loading() {
+interface ILoading {
+  bgColor?: string;
+  color?: string;
+}
+
+export function Loading({ bgColor, color }: ILoading) {
   const THEME = useTheme();
 
   return (
-    <Container>
-      <ActivityIndicator color={THEME.colors.light} size="large" />
+    <Container bgColor={bgColor}>
+      <ActivityIndicator color={color ? color : THEME.colors.light} size="large" />
     </Container>
   );
 }

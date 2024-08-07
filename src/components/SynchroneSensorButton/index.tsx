@@ -7,11 +7,12 @@ import { RFValue } from "react-native-responsive-fontsize";
 import SensorsIcon from "../../assets/icons/sensors.svg";
 
 import { Container, Content, Title, Subtitle } from "./styles";
+import { QRCodeNavigationProps } from "./types";
 
 export function SynchroneSensorButton() {
   const [, requestPermission] = Camera.useCameraPermissions();
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<QRCodeNavigationProps>();
   const THEME = useTheme();
 
   const iconSize = RFValue(32);
@@ -19,7 +20,7 @@ export function SynchroneSensorButton() {
   async function getCameraPermission() {
     const { granted } = await requestPermission();
 
-    if (granted) navigation.navigate("QRCodeScanner" as never);
+    if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'ConfigureParameters' });
   }
 
   return (

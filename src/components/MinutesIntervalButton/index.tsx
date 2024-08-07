@@ -5,11 +5,12 @@ import { Container, Title } from "./styles";
 
 export function MinutesIntervalButton({
   title,
+  selected,
   ...rest
 }: MinutesIntervalButtonProps) {
   return (
-    <Container {...rest}>
-      <Title>{title}</Title>
+    <Container selected={selected} {...rest}>
+      <Title selected={selected}>{title}</Title>
     </Container>
   );
 }

@@ -17,6 +17,7 @@ import THEME from "./global/styles/theme";
 
 import { AuthProvider } from "./hooks/useAuth";
 import { Routes } from "./routes";
+import { BLEManagerProvider } from "./hooks/useBLEManager";
 
 export default function App() {
   if (Platform.OS === "android")
@@ -64,9 +65,11 @@ export default function App() {
               backgroundColor={THEME.colors.primary}
               barStyle="light-content"
             />
-            <SafeAreaView style={styles.safeArea}>
-              <Routes />
-            </SafeAreaView>
+            <BLEManagerProvider>
+              <SafeAreaView style={styles.safeArea}>
+                <Routes />
+              </SafeAreaView>
+            </BLEManagerProvider>
           </AuthProvider>
         </ToastProvider>
       </ToastProvider>
