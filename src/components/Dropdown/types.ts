@@ -9,4 +9,6 @@ export type DropdownProps = PickerProps & {
   data: PickerData[];
   editable: boolean;
   label?: string;
+  error?: string;
+  errorTextColor?: string;
 };

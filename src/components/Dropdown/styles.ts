@@ -12,3 +12,11 @@ export const Container = styled.View`
   border-radius: 6px;
   border-width: 1px;
 `;
+
+interface IErrorText {
+  errorTextColor: string
+}
+
+export const ErrorText = styled.Text<IErrorText>`
+  color: ${({ errorTextColor }) => errorTextColor};
+`;

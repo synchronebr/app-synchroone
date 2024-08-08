@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "styled-components/native";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { useBLEManager } from "../../hooks/useBLEManager";
 
@@ -7,6 +11,7 @@ import { Dropdown } from "../../components/Dropdown";
 import { PickerData } from "../../components/Dropdown/types";
 import { MinutesIntervalButton } from "../../components/MinutesIntervalButton";
 import { Button } from "../../components/Button";
+import { FormData } from "./types";
 
 import {
   Container,
@@ -19,48 +24,79 @@ import {
   Content,
 } from "./styles";
 import { Loading } from "../../components/Loading";
+import { getCompaniesForSelect } from "../../services/Companies";
+import { getAreasForSelect } from "../../services/Companies/Areas";
+import { getSectorsForSelect } from "../../services/Companies/Areas/Sectors";
+import { getMachinesForSelect } from "../../services/Companies/Areas/Sectors/Machines";
+import { getPiecesForSelect } from "../../services/Companies/Areas/Sectors/Machines/Pieces";
+import { getMeasuringPointsForSelect } from "../../services/Companies/Areas/Sectors/Machines/Pieces/MeasuringPoints";
+import api from "../../services/api";
+import { Toast } from "react-native-toast-notifications";
 
 export function ConfigureParameters( { route } ) {
   const THEME = useTheme();
   const navigation = useNavigation();
   const { allowed, isLoading, connectedDevice, getPermissions, scanDevices, sendCommand } = useBLEManager();
-  const [notFoundDevice, setNotFoundDevice] = useState(false);
   const [interval, setInterval] = useState(60);
+  const [data, setData] = useState({ companyId: 0, areaId: 0, sectorId: 0, machineId: 0, pieceId: 0, measuringPointId: 0 });
+  const [companies, setCompanies] = useState([] as any[]);
+  const [areas, setAreas] = useState([]);
+  const [sectors, setSectors] = useState([]);
+  const [machines, setMachines] = useState([]);
+  const [pieces, setPieces] = useState([]);
+  const [measuringPoints, setMeasuringPoints] = useState([]);
+  const [isLoadingPost, setIsLoadingPost] = useState(false);
 
-  const areaData: PickerData[] = [
-    {
-      label: "Selecione a área",
-      value: "1",
-    },
-  ];
+  const getCompanies = async () => {
+    const companiesGet = await getCompaniesForSelect();
+    setCompanies(companiesGet);
+    console.log(companiesGet)
+  }
 
-  const sectorData: PickerData[] = [
-    {
-      label: "Selecione o setor",
-      value: "1",
-    },
-  ];
+  useEffect(() => {
+    getCompanies();
+  }, [])
 
-  const machineData: PickerData[] = [
-    {
-      label: "Selecione a máquina",
-      value: "1",
-    },
-  ];
+  const handleChangeCompanies = async (value: string) => {
+    const id = Number(value);
+    const items = await getAreasForSelect(Number(value));
+    setAreas(items);
+    setData((old) => ({ ...old, companyId: id }));
+  }
 
-  const assetData: PickerData[] = [
-    {
-      label: "Selecione o ativo",
-      value: "1",
-    },
-  ];
+  const handleChangeAreas = async (value: number) => {
+    const id = Number(value);
+    const items = await getSectorsForSelect(data.companyId, id);
+    setSectors(items);
+    setData((old) => ({ ...old, areaId: id }));
+  }
 
-  const measurementPointData: PickerData[] = [
-    {
-      label: "Selecione o ponto de medição",
-      value: "1",
-    },
-  ];
+  const handleChangeSector = async (value: number) => {
+    const id = Number(value);
+    const items = await getMachinesForSelect(data.companyId, data.areaId, id);
+    setMachines(items);
+    setData((old) => ({ ...old, sectorId: id }));
+  }
+
+  const handleChangeMachine = async (value: number) => {
+    const id = Number(value);
+    const items = await getPiecesForSelect(data.companyId, data.areaId, data.sectorId, id);
+    setPieces(items);
+    console.log(items)
+    setData((old) => ({ ...old, machineId: id }));
+  }
+
+  const handleChangePiece = async (value: number) => {
+    const id = Number(value);
+    const items = await getMeasuringPointsForSelect(data.companyId, data.areaId, data.sectorId, data.machineId, id);
+    setMeasuringPoints(items);
+    setData((old) => ({ ...old, pieceId: id }));
+  }
+
+  const handleChangeMeasuringPoint = async (value: number) => {
+    const id = Number(value);
+    setData((old) => ({ ...old, measuringPointId: id }));
+  }
 
   const sendCommands = async () => {
     console.log(connectedDevice)
@@ -84,10 +120,6 @@ export function ConfigureParameters( { route } ) {
     sendCommand(connectedDevice, "SYNC-FINISH");
   }
 
-  const handleSubmit = () => {
-    sendCommands()
-  }
-
   const verifyConnecton = async () => {
     if (!allowed) await getPermissions();
     const connectedByScan = await scanDevices(route.params.bluetoothDeviceName);
@@ -96,6 +128,56 @@ export function ConfigureParameters( { route } ) {
   useEffect(() => {
     verifyConnecton()
   }, [])
+
+  const schema = yup.object().shape({
+    companyId: yup.string().required("Empresa é obrigatório"),
+    areaId: yup.string().required("Area é obrigatório"),
+    sectorId: yup.string().required("Setor é obrigatório"),
+    machineId: yup.string().required("Máquina é obrigatório"),
+    pieceId: yup.string().required("Peça é obrigatório"),
+    measuringPointId: yup.string().required("Empresa é obrigatório"),
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  async function handleFormSubmit(formData: FormData) {
+    setIsLoadingPost(true);
+
+    try {
+      await sendCommands()
+
+      // const url = `companies/${formData.companyId}/devices/${route.params.bluetoothDeviceName}`;
+      const url = `companies/${formData.companyId}/devices/SSYNC-AAA1`;
+      const request = await api.post(url, {
+        measuringPointId: Number(formData.measuringPointId),
+        readingWindow: interval,
+      });
+
+      console.log(request);
+      Toast.show(
+        "Novo sensor configurado com sucesso!",
+        { type: "success" }
+      );
+
+      // navigation.reset({
+      //   index: 0,
+      //   routes: [{ name: "Dashboard" as never }],
+      // });
+    } catch (error) {
+      Toast.show(
+        "Ocorreu um erro ao tentar configurar o sensor. Por favor, tente novamente.",
+        { type: "danger" }
+      );
+      setIsLoadingPost(false);
+      console.log(error)
+    }
+  }
 
   return (
     <Container>
@@ -113,26 +195,116 @@ export function ConfigureParameters( { route } ) {
         <Scroll>
         <Form>
           <DropdownWrapper>
-            <Dropdown editable data={areaData} label="Área" />
+            <Controller
+              name="companyId"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Dropdown 
+                  editable 
+                  data={companies} 
+                  label="Empresa" 
+                  error={errors?.companyId?.message}
+                  errorTextColor={THEME.colors.danger}
+                  onValueChange={value => {onChange(value);handleChangeCompanies(value)}}
+                  placeholder="Selecione uma empresa"
+                  selectedValue={value}
+                />
+              )}
+            />
           </DropdownWrapper>
 
           <DropdownWrapper>
-            <Dropdown editable data={sectorData} label="Setor" />
+            <Controller
+                name="areaId"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Dropdown 
+                    editable 
+                    data={areas} 
+                    label="Área" 
+                    error={errors?.areaId?.message}
+                    errorTextColor={THEME.colors.danger}
+                    onValueChange={value => {onChange(value);handleChangeAreas(value)}}
+                    placeholder="Selecione uma area"
+                    selectedValue={value}
+                  />
+                )}
+              />
           </DropdownWrapper>
 
           <DropdownWrapper>
-            <Dropdown editable data={machineData} label="Máquina" />
+            <Controller
+              name="sectorId"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Dropdown 
+                  editable 
+                  data={sectors} 
+                  label="Setor" 
+                  error={errors?.sectorId?.message}
+                  errorTextColor={THEME.colors.danger}
+                  onValueChange={value => {onChange(value);handleChangeSector(value)}}
+                  placeholder="Selecione uma setor"
+                  selectedValue={value}
+                />
+              )}
+            />
           </DropdownWrapper>
 
           <DropdownWrapper>
-            <Dropdown editable data={assetData} label="Ativo" />
+            <Controller
+              name="machineId"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Dropdown 
+                  editable 
+                  data={machines} 
+                  label="Máquina" 
+                  error={errors?.machineId?.message}
+                  errorTextColor={THEME.colors.danger}
+                  onValueChange={value => {onChange(value);handleChangeMachine(value)}}
+                  placeholder="Selecione uma máquina"
+                  selectedValue={value}
+                />
+              )}
+            />
           </DropdownWrapper>
 
           <DropdownWrapper>
-            <Dropdown
-              editable
-              data={measurementPointData}
-              label="Ponto de Medição"
+            <Controller
+              name="pieceId"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Dropdown 
+                  editable 
+                  data={pieces} 
+                  label="Ativo" 
+                  error={errors?.pieceId?.message}
+                  errorTextColor={THEME.colors.danger}
+                  onValueChange={value => {onChange(value);handleChangePiece(value)}}
+                  placeholder="Selecione uma ativo"
+                  selectedValue={value}
+                />
+              )}
+            />
+          </DropdownWrapper>
+
+          <DropdownWrapper>
+            <Controller
+              name="measuringPointId"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Dropdown 
+                  editable 
+                  data={measuringPoints} 
+                  label="Ponto de Medição" 
+                  error={errors?.measuringPointId?.message}
+                  errorTextColor={THEME.colors.danger}
+                  onValueChange={value => {onChange(value);handleChangeMeasuringPoint(value)}}
+                  placeholder="Selecione uma ponto de medição"
+                  selectedValue={value}
+                />
+              )}
             />
           </DropdownWrapper>
 
@@ -149,9 +321,9 @@ export function ConfigureParameters( { route } ) {
 
         <ButtonWrapper>
           <Button
-            title="Avançar"
-            // onPress={() => navigation.navigate("ConfigureGateway" as never)}
-            onPress={() => handleSubmit()}
+            title="Salvar"
+            onPress={handleSubmit(handleFormSubmit)}
+            loading={isLoadingPost}
           />
         </ButtonWrapper>
       </Scroll>
