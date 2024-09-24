@@ -65,7 +65,7 @@ export function AssetDetails() {
         <Header>
           <Image
             resizeMode="cover"
-            source={piece?.image ? (piece.image) : (require("../../assets/images/asset-image.png"))}
+            source={{uri: piece?.image ? (piece.image) : ("https://synchroone.s3.amazonaws.com/blue-machine-sensor.png")}}
           />
 
           <Entypo

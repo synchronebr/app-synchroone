@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { sessions } from "../../services/Auth";
+import { sessions, deleteUser } from "../../services/Auth";
 import {
   SessionsRequest,
   SessionsResponse,
@@ -51,6 +51,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser({} as User);
   }
 
+  async function deleteRegister() {
+    // await deleteUser(user.id);
+    console.log('delete...');
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -60,6 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser,
         login,
         logout,
+        deleteRegister,
       }}
     >
       {children}

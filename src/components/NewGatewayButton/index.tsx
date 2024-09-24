@@ -20,13 +20,12 @@ export function NewGatewayButton() {
   async function getCameraPermission() {
     const { granted } = await requestPermission();
 
-    if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'BluetoothManager' });
+    // if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'ConfigureGateway' });
+    if (granted) navigation.navigate("ConfigureGateway" as never, { nextPage: 'ConfigureGateway' });
   }
 
   return (
-    <Container
-      onPress={() => navigation.navigate("ConfigureParameters" as never, { nextPage: ''})}
-    >
+    <Container onPress={getCameraPermission} >
       <GatewayIcon
         height={iconSize}
         fill={THEME.colors.secondary}

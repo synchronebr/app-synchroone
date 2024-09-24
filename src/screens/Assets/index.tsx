@@ -50,7 +50,7 @@ export function Assets() {
           <List
             data={assets}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <AssetCard item={item} />}
+            renderItem={({ item }) => <AssetCard item={item} key={item.id}/>}
           />
         ) : (
           <Content>

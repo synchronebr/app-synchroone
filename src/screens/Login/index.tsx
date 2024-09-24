@@ -7,6 +7,8 @@ import { useTheme } from "styled-components/native";
 import * as yup from "yup";
 import { Toast } from "react-native-toast-notifications";
 
+import LogoWhiteIconIcon from "../../assets/icons/logo-white-text.svg";
+
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 
@@ -16,11 +18,13 @@ import { FormData } from "./types";
 import {
   Scroll,
   Container,
+  Content,
   Title,
   Form,
   InputWrapper,
   ButtonWrapper,
 } from "./styles";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export function Login() {
   const [isLogginIn, setIsLoggingIn] = useState(false);
@@ -72,68 +76,71 @@ export function Login() {
     <Scroll>
       <Container>
         <KeyboardAvoidingView behavior="position">
-          <Title>Synchroone</Title>
+          {/* <Title>Synchroone</Title> */}
+          <Content>
+            <LogoWhiteIconIcon height={RFValue(50)} width={'100%'} />
 
-          <Form>
-            <InputWrapper>
-              <Controller
-                name="email"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <>
-                    <Input
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      editable={!isLogginIn}
-                      error={errors?.email?.message}
-                      errorTextColor={THEME.colors.light}
-                      label="E-mail"
-                      labelColor={THEME.colors.light}
-                      onChangeText={onChange}
-                      onSubmitEditing={() => passwordInputRef.current.focus()}
-                      placeholder="Insira seu e-mail"
-                      value={value}
-                    />
-                  </>
-                )}
-              />
-            </InputWrapper>
+            <Form>
+              <InputWrapper>
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <>
+                      <Input
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        editable={!isLogginIn}
+                        error={errors?.email?.message}
+                        errorTextColor={THEME.colors.light}
+                        label="E-mail"
+                        labelColor={THEME.colors.light}
+                        onChangeText={onChange}
+                        onSubmitEditing={() => passwordInputRef.current.focus()}
+                        placeholder="Insira seu e-mail"
+                        value={value}
+                      />
+                    </>
+                  )}
+                />
+              </InputWrapper>
 
-            <InputWrapper>
-              <Controller
-                name="password"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <>
-                    <Input
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      editable={!isLogginIn}
-                      error={errors?.password?.message}
-                      errorTextColor={THEME.colors.light}
-                      label="Senha"
-                      labelColor={THEME.colors.light}
-                      onChangeText={onChange}
-                      onSubmitEditing={handleSubmit(handleLogin)}
-                      placeholder="Insira sua senha"
-                      secureTextEntry
-                      ref={passwordInputRef}
-                      value={value}
-                    />
-                  </>
-                )}
-              />
-            </InputWrapper>
+              <InputWrapper>
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <>
+                      <Input
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        editable={!isLogginIn}
+                        error={errors?.password?.message}
+                        errorTextColor={THEME.colors.light}
+                        label="Senha"
+                        labelColor={THEME.colors.light}
+                        onChangeText={onChange}
+                        onSubmitEditing={handleSubmit(handleLogin)}
+                        placeholder="Insira sua senha"
+                        secureTextEntry
+                        ref={passwordInputRef}
+                        value={value}
+                      />
+                    </>
+                  )}
+                />
+              </InputWrapper>
 
-            <ButtonWrapper>
-              <Button
-                disabled={isLogginIn}
-                loading={isLogginIn}
-                onPress={handleSubmit(handleLogin)}
-                title="Entrar"
-              />
-            </ButtonWrapper>
-          </Form>
+              <ButtonWrapper>
+                <Button
+                  disabled={isLogginIn}
+                  loading={isLogginIn}
+                  onPress={handleSubmit(handleLogin)}
+                  title="Entrar"
+                />
+              </ButtonWrapper>
+            </Form>
+          </Content>
         </KeyboardAvoidingView>
       </Container>
     </Scroll>

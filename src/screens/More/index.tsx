@@ -11,6 +11,7 @@ import { SettingButton } from "../../components/SettingButton";
 import { useAuth } from "../../hooks/useAuth";
 
 import { Container, Buttons } from "./styles";
+import { Alert } from "react-native";
 
 export function More() {
   const navigation = useNavigation();
@@ -26,22 +27,42 @@ export function More() {
     });
   }
 
+  async function showAbout() {
+    Alert.alert(
+      'Sobre',
+      'Versão: 1.0',
+      [
+        {
+          text: 'OK', 
+          onPress: () => {}
+        },
+      ],
+      {cancelable: false},
+    );
+  }
+
   return (
     <Container>
       <Buttons>
-        <SettingButton
+        {/* <SettingButton
           onPress={() => navigation.navigate("Manuals" as never)}
           icon={() => (
             <LabProfileIcon height={RFValue(17)} width={RFValue(14)} />
           )}
           title="Acessar Manuais"
-        />
-        <SettingButton
+        /> */}
+        {/* <SettingButton
           icon={() => <HelpIcon height={RFValue(18)} width={RFValue(18)} />}
           title="Ajuda"
+        /> */}
+        <SettingButton
+          icon={() => <InfoIcon height={RFValue(18)} width={RFValue(18)} />}
+          title="Meus Dados"
+          onPress={() => navigation.navigate("MyData" as never)}
         />
         <SettingButton
           icon={() => <InfoIcon height={RFValue(18)} width={RFValue(18)} />}
+          onPress={showAbout}
           title="Sobre"
         />
         <SettingButton

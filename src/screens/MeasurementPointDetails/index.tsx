@@ -54,7 +54,7 @@ export function MeasurementPointDetails({ route, nabigation }) {
       <Header>
         <Image
           resizeMode="cover"
-          source={require("../../assets/images/asset-image.png")}
+          source={{ uri: "https://synchroone.s3.amazonaws.com/asset-image.png"}}
         />
 
         <Entypo

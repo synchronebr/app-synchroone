@@ -13,3 +13,9 @@ export async function sessions(request: SessionsRequest) {
 
   return response;
 }
+
+export async function deleteUser(userId: number) {
+  const response = await api.delete(`users/${userId}`);
+
+  return response;
+}

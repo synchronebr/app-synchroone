@@ -1,6 +1,8 @@
+import { IDiagnose } from "../../services/dtos/IDiagnose";
+
 export type HistoryCardProps = {
   isLastCard?: boolean;
-  type: Type;
+  item: IDiagnose;
 };
 
 export type HistoryCardStyleProps = {
@@ -11,4 +13,4 @@ export type HistoryCardCircleStyleProps = {
   isLastCard?: boolean;
 };
 
-type Type = "success" | "danger" | "warning";
+type Type = "S" | "D" | "W";

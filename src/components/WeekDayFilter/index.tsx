@@ -1,44 +1,31 @@
 import React from "react";
+import { format, startOfWeek, addDays } from "date-fns";
+import { ptBR } from 'date-fns/locale';
 
-import { Container, WeekDay, Day, Date } from "./styles";
+import { Container, WeekDay, Day, DateDiv } from "./styles";
+import { View } from "react-native";
 
-export function WeekDayFilter() {
+interface IWeekDayFilterProps {
+  selectedDate: Date; 
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+export function WeekDayFilter({ selectedDate, setSelectedDate }: IWeekDayFilterProps) {
+  const today = format(selectedDate, 'EEE', { locale: ptBR }); // 'ter' para terça-feira, por exemplo
+  const weekStart = startOfWeek(new Date(), { locale: ptBR });
+
+  const days = Array.from({ length: 7 }).map((_, i) =>
+    addDays(weekStart, i)
+  );
+
   return (
     <Container>
-      <WeekDay>
-        <Day>Seg</Day>
-        <Date>11</Date>
-      </WeekDay>
-
-      <WeekDay>
-        <Day isSelected={true}>Ter</Day>
-        <Date isSelected={true}>12</Date>
-      </WeekDay>
-
-      <WeekDay>
-        <Day>Qua</Day>
-        <Date>13</Date>
-      </WeekDay>
-
-      <WeekDay>
-        <Day>Qui</Day>
-        <Date>14</Date>
-      </WeekDay>
-
-      <WeekDay>
-        <Day>Sex</Day>
-        <Date>15</Date>
-      </WeekDay>
-
-      <WeekDay>
-        <Day>Sáb</Day>
-        <Date>16</Date>
-      </WeekDay>
-
-      <WeekDay>
-        <Day>Dom</Day>
-        <Date>17</Date>
-      </WeekDay>
+      {days.map((day, index) => (
+        <WeekDay key={index} onPress={() => {setSelectedDate(day)}}>
+            <Day isSelected={format(day, 'EEE', { locale: ptBR }) === today}>{format(day, 'EEE', { locale: ptBR }).toUpperCase().slice(0, 3)}</Day>
+            <DateDiv isSelected={format(day, 'EEE', { locale: ptBR }) === today}>{format(day, 'dd')}</DateDiv>
+        </WeekDay>
+      ))}
     </Container>
   );
 }

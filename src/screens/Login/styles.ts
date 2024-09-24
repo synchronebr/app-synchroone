@@ -16,6 +16,13 @@ export const Scroll = styled.ScrollView.attrs({
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.colors.primary};
   flex: 1;
+  justify-content: center;
+`;
+
+export const Content = styled.View`
+  flex: 1;
+  justify-content: center;
+  gap: 100px;
 `;
 
 export const Title = styled.Text`

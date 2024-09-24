@@ -57,28 +57,28 @@ export function ConfigureParameters( { route } ) {
     getCompanies();
   }, [])
 
-  const handleChangeCompanies = async (value: string) => {
+  const handleChangeCompanies = async (value: any) => {
     const id = Number(value);
     const items = await getAreasForSelect(Number(value));
     setAreas(items);
     setData((old) => ({ ...old, companyId: id }));
   }
 
-  const handleChangeAreas = async (value: number) => {
+  const handleChangeAreas = async (value: any) => {
     const id = Number(value);
     const items = await getSectorsForSelect(data.companyId, id);
     setSectors(items);
     setData((old) => ({ ...old, areaId: id }));
   }
 
-  const handleChangeSector = async (value: number) => {
+  const handleChangeSector = async (value: any) => {
     const id = Number(value);
     const items = await getMachinesForSelect(data.companyId, data.areaId, id);
     setMachines(items);
     setData((old) => ({ ...old, sectorId: id }));
   }
 
-  const handleChangeMachine = async (value: number) => {
+  const handleChangeMachine = async (value: any) => {
     const id = Number(value);
     const items = await getPiecesForSelect(data.companyId, data.areaId, data.sectorId, id);
     setPieces(items);
@@ -86,14 +86,14 @@ export function ConfigureParameters( { route } ) {
     setData((old) => ({ ...old, machineId: id }));
   }
 
-  const handleChangePiece = async (value: number) => {
+  const handleChangePiece = async (value: any) => {
     const id = Number(value);
     const items = await getMeasuringPointsForSelect(data.companyId, data.areaId, data.sectorId, data.machineId, id);
     setMeasuringPoints(items);
     setData((old) => ({ ...old, pieceId: id }));
   }
 
-  const handleChangeMeasuringPoint = async (value: number) => {
+  const handleChangeMeasuringPoint = async (value: any) => {
     const id = Number(value);
     setData((old) => ({ ...old, measuringPointId: id }));
   }
@@ -106,10 +106,12 @@ export function ConfigureParameters( { route } ) {
     
     await connectedDevice.discoverAllServicesAndCharacteristics();
     sendCommand(connectedDevice, "SSYNC-OK");
-    // sendCommand(connectedDevice, `SN:${params.bluetoothDeviceName}`);
+    // sendCommand(connectedDevice, `SN:${route.params.bluetoothDeviceName}`);
     sendCommand(connectedDevice, "SN:150993");
+    // sendCommand(connectedDevice, "PASS:5enh@SYNC24");
     sendCommand(connectedDevice, "PASS:150993");
-    sendCommand(connectedDevice, `SYNC-TD:${interval}`);
+    // sendCommand(connectedDevice, `SYNC-TD:${interval}`);
+    sendCommand(connectedDevice, `SYNC-TD:2`);
     sendCommand(connectedDevice, "SYNC-STH:100");
     sendCommand(connectedDevice, "SYNC-SM:10");
     sendCommand(connectedDevice, "SYNC-SI:100");
@@ -165,10 +167,10 @@ export function ConfigureParameters( { route } ) {
         { type: "success" }
       );
 
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{ name: "Dashboard" as never }],
-      // });
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Home" as never }],
+      });
     } catch (error) {
       Toast.show(
         "Ocorreu um erro ao tentar configurar o sensor. Por favor, tente novamente.",

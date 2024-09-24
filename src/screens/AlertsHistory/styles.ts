@@ -1,3 +1,4 @@
+import { FlatList } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -16,3 +17,17 @@ export const Scroll = styled.ScrollView.attrs({
     padding: 20,
   },
 })``;
+
+export const List = styled.FlatList.attrs({
+  contentContainerStyle: {
+    gap: 8,
+    paddingBottom: 24,
+  },
+})`` as typeof FlatList;
+
+export const Content = styled.View`
+  padding: 20px;
+  margin-bottom: 10px;
+`;
+
+export const Text = styled.Text``;

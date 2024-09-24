@@ -31,22 +31,24 @@ export const Line = styled.View`
 
 export const Card = styled.View<HistoryCardStyleProps>`
   background-color: ${({ type, theme }) =>
-    type === "danger"
+    type === "D"
       ? theme.colors.danger
-      : type === "success"
+      : type === "S"
       ? theme.colors.success
-      : type === "warning"
+      : type === "W"
       ? theme.colors.warning
       : theme.colors.success};
   border-radius: 8px;
   flex: 1;
-  padding: 12px 8px;
+  padding: 8px 8px;
 `;
 
 export const Header = styled.View`
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 8px;
+  flex-flow: wrap;
+  align-items: center;
 `;
 
 export const Title = styled.Text`
@@ -59,7 +61,7 @@ export const Title = styled.Text`
 export const Time = styled.Text`
   color: ${({ theme }) => theme.colors.light};
   font-family: ${({ theme }) => theme.fonts.semiBold};
-  font-size: ${({ theme }) => theme.fontSize.larger}px;
+  font-size: ${({ theme }) => theme.fontSize.normal}px;
   line-height: 24px;
 `;
 

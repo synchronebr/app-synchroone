@@ -37,7 +37,7 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
     >
       <Image
         resizeMode="cover"
-        source={require("../../assets/images/asset-image.png")}
+        source={{ uri: "https://synchroone.s3.amazonaws.com/white-mp-sensor.png"}}
       />
 
       <Content>

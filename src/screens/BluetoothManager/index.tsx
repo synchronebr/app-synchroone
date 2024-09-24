@@ -72,7 +72,7 @@ export function BluetoothManager() {
     // sendCommand(connectedDevice, `SN:${params.bluetoothDeviceName}`);
     sendCommand(connectedDevice, "SN:150993");
     sendCommand(connectedDevice, "PASS:150993");
-    sendCommand(connectedDevice, "SYNC-TD:10");
+    sendCommand(connectedDevice, "SYNC-TD:2");
     sendCommand(connectedDevice, "SYNC-STH:100");
     sendCommand(connectedDevice, "SYNC-SM:10");
     sendCommand(connectedDevice, "SYNC-SI:100");

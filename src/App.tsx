@@ -12,12 +12,21 @@ import {
 import { ThemeProvider } from "styled-components/native";
 import { ToastProvider } from "react-native-toast-notifications";
 import { RFValue } from "react-native-responsive-fontsize";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 
 import THEME from "./global/styles/theme";
 
 import { AuthProvider } from "./hooks/useAuth";
 import { Routes } from "./routes";
 import { BLEManagerProvider } from "./hooks/useBLEManager";
+
+const queryClient = new QueryClient()
 
 export default function App() {
   if (Platform.OS === "android")
@@ -61,15 +70,17 @@ export default function App() {
           warningColor={THEME.colors.warning}
         >
           <AuthProvider>
-            <StatusBar
-              backgroundColor={THEME.colors.primary}
-              barStyle="light-content"
-            />
-            <BLEManagerProvider>
-              <SafeAreaView style={styles.safeArea}>
-                <Routes />
-              </SafeAreaView>
-            </BLEManagerProvider>
+            <QueryClientProvider client={queryClient}>
+              <StatusBar
+                backgroundColor={THEME.colors.primary}
+                barStyle="light-content"
+              />
+              <BLEManagerProvider>
+                <SafeAreaView style={styles.safeArea}>
+                  <Routes />
+                </SafeAreaView>
+              </BLEManagerProvider>
+            </QueryClientProvider>
           </AuthProvider>
         </ToastProvider>
       </ToastProvider>

@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import NotificationsIcon from "../../assets/icons/notifications.svg";
 import BlueLogoIcon from "../../assets/icons/blue-logo.svg";
+import LogoWhiteIconIcon from "../../assets/icons/logo-white-text.svg";
 
 import { TotalNotifications } from "../../components/TotalNotifications";
 import { SynchroneSensorButton } from "../../components/SynchroneSensorButton";
@@ -28,7 +29,8 @@ export function Home() {
   return (
     <Container>
       <Header>
-        <Title>Synchroone</Title>
+        {/* <Title>Synchroone</Title> */}
+        <LogoWhiteIconIcon height={RFValue(50)} width={'100%'} />
 
         <NotificationsIconContainer
           onPress={() => navigation.navigate("Notifications" as never)}

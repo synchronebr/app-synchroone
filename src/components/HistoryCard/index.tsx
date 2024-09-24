@@ -13,24 +13,24 @@ import {
   Content,
   Text,
 } from "./styles";
+import { format } from "date-fns";
 
-export function HistoryCard({ isLastCard, type }: HistoryCardProps) {
+export function HistoryCard({ isLastCard, item }: HistoryCardProps) {
   return (
     <Container>
       <Progress>
         <Circle isLastCard={isLastCard} />
         <Line />
       </Progress>
-      <Card type={type}>
+      <Card type={item.hazardousness}>
         <Header>
-          <Title>Desbalanceamento</Title>
-          <Time>12:00</Time>
+          <Title>{item.title}</Title>
+          <Time>{format(item.createdAt, 'hh:mm')}</Time>
         </Header>
 
         <Content>
           <Text>
-            Possível desbalaceaemento da máquina detectado. Chance de quebra
-            estimada em 32%.
+            {item.description}
           </Text>
         </Content>
       </Card>

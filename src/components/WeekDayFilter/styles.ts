@@ -21,7 +21,7 @@ export const Day = styled.Text<WeekDayFilterStyleProps>`
   line-height: 21px;
 `;
 
-export const Date = styled.Text<WeekDayFilterStyleProps>`
+export const DateDiv = styled.Text<WeekDayFilterStyleProps>`
   color: ${({ isSelected, theme }) =>
     !isSelected ? theme.colors.gray_dark : theme.colors.secondary};
   font-family: ${({ theme }) => theme.fonts.medium};

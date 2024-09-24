@@ -15,6 +15,7 @@ import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
 import { NotificationDetails } from "../screens/NotificationDetails";
 import { Manuals } from "../screens/Manuals";
+import { MyData } from "../screens/MyData";
 import { Notifications } from "../screens/Notifications";
 
 export function Dashboard() {
@@ -134,6 +135,13 @@ export function Dashboard() {
         name="Manuals"
         options={{
           title: "Acessar Manuais",
+        }}
+      />
+      <Screen
+        component={MyData}
+        name="MyData"
+        options={{
+          title: "Meus Dados",
         }}
       />
     </Navigator>
