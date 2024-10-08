@@ -3,11 +3,22 @@ import { IPiece } from "../dtos/IPiece";
 
 import { EquipmentsResponse } from "./types";
 
-export async function getEquipments(): Promise<EquipmentsResponse | any> {
-  let response = await api.get<EquipmentsResponse>("screens/mobiles/equipments");
+type EquipmentsFilters = {
+  areaId: number
+  machineId: number
+  sectorId: number
+  unitId: number
+  responsibleId: number
+  search: string
+}
+
+export async function getEquipments(filters: EquipmentsFilters): Promise<EquipmentsResponse | any> {
+  let response = await api.get<EquipmentsResponse>("screens/mobiles/equipments", {
+    params: filters
+  });
 
   if (!response.data || !response.data.total) {
-    response.data.data = []
+    response.data.data.items = []
     response.data.total = 0
   }
 

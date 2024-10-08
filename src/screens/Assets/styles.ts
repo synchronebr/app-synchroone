@@ -11,7 +11,8 @@ export const Header = styled.View`
   flex-direction: row;
   gap: 18px;
   margin-bottom: 16px;
-  padding: 0 20px;
+  padding: 0 30px;
+  justify-content: center;
 `;
 
 export const List = styled.FlatList.attrs({

@@ -46,7 +46,7 @@ export function BluetoothManager() {
         characteristicUUID,
         base64Command
       );
-      
+
       console.log(command)
       // console.log(response);
       Toast.show("Comando enviado com sucesso!");
@@ -59,8 +59,8 @@ export function BluetoothManager() {
   async function sendCommandTest() {
     if (!await connectedDevice.isConnected()) {
       await connectedDevice.connect()
-    } 
-    
+    }
+
     await connectedDevice.discoverAllServicesAndCharacteristics();
     const services = await connectedDevice.services();
     const serviceUUID = services[0].uuid;

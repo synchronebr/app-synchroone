@@ -34,7 +34,7 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
         characteristicUUID,
         base64Command
       );
-      
+
       console.log(command)
       // console.log(response);
       // Toast.show("Comando enviado com sucesso!");
