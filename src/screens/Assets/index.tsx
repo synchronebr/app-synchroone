@@ -115,7 +115,7 @@ export function Assets() {
 
         <TuneIcon height={RFValue(18)} width={RFValue(18)} onPress={openFilter} />
 
-        <Drawer isOpen={isFiltersOpen}>
+        <Drawer isOpen={isFiltersOpen} height="85%">
           <View style={styles.filterWrapper}>
             <View style={styles.filterHeader}>
               <Text style={styles.title}>Filtrar ativos</Text>
@@ -163,11 +163,11 @@ export function Assets() {
               />
 
               <TouchableOpacity style={styles.clearFilterButton} onPress={clearFilters}>
-                <Text style={styles.clearFilterButtonText}>Limpar filtros</Text>
+                <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.applyButton} onPress={handleFilterSubmit}>
-                <Text style={styles.applyButtonText}>Aplicar filtros</Text>
+                <Text style={styles.applyButtonText}>Aplicar filtro</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   },
   applyButton: {
     backgroundColor: THEME.colors.secondary,
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",
     marginTop: 5,
@@ -234,8 +234,10 @@ const styles = StyleSheet.create({
     fontSize: THEME.fontSize.larger
   },
   clearFilterButton: {
+    borderWidth: 1,
+    borderColor: THEME.colors.gray,
     backgroundColor: THEME.colors.light,
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",
     marginTop: 20,

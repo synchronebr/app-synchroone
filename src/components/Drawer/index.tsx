@@ -1,8 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Dimensions, Modal } from "react-native";
 
-import THEME from "../../global/styles/theme";
-
 import { DrawerProps } from "./types";
 
 export default function Drawer({ children, isOpen, height = "auto" }: DrawerProps) {

@@ -20,103 +20,131 @@ import { Assets } from "../screens/Assets";
 import { Analyses } from "../screens/Analyses";
 import { AlertsHistory } from "../screens/AlertsHistory";
 import { More } from "../screens/More";
+import { useState } from "react";
+import { AlertFilterProvider, useAlertFilter } from "../hooks/useAlertFilter";
 
 export function DashboardTab() {
   const { Navigator, Screen } = createBottomTabNavigator();
 
   const THEME = useTheme();
+
+  const [readingsCount, setReadingsCount] = useState(0);
+
+  function AlertsWrapper() {
+    return (
+        <AlertsHistory
+          setReadingsCount={setReadingsCount}
+        />
+    );
+  }
+
   return (
-    <Navigator
-      screenOptions={{
-        headerShadowVisible: false,
-        headerShown: true,
-        headerStyle: {
-          backgroundColor: THEME.colors.light,
-          elevation: null,
-        },
-        headerTintColor: THEME.colors.primary,
-        headerTitleAlign: "center",
-        headerTitleStyle: {
-          fontFamily: THEME.fonts.semiBold,
-          fontSize: THEME.fontSize.normal,
-          lineHeight: RFValue(24),
-          marginLeft: 8,
-        },
-        tabBarActiveTintColor: THEME.colors.primary,
-        tabBarHideOnKeyboard: true,
-        tabBarInactiveTintColor: THEME.colors.gray_dark,
-        tabBarItemStyle: {
-          paddingVertical: 8,
-        },
-        tabBarLabelStyle: {
-          fontFamily: THEME.fonts.semiBold,
-          fontSize: THEME.fontSize.smaller,
-        },
-        tabBarStyle: {
-          height: RFValue(62),
-          paddingHorizontal: 20,
-        },
-      }}
-    >
-      <Screen
-        component={Home}
-        name="Home"
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? <HomeSolidIcon /> : <HomeOutlineIcon />,
-          title: "Início",
+    <AlertFilterProvider>
+      <Navigator
+        screenOptions={{
+          headerShadowVisible: false,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: THEME.colors.light,
+            elevation: null,
+          },
+          headerTintColor: THEME.colors.primary,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontFamily: THEME.fonts.semiBold,
+            fontSize: THEME.fontSize.normal,
+            lineHeight: RFValue(24),
+            marginLeft: 8,
+          },
+          tabBarActiveTintColor: THEME.colors.primary,
+          tabBarHideOnKeyboard: true,
+          tabBarInactiveTintColor: THEME.colors.gray_dark,
+          tabBarItemStyle: {
+            paddingVertical: 8,
+          },
+          tabBarLabelStyle: {
+            fontFamily: THEME.fonts.semiBold,
+            fontSize: THEME.fontSize.smaller,
+          },
+          tabBarStyle: {
+            height: RFValue(62),
+            paddingHorizontal: 20,
+          },
         }}
-      />
-      <Screen
-        component={Assets}
-        name="Assets"
-        options={{
-          headerRight: () => <QRCodeButton />,
-          headerTitle: "Ativos Monitorados",
-          tabBarIcon: ({ focused }) =>
-            focused ? <WaterPumpIcon /> : <WaterPumpOutlineIcon />,
-          title: "Ativos",
-        }}
-      />
-      <Screen
-        component={AlertsHistory}
-        name="AlertsHistory"
-        options={{
-          headerRight: () => (
-            <TuneIcon
-              style={{ marginRight: 20 }}
-              height={RFValue(18)}
-              width={RFValue(18)}
-            />
-          ),
-          headerTitle: "Histórico de Alertas",
-          tabBarLabel: "",
-          tabBarIcon: ({ focused }) => (
-            <TabBarCenterButton isFocused={focused} />
-          ),
-        }}
-      />
-      <Screen
-        component={Analyses}
-        name="Analyses"
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? <ChartPieFilledIcon /> : <ChartPieIcon />,
-          title: "Análises",
-        }}
-      />
-      <Screen
-        component={More}
-        name="More"
-        options={{
-          headerTitle: "Configurações",
-          tabBarIcon: ({ focused }) =>
-            focused ? <SettingsBoldIcon /> : <SettingsLinearIcon />,
-          title: "Mais",
-        }}
-      />
-    </Navigator>
+      >
+        <Screen
+          component={Home}
+          name="Home"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? <HomeSolidIcon /> : <HomeOutlineIcon />,
+            title: "Início",
+          }}
+        />
+        <Screen
+          component={Assets}
+          name="Assets"
+          options={{
+            headerRight: () => <QRCodeButton />,
+            headerTitle: "Ativos Monitorados",
+            tabBarIcon: ({ focused }) =>
+              focused ? <WaterPumpIcon /> : <WaterPumpOutlineIcon />,
+            title: "Ativos",
+          }}
+        />
+        <Screen
+          component={AlertsWrapper}
+          name="AlertsHistory"
+          options={{
+            headerRight: AlertFilterButton,
+            headerTitle: "Histórico de Alertas",
+            tabBarLabel: "",
+            tabBarIcon: ({ focused }) => (
+              <TabBarCenterButton isFocused={focused} readingsCount={readingsCount} />
+            ),
+          }}
+        />
+        <Screen
+          component={Analyses}
+          name="Analyses"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? <ChartPieFilledIcon /> : <ChartPieIcon />,
+            title: "Análises",
+          }}
+        />
+        <Screen
+          component={More}
+          name="More"
+          options={{
+            headerTitle: "Configurações",
+            tabBarIcon: ({ focused }) =>
+              focused ? <SettingsBoldIcon /> : <SettingsLinearIcon />,
+            title: "Mais",
+          }}
+        />
+      </Navigator>
+    </AlertFilterProvider>
   );
+}
+
+function AlertFilterButton () {
+  const { setIsFilterOpen } = useAlertFilter();
+
+  function openFilter () {
+    setIsFilterOpen(true);
+  }
+
+  return (
+    <TuneIcon
+      style={{ marginRight: 20 }}
+      height={RFValue(18)}
+      width={RFValue(18)}
+      onPress={() => {
+        openFilter();
+      }}
+    />
+  )
 }
