@@ -5,17 +5,22 @@ import THEME from "../../global/styles/theme";
 
 import { DrawerProps } from "./types";
 
-export default function Drawer({ children, isOpen }: DrawerProps) {
+export default function Drawer({ children, isOpen, height = "auto" }: DrawerProps) {
   if (!isOpen) return null;
 
   return (
-    <Modal 
+    <Modal
       visible={isOpen}
       transparent={true}
       animationType="slide"
+      statusBarTranslucent={true}
     >
       <View style={styles.overlay}>
-        <View style={styles.modal}>
+        <View style={{
+            ...styles.modal,
+            height,
+          }}
+        >
           {children}
         </View>
       </View>
@@ -31,14 +36,14 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   modal: {
+    marginTop: 40,
     padding: 15,
     borderRadius: 10,
-    width: "100%",
-    height: "100%",
+    width: "90%",
     maxWidth: Dimensions.get("window").width * 0.9,
     maxHeight: Dimensions.get("window").height * 0.95,
   },

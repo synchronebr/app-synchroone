@@ -1,11 +1,11 @@
 
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import Picker from "react-native-picker-select";
+import Picker, { PickerStyle } from "react-native-picker-select";
 import { SelectProps } from "./types";
 import THEME from "../../global/styles/theme";
 
-export default function Select<T>({ label, placeholder, values, selected, itemLabelFunc, onSelect }: SelectProps<T>) {
+export default function Select<T>({ label, placeholder, values, selected, onSelect }: SelectProps<T>) {
   function onValueChange(newValue: T) {
     onSelect(newValue);
   }
@@ -48,27 +48,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 14,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderWidth: 1,
-    borderColor: 'green',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 14,
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    borderWidth: 1,
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
+const pickerSelectStyles: PickerStyle = {
   placeholder: {
     color: THEME.colors.dark,
   },
-});
+  viewContainer: {
+    height: 40,
+    justifyContent: 'center',
+    borderColor: THEME.colors.gray_dark,
+  },
+  inputIOS: {
+    color: THEME.colors.dark,
+  },
+  inputAndroid: {
+    color: THEME.colors.dark,
+  },
+};
