@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { RFValue } from "react-native-responsive-fontsize";
 import {
   ActivityIndicator,
@@ -40,55 +40,66 @@ export function Assets() {
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedResponsible, setSelectedResponsible] = useState(null);
 
-  const getEquips = async () => {
+  // filters as params here because the way React updates states
+  // is asynchronous, so we need to pass the filters as params,
+  // otherwise the filters will be outdated (old state values were being used)
+  const getEquips = useCallback(async (filters) => {
     setIsLoading(true);
 
-    const requestFilters = {
-      areaId: selectedArea,
-      machineId: selectedMachine,
-      sectorId: selectedSector,
-      unitId: selectedUnit,
-      responsibleId: selectedResponsible,
-      search: searchFieldValue,
-    }
-    const getEquipResponse = await getEquipments(requestFilters);
-    const { filters, items: assets } = getEquipResponse.data.data;
+    const getEquipResponse = await getEquipments(filters);
+    const { filters: responseFilters, items: assets } = getEquipResponse.data.data;
 
     setAssets(assets);
-    setAreas(filters.areas);
-    setMachines(filters.machines);
-    setSectors(filters.sectors);
-    setUnits(filters.units);
-    setResponsibles(filters.responsibles);
+    setAreas(responseFilters.areas);
+    setMachines(responseFilters.machines);
+    setSectors(responseFilters.sectors);
+    setUnits(responseFilters.units);
+    setResponsibles(responseFilters.responsibles);
 
     setIsLoading(false);
-  }
-
-  useEffect(() => {
-    getEquips();
-  }, [])
+  }, []);
 
   function openFilter() {
     if (isLoading) return;
     setIsFiltersOpen(true);
   }
 
-  function closeFilter() { setIsFiltersOpen(false); }
+  function closeFilter() {
+    setIsFiltersOpen(false);
+  }
 
   function clearFilters() {
+    const clearedFilters = {
+      areaId: null,
+      machineId: null,
+      sectorId: null,
+      unitId: null,
+      responsibleId: null,
+      search: searchFieldValue,
+    };
+
     setSelectedArea(null);
     setSelectedMachine(null);
     setSelectedSector(null);
     setSelectedUnit(null);
     setSelectedResponsible(null);
 
-    closeFilter()
-    getEquips();
+    closeFilter();
+    getEquips(clearedFilters); // Pass cleared filters
   }
 
   function handleFilterSubmit() {
-    closeFilter()
-    getEquips();
+    const appliedFilters = {
+      areaId: selectedArea,
+      machineId: selectedMachine,
+      sectorId: selectedSector,
+      unitId: selectedUnit,
+      responsibleId: selectedResponsible,
+      search: searchFieldValue,
+    };
+
+    closeFilter();
+    getEquips(appliedFilters); // Pass applied filters
   }
 
   const setters = {
@@ -97,7 +108,8 @@ export function Assets() {
     'sectors': setSelectedSector,
     'units': setSelectedUnit,
     'responsibles': setSelectedResponsible,
-  }
+  };
+
   function handleValueChange(key: string, value: any) {
     setters[key](value);
   }
