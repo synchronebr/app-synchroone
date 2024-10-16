@@ -29,3 +29,9 @@ export async function getEquipmentById(id: number): Promise<IPiece | any> {
   let response = await api.get<IPiece>(`screens/mobiles/equipments/${id}`);
   return response?.data;
 }
+
+export async function updateEquipmentFavoriteStatus(id: number, toFavorite: boolean): Promise<void> {
+  try {
+    await api.post(`/screens/mobiles/equipments/${id}/${toFavorite ? 'favorite' : 'unfavorite'}`);
+  } catch (_) {}
+}

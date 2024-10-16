@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import { View } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
@@ -18,16 +19,20 @@ import {
   List,
 } from "./styles";
 import { AssetDetailsRouteProps } from "./types";
-import { getEquipmentById } from "../../services/Equipments";
+import { getEquipmentById, updateEquipmentFavoriteStatus } from "../../services/Equipments";
 import { Toast } from "react-native-toast-notifications";
 import { Loading } from "../../components/Loading";
 import { IPiece } from "../../services/dtos/IPiece";
+import { useFavoriteAsset } from "../../hooks/useFavoriteAsset";
+import { AssetDetailHeaderIcon } from "../../components/AssetDetailsHeaderIcon";
+import api from "../../services/api";
 
 export function AssetDetails() {
   const navigation = useNavigation();
   const route = useRoute();
   const [isLoading, setIsLoading] = useState(false);
   const [piece, setPiece] = useState<IPiece>(null);
+  const [ isFavorite, setIsFavorite ] = useState(true);
 
   const THEME = useTheme();
 
@@ -40,6 +45,7 @@ export function AssetDetails() {
       const response = await getEquipmentById(Number(params.id));
       const data = response;
       setPiece(data);
+      setIsFavorite(data.isFavorite);
     } catch (error) {
       Toast.show(
         "Houve um erro ao buscar o equipamento. Por favor, verifique sua conexão, ou tente novamente mais tarde.",
@@ -48,6 +54,12 @@ export function AssetDetails() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function toggleIsFavorite () {
+    setIsFavorite(!isFavorite);
+    updateEquipmentFavoriteStatus(piece.id, !isFavorite)
+      .catch(_ => {})
   }
 
   useFocusEffect(
@@ -79,6 +91,16 @@ export function AssetDetails() {
               top: 16,
             }}
           />
+          <View style={{
+            position: "absolute",
+            right: 8,
+            top: 16,
+          }}>
+            <AssetDetailHeaderIcon
+                isFavorite={isFavorite}
+                toggleIsFavorite={toggleIsFavorite}
+            />
+          </View>
 
           <Asset>
             <Title>{piece?.description}</Title>
@@ -98,7 +120,7 @@ export function AssetDetails() {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => <MeasurementPointCard item={item} />}
             ListEmptyComponent={
-              isLoading ? 
+              isLoading ?
               <Loading />
               :
               <Content>
@@ -109,7 +131,7 @@ export function AssetDetails() {
         </Content>
           </>
         )}
-        
+
     </Container>
   );
 }
