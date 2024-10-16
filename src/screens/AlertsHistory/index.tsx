@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays, startOfYear, endOfYear, endOfToday, startOfToday } from 'date-fns';
 
@@ -48,6 +48,7 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
   const THEME = useTheme();
   const { isFilterOpen, setIsFilterOpen } = useAlertFilter()
 
+  const [isLoading, setIsLoading] = useState(false);
   const [initRange, setInitRange] = useState(startOfToday());
   const [endRange, setEndRange] = useState(endOfToday());
 
@@ -60,6 +61,7 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
   const diagnoses = useQuery<IDiagnose[]>({
     queryKey: ["diagnoses", initRange, endRange, dangerChecked, alertChecked, severeChecked],
     queryFn: async () => {
+      setIsLoading(true);
       let hazardousness = [
         ...(dangerChecked ? [HazardousnessFilters.D] : []),
         ...(severeChecked ? [HazardousnessFilters.P] : []),
@@ -76,11 +78,14 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
           startDate: initRange,
           endDate: endRange,
           ...(hazardousness ? { hazardousness } : {}),
+          page: 1,
+          pageSize: 10000,
         }
       });
 
       const { count, diagnoses: diagnosesData } = response.data?.data ?? { count: 0, diagnoses: [] };
       setReadingsCount(count);
+      setIsLoading(false);
 
       return diagnosesData
     },
@@ -160,6 +165,13 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
       }
 
       <Content>
+
+      {isLoading ? (
+        <View>
+          <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />
+          <ActivityIndicator color={THEME.colors.light} />
+        </View>
+      ) : (
         <List
           data={diagnoses.data}
           keyExtractor={(item) => item.id.toString()}
@@ -180,6 +192,7 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
               </Content>
           }
         />
+      )}
       </Content>
 
       <AlertFiltersDrawer
@@ -225,7 +238,7 @@ function AlertFiltersDrawer({ isOpen, closeDrawer, applyFilters, clearFilters }:
   }
 
   return (
-    <Drawer isOpen={isOpen} height="65%">
+    <Drawer isOpen={isOpen} height="62%">
       <View style={styles.filterWrapper}>
         <View style={styles.filterHeader}>
           <Text style={styles.title}>Filtrar alertas</Text>
@@ -283,7 +296,7 @@ const styles = StyleSheet.create({
   },
   applyButton: {
     backgroundColor: THEME.colors.secondary,
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",
     marginTop: 5,
@@ -298,7 +311,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: THEME.colors.gray,
     backgroundColor: THEME.colors.light,
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",
     marginTop: 20,

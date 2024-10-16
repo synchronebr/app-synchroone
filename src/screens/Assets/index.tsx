@@ -114,6 +114,10 @@ export function Assets() {
     setters[key](value);
   }
 
+  useEffect(() => {
+    getEquips({});
+  }, []);
+
   return (
     <Container>
       <Header>
