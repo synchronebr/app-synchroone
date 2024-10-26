@@ -1,4 +1,4 @@
-package com.synchrone
+package com.synchroone
 
 import android.os.Build
 import android.os.Bundle

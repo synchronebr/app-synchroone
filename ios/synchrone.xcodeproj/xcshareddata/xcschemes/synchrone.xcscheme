@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "synchrone.app"
-               BlueprintName = "synchrone"
-               ReferencedContainer = "container:synchrone.xcodeproj">
+               BuildableName = "synchroone.app"
+               BlueprintName = "synchroone"
+               ReferencedContainer = "container:synchroone.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "synchroneTests.xctest"
-               BlueprintName = "synchroneTests"
-               ReferencedContainer = "container:synchrone.xcodeproj">
+               BuildableName = "synchrooneTests.xctest"
+               BlueprintName = "synchrooneTests"
+               ReferencedContainer = "container:synchroone.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "synchrone.app"
-            BlueprintName = "synchrone"
-            ReferencedContainer = "container:synchrone.xcodeproj">
+            BuildableName = "synchroone.app"
+            BlueprintName = "synchroone"
+            ReferencedContainer = "container:synchroone.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "synchrone.app"
-            BlueprintName = "synchrone"
-            ReferencedContainer = "container:synchrone.xcodeproj">
+            BuildableName = "synchroone.app"
+            BlueprintName = "synchroone"
+            ReferencedContainer = "container:synchroone.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

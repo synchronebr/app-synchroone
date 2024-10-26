@@ -15,9 +15,9 @@ const AuthContext = createContext({} as IAuthContextData);
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User);
 
-  const AUTH_TOKEN_STORAGE_KEY = "@synchrone:auth_token";
-  const REFRESH_TOKEN_STORAGE_KEY = "@synchrone:refresh_token";
-  const USER_STORAGE_KEY = "@synchrone:user";
+  const AUTH_TOKEN_STORAGE_KEY = "@synchroone:auth_token";
+  const REFRESH_TOKEN_STORAGE_KEY = "@synchroone:refresh_token";
+  const USER_STORAGE_KEY = "@synchroone:user";
 
   async function login(form: SessionsRequest) {
     const { email, password } = form;
