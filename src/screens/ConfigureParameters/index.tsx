@@ -162,6 +162,7 @@ export function ConfigureParameters( { route } ) {
       const request = await api.post(url, {
         measuringPointId: Number(formData.measuringPointId),
         readingWindow: interval,
+        scale: 16,
       });
 
       console.log(request);
