@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
+import DeviceInfo from 'react-native-device-info';
 
 import LabProfileIcon from "../../assets/icons/lab-profile.svg";
 import HelpIcon from "../../assets/icons/help.svg";
@@ -28,9 +29,12 @@ export function More() {
   }
 
   async function showAbout() {
+    const version = DeviceInfo.getVersion(); // Gets version from native files
+    const buildNumber = DeviceInfo.getBuildNumber(); // Gets the build number
+
     Alert.alert(
       'Sobre',
-      'Versão: 1.0',
+      'Versão: '+version,
       [
         {
           text: 'OK', 

@@ -38,12 +38,13 @@ export function Home() {
             height={notificationsIconSize}
             width={notificationsIconSize}
           />
-          <TotalNotifications total={5} />
+          {/* <TotalNotifications total={5} /> */}
+          <TotalNotifications />
         </NotificationsIconContainer>
       </Header>
 
       <GreetingsContainer>
-        <BlueLogoIcon width={RFValue(46)} height={RFValue(68)} />
+        <BlueLogoIcon width={RFValue(36)} height={RFValue(68)} />
         <GreetingsMessage>Bem-vindo ao Synchroone!</GreetingsMessage>
       </GreetingsContainer>
 

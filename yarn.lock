@@ -3838,6 +3838,13 @@ expo-navigation-bar@~2.8.1:
     "@react-native/normalize-color" "^2.0.0"
     debug "^4.3.2"
 
+expo-splash-screen@~0.26.5:
+  version "0.26.5"
+  resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.26.5.tgz#9813a5e099180188204e4e7f925f90a0a1939cd2"
+  integrity sha512-FyvA2EWDeQdC3zuoQdXV2VmSANiJzF0hmbtoEEyR6MXoHaYFvxxKyhBeAm61N8C9TtUijIcEgFM6XBCh0wTBVw==
+  dependencies:
+    "@expo/prebuild-config" "6.8.1"
+
 expo-status-bar@~1.11.1:
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.11.1.tgz#a11318741d361048c11db2b16c4364a79a74af30"
@@ -6181,6 +6188,11 @@ react-native-ble-plx@^3.2.0:
   integrity sha512-GVfgA8zXOD9u0t6bwWEm2MLZpl4nkZJJ35hMowIF9CUrrKyBDpIGK9KJHkCBJR1YRDWbtGLVgNS/DzOFRQPNfQ==
   dependencies:
     "@expo/config-plugins" "^7.2.5 || ^8.0.0"
+
+react-native-device-info@^14.0.2:
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-14.0.2.tgz#cb583e283eba4e54f56c9c548dae89a96ccf39ab"
+  integrity sha512-W1oqu4dC4uLKT/Z4uimRP6birJprWjhMP/AwV9hxGSZ5K3wJ/yb34aQ22sd6HmegQHfT2PmkFs3mj+4uXLE1YQ==
 
 react-native-gesture-handler@~2.14.0:
   version "2.14.1"

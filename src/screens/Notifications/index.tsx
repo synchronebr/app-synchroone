@@ -8,7 +8,7 @@ import { NotificationCard } from "../../components/NotificationCard";
 import { Container, TuneIconContainer, List } from "./styles";
 
 export function Notifications() {
-  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const data = [];
 
   return (
     <Container>

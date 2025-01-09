@@ -15,7 +15,7 @@ export function NewGatewayButton() {
   const navigation = useNavigation<QRCodeNavigationProps>();
   const THEME = useTheme();
 
-  const iconSize = RFValue(28);
+  const iconSize = RFValue(22);
 
   async function getCameraPermission() {
     const { granted } = await requestPermission();
