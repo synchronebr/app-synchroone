@@ -29,8 +29,7 @@ export function Home() {
   return (
     <Container>
       <Header>
-        {/* <Title>Synchroone</Title> */}
-        <LogoWhiteIconIcon height={RFValue(50)} width={'100%'} />
+        <Title>Synchroone</Title>
 
         <NotificationsIconContainer
           onPress={() => navigation.navigate("Notifications" as never)}

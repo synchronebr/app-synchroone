@@ -53,8 +53,8 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
 
   return (
     <Container onPress={() => navigation.navigate("AssetDetails", { id: item.id })} {...rest}>
-      <Image 
-        source={{ uri: "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png"}} 
+      <Image
+        source={{ uri: "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png"}}
       />
       <Content>
         <Title>{item.description}</Title>

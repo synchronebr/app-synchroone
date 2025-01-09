@@ -10,7 +10,7 @@ import { TotalNotifications } from "../TotalNotifications";
 import { TabBarCenterButtonProps } from "./types";
 import { Container, BellRingingIconContainer } from "./styles";
 
-export function TabBarCenterButton({ isFocused }: TabBarCenterButtonProps) {
+export function TabBarCenterButton({ isFocused, readingsCount }: TabBarCenterButtonProps) {
   const THEME = useTheme();
 
   return (
@@ -29,7 +29,7 @@ export function TabBarCenterButton({ isFocused }: TabBarCenterButtonProps) {
           <BellRingingIcon height={RFValue(24)} width={RFValue(24)} />
         )}
 
-        <TotalNotifications total={1} />
+        <TotalNotifications total={readingsCount} />
       </BellRingingIconContainer>
     </Container>
   );

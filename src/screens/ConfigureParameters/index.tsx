@@ -107,18 +107,21 @@ export function ConfigureParameters( { route } ) {
     await connectedDevice.discoverAllServicesAndCharacteristics();
     sendCommand(connectedDevice, "SSYNC-OK");
     // sendCommand(connectedDevice, `SN:${route.params.bluetoothDeviceName}`);
-    sendCommand(connectedDevice, "SN:150993");
+    sendCommand(connectedDevice, "SN:A55EAC");
     // sendCommand(connectedDevice, "PASS:5enh@SYNC24");
-    sendCommand(connectedDevice, "PASS:150993");
+    sendCommand(connectedDevice, "PASS:5enh@SYNC24");
     // sendCommand(connectedDevice, `SYNC-TD:${interval}`);
-    sendCommand(connectedDevice, `SYNC-TD:2`);
+    sendCommand(connectedDevice, `SYNC-TD:1`);
     sendCommand(connectedDevice, "SYNC-STH:100");
     sendCommand(connectedDevice, "SYNC-SM:10");
-    sendCommand(connectedDevice, "SYNC-SI:100");
+    sendCommand(connectedDevice, "SYNC-SI:300");
     sendCommand(connectedDevice, "SYNC-SME:10");
     sendCommand(connectedDevice, "SYNC-SB:10");
     sendCommand(connectedDevice, "SYNC-TPB:10");
     sendCommand(connectedDevice, "SYNC-TBLE:30");
+    sendCommand(connectedDevice, "SYNC-FS:1");
+    sendCommand(connectedDevice, "SYNC-BW:00");
+    sendCommand(connectedDevice, "SYNC-AVD:123");
     sendCommand(connectedDevice, "SYNC-FINISH");
   }
 
@@ -159,6 +162,7 @@ export function ConfigureParameters( { route } ) {
       const request = await api.post(url, {
         measuringPointId: Number(formData.measuringPointId),
         readingWindow: interval,
+        scale: 16,
       });
 
       console.log(request);

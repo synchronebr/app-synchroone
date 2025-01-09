@@ -1,13 +1,19 @@
 {
   "expo": {
-    "name": "synchrone",
-    "slug": "synchrone",
+    "name": "synchroone",
+    "slug": "synchroone",
     "version": "1.0.0",
+    "icon": "./assets/images/app-icon.png",
     "assetBundlePatterns": [
       "**/*"
     ],
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1acbf27b-df6b-45be-9b63-e92b8a63cabc"
+      }
+    }
   }
 }
