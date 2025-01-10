@@ -23,6 +23,10 @@ export type SessionsResponse = {
   refreshToken: string;
 };
 
+export type RequestUserRequest = {
+  email: string;
+};
+
 export type User = {
   id: number;
   name: string;

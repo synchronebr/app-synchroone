@@ -27,7 +27,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       password,
     };
 
-    const response = await sessions(request);
+    const response = await requestUser(request);
     const data = response.data as SessionsResponse;
 
     if (response.status === 200) {

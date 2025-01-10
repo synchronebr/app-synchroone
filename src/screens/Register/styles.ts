@@ -54,3 +54,7 @@ export const CreateAccountButtonText = styled.Text`
   font-size: ${RFValue(Platform.OS === "android" ? 12 : 10)}px;
   font-family: 'RobotSlab-Regular';
 `;
+
+export const IconBack = styled.TouchableOpacity`
+  color: ${({ theme }) => theme.colors.light};  
+`;

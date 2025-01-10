@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useTheme } from "styled-components/native";
 import * as yup from "yup";
 import { Toast } from "react-native-toast-notifications";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import LogoWhiteIconIcon from "../../assets/icons/logo-white-text.svg";
 
@@ -13,6 +14,7 @@ import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 
 import { useAuth } from "../../hooks/useAuth";
+import { requestUser } from "../../services/Auth";
 
 import { FormData } from "./types";
 import {
@@ -25,11 +27,12 @@ import {
   ButtonWrapper,
   CreateAccountButton,
   CreateAccountButtonText,
+  IconBack,
 } from "./styles";
 import { RFValue } from "react-native-responsive-fontsize";
 
-export function Login() {
-  const [isLogginIn, setIsLoggingIn] = useState(false);
+export function Register() {
+  const [isLoading, setIsLoading] = useState(false);
 
   const passwordInputRef = useRef<TextInput>();
   const navigation = useNavigation();
@@ -44,7 +47,10 @@ export function Login() {
       .trim()
       .required("E-mail obrigatório.")
       .email("E-mail inválido."),
-    password: yup.string().trim().required("Senha obrigatória."),
+    company: yup
+      .string()
+      .trim()
+      .required("Empresa é obrigatório."),
   });
 
   const {
@@ -55,23 +61,54 @@ export function Login() {
     resolver: yupResolver(schema),
   });
 
-  async function handleLogin(formData: FormData) {
-    setIsLoggingIn(true);
+  async function register(form) {
+    const { email, company } = form;
+
+    const request = {
+      email,
+      company,
+    };
+
+    const response = await requestUser(request);
+    const data = response.data;
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async function handleRegister(formData: FormData) {
+    setIsLoading(true);
 
     try {
-      await login(formData);
+      const reqRegister = await register(formData);
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Dashboard" as never }],
-      });
+      if (reqRegister) {
+        Toast.show(
+          "Enviamos sua solicitção pra nossa equipe, será avaliado e liberado seu acesso.",
+          { type: "success" }
+        );
+  
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Login" as never }],
+        });
+      } else {
+        Toast.show(
+          "Ocorreu um erro ao criar sua conta. Por favor, tente novamente mais tarde.",
+          { type: "danger" }
+        );
+      }
     } catch (error) {
       Toast.show(
-        "Ocorreu um erro ao fazer login. Por favor, verifique suas credenciais e tente novamente.",
+        "Ocorreu um erro ao criar sua conta. Por favor, tente novamente mais tarde.",
         { type: "danger" }
       );
-      setIsLoggingIn(false);
+      setIsLoading(false);
     }
+    setIsLoading(false);
   }
 
   return (
@@ -80,7 +117,9 @@ export function Login() {
         <KeyboardAvoidingView behavior="position">
           {/* <Title>Synchroone</Title> */}
           <Content>
-            <LogoWhiteIconIcon height={RFValue(50)} width={'100%'} />
+            <IconBack onPress={() => navigation.navigate('Login')}>
+              <Icon name="arrow-back" color="#ffffff" size={30} />
+            </IconBack>
 
             <Form>
               <InputWrapper>
@@ -92,7 +131,7 @@ export function Login() {
                       <Input
                         autoCapitalize="none"
                         autoCorrect={false}
-                        editable={!isLogginIn}
+                        editable={!isLoading}
                         error={errors?.email?.message}
                         errorTextColor={THEME.colors.light}
                         label="E-mail"
@@ -109,23 +148,21 @@ export function Login() {
 
               <InputWrapper>
                 <Controller
-                  name="password"
+                  name="company"
                   control={control}
                   render={({ field: { onChange, value } }) => (
                     <>
                       <Input
                         autoCapitalize="none"
                         autoCorrect={false}
-                        editable={!isLogginIn}
-                        error={errors?.password?.message}
+                        editable={!isLoading}
+                        error={errors?.email?.message}
                         errorTextColor={THEME.colors.light}
-                        label="Senha"
+                        label="Empresa"
                         labelColor={THEME.colors.light}
                         onChangeText={onChange}
-                        onSubmitEditing={handleSubmit(handleLogin)}
-                        placeholder="Insira sua senha"
-                        secureTextEntry
-                        ref={passwordInputRef}
+                        onSubmitEditing={() => handleSubmit(handleRegister)}
+                        placeholder="Insira o nome de sua empresa"
                         value={value}
                       />
                     </>
@@ -133,16 +170,12 @@ export function Login() {
                 />
               </InputWrapper>
 
-              <CreateAccountButton onPress={() => navigation.navigate('Register')}>
-                <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
-              </CreateAccountButton>
-
               <ButtonWrapper>
                 <Button
-                  disabled={isLogginIn}
-                  loading={isLogginIn}
-                  onPress={handleSubmit(handleLogin)}
-                  title="Entrar"
+                  disabled={isLoading}
+                  loading={isLoading}
+                  onPress={handleSubmit(handleRegister)}
+                  title="Solicitar conta"
                 />
               </ButtonWrapper>
             </Form>

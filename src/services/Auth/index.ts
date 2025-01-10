@@ -1,6 +1,6 @@
 import api from "../api";
 
-import { CreateRequest, SessionsRequest } from "./types";
+import { CreateRequest, SessionsRequest, RequestUserRequest } from "./types";
 
 export async function create(request: CreateRequest) {
   const response = await api.post("users", request);
@@ -10,6 +10,12 @@ export async function create(request: CreateRequest) {
 
 export async function sessions(request: SessionsRequest) {
   const response = await api.post("sessions", request);
+
+  return response;
+}
+
+export async function requestUser(request: RequestUserRequest) {
+  const response = await api.post("users/requests", request);
 
   return response;
 }
