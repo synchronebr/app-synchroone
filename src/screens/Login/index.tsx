@@ -66,6 +66,7 @@ export function Login() {
         routes: [{ name: "Dashboard" as never }],
       });
     } catch (error) {
+      console.log(error)
       Toast.show(
         "Ocorreu um erro ao fazer login. Por favor, verifique suas credenciais e tente novamente.",
         { type: "danger" }

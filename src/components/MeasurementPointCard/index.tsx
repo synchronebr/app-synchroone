@@ -29,6 +29,7 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
   const navigation = useNavigation<MeasurementPointCardNavigationProps>();
 
   const THEME = useTheme();
+  console.log(item)
 
   return (
     <Container
@@ -48,7 +49,11 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
         <LastMeasurementInfo>
           <Text>{item?.device?.readingWindow} min</Text>
 
-          <LastMeasurementTextInfo>Seguro</LastMeasurementTextInfo>
+          <LastMeasurementTextInfo status={item.status}>
+            {item.status === 'S' && (<>Seguro</>)}
+            {item.status === 'W' && (<>Alerta</>)}
+            {item.status === 'D' && (<>Perigo</>)}
+          </LastMeasurementTextInfo>
         </LastMeasurementInfo>
       </Content>
 

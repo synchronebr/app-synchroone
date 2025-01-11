@@ -124,7 +124,7 @@ export function AssetDetails() {
               <Loading />
               :
               <Content>
-                 <Text>0 results</Text>
+                 <Text>Nenhum ponto de medição</Text>
               </Content>
             }
           />

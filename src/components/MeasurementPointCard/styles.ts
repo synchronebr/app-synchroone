@@ -50,8 +50,23 @@ export const LastMeasurementInfo = styled.View`
   justify-content: space-between;
 `;
 
-export const LastMeasurementTextInfo = styled.Text`
-  background-color: ${({ theme }) => theme.colors.success};
+interface ILastMeasurementTextInfo {
+  status: 'S' | 'W' | 'D';
+}
+
+export const LastMeasurementTextInfo = styled.Text<ILastMeasurementTextInfo>`
+  background-color: ${({ theme, status }) => {
+    switch (status) {
+      case 'S':
+        return theme.colors.success;
+      case 'W':
+        return theme.colors.warning;
+      case 'D':
+        return theme.colors.danger;
+      default:
+        return theme.colors.light; 
+    }
+  }};
   border-radius: 128px;
   color: ${({ theme }) => theme.colors.light};
   font-family: ${({ theme }) => theme.fonts.medium};

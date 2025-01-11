@@ -19,3 +19,10 @@ export const List = styled.FlatList.attrs({
     paddingHorizontal: 20,
   },
 })`` as typeof FlatList;
+
+export const Content = styled.View`
+  padding: 20px;
+  margin-bottom: 10px;
+`;
+
+export const Text = styled.Text``;

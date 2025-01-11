@@ -1,11 +1,26 @@
 import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
+interface IContainer {
+  status: 'S' | 'W' | 'D';
+}
+
 export const Container = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
 })`
   align-items: center;
-  border-color: ${({ theme }) => theme.colors.gray_dark};
+  border-color: ${({ theme, status }) => {
+    switch (status) {
+      case 'S':
+        return theme.colors.success;
+      case 'W':
+        return theme.colors.warning;
+      case 'D':
+        return theme.colors.danger;
+      default:
+        return theme.colors.gray_dark; 
+    }
+  }};
   border-radius: 12px;
   border-width: 1px;
   flex-direction: row;
@@ -57,15 +72,30 @@ export const LastMeasurementText = styled.Text`
   line-height: 15px;
 `;
 
-export const LastMeasurementTextInfo = styled.Text`
-  background-color: ${({ theme }) => theme.colors.success};
-  border-radius: 128px;
+interface ILastMeasurementTextInfo {
+  status: 'S' | 'W' | 'D';
+}
+
+export const LastMeasurementTextInfo = styled.Text<ILastMeasurementTextInfo>`
+  background-color: ${({ theme, status }) => {
+    switch (status) {
+      case 'S':
+        return theme.colors.success;
+      case 'W':
+        return theme.colors.warning;
+      case 'D':
+        return theme.colors.danger;
+      default:
+        return theme.colors.light; 
+    }
+  }};
   color: ${({ theme }) => theme.colors.light};
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.smallest}px;
   line-height: 15px;
   margin-bottom: 6px;
   padding: 4px;
+  border-radius: 128px;
 `;
 
 export const Elipses = styled.View`

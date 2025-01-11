@@ -5,7 +5,7 @@ import TuneIcon from "../../assets/icons/tune.svg";
 
 import { NotificationCard } from "../../components/NotificationCard";
 
-import { Container, TuneIconContainer, List } from "./styles";
+import { Container, TuneIconContainer, List, Content, Text } from "./styles";
 
 export function Notifications() {
   const data = [];
@@ -20,6 +20,21 @@ export function Notifications() {
         data={data}
         keyExtractor={(item) => item.toString()}
         renderItem={({ item }) => <NotificationCard />}
+        ListEmptyComponent={
+          false ?
+            <Loading bgColor={'transparent'} color={THEME.colors.primary} />
+            :
+            <Content>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  textAlign: 'center',
+                }}
+              >
+                Nenhuma notificação para visualizar.
+              </Text>
+            </Content>
+        }
       />
     </Container>
   );

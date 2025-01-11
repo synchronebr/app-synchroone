@@ -18,7 +18,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.0</string>
     <key>CFBundleVersion</key>
-	<string>7</string>
+	<string>10</string>
     
     <!-- Descrição de Uso da Câmera -->
     <key>NSCameraUsageDescription</key>

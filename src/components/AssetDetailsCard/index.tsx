@@ -17,7 +17,7 @@ export function AssetDetailsCard({ piece }: IAssetDetailsCard) {
     <Container>
       <Details>
         <Text>
-          <Title>Tipo: </Title>{piece?.pieceType.description}
+          <Title>Tipo: </Title>{piece?.pieceType?.description}
         </Text>
         <Text>
           <Title>Marca: </Title>{piece?.brand}
@@ -27,12 +27,12 @@ export function AssetDetailsCard({ piece }: IAssetDetailsCard) {
         </Text>
       </Details>
 
-      <IconContainer>
+      {/* <IconContainer>
         <Icon>
           <BellRingingIcon height={RFValue(18)} width={RFValue(18)} />
           <TotalNotifications total={1} />
         </Icon>
-      </IconContainer>
+      </IconContainer> */}
     </Container>
   );
 }

@@ -52,7 +52,7 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
 
 
   return (
-    <Container onPress={() => navigation.navigate("AssetDetails", { id: item.id })} {...rest}>
+    <Container onPress={() => navigation.navigate("AssetDetails", { id: item.id })} {...rest} status={readings[0]?.securityStatus}>
       <Image
         source={{ uri: "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png"}}
       />
@@ -66,11 +66,16 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
         <LastMeasurementInfo>
           <LastMeasurementText>Últimas medições:</LastMeasurementText>
 
-          <LastMeasurementTextInfo>Seguro</LastMeasurementTextInfo>
+          <LastMeasurementTextInfo status={readings[0]?.securityStatus}>
+            {readings[0]?.securityStatus === 'S' && (<>Seguro</>)}
+            {readings[0]?.securityStatus === 'W' && (<>Alerta</>)}
+            {readings[0]?.securityStatus === 'D' && (<>Perigo</>)}
+          </LastMeasurementTextInfo>
+          
         </LastMeasurementInfo>
 
         <Elipses>
-          {readings?.slice(0, 8).map(reading => (
+          {readings?.slice(0, 8).sort((a, b) => a.id - b.id).map(reading => (
             <>
             {reading.securityStatus === 'S' && (<SuccessElipse />)}
             {reading.securityStatus === 'W' && (<WarningElipse />)}

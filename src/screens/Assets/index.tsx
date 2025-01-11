@@ -47,14 +47,14 @@ export function Assets() {
     setIsLoading(true);
 
     const getEquipResponse = await getEquipments(filters);
-    const { filters: responseFilters, items: assets } = getEquipResponse.data.data;
+    const assets = getEquipResponse.data.data;
 
     setAssets(assets);
-    setAreas(responseFilters.areas);
-    setMachines(responseFilters.machines);
-    setSectors(responseFilters.sectors);
-    setUnits(responseFilters.units);
-    setResponsibles(responseFilters.responsibles);
+    // setAreas(responseFilters.areas);
+    // setMachines(responseFilters.machines);
+    // setSectors(responseFilters.sectors);
+    // setUnits(responseFilters.units);
+    // setResponsibles(responseFilters.responsibles);
 
     setIsLoading(false);
   }, []);
