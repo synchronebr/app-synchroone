@@ -18,8 +18,13 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.0</string>
     <key>CFBundleVersion</key>
-	<string>10</string>
+	<string>13</string>
     
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>whatsapp</string>
+    </array>
+
     <!-- Descrição de Uso da Câmera -->
     <key>NSCameraUsageDescription</key>
     <string>$(PRODUCT_NAME) precisa de acesso à câmera para capturar imagens.</string>

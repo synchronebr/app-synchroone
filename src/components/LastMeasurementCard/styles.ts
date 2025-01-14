@@ -1,13 +1,9 @@
 import styled from "styled-components/native";
 
-export const Container = styled.TouchableOpacity.attrs({
-  activeOpacity: 0.7,
-})`
+export const Container = styled.View`
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.secondary_light};
   border-radius: 8px;
   flex-direction: row;
-  padding: 8px 12px;
 `;
 
 export const Details = styled.View`
@@ -15,7 +11,39 @@ export const Details = styled.View`
   gap: 8px;
 `;
 
-export const MeasurementHistory = styled.View`
+export const CardViews = styled.View`
+  flex: 1;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const CardViewsTitle = styled.Text`
+`;
+
+export const CardView = styled.View`
+  background-color: ${({ theme }) => theme.colors.secondary_light};
+  padding: 8px 12px;
+  border-radius: 4px;
+`;
+
+export const CardViewTemperature = styled.View`
+  /* flex: 1; */
+  flex-direction: row;
+  gap: 2px;
+  background-color: ${({ theme }) => theme.colors.secondary_light};
+  padding: 8px;
+  border-radius: 4px;
+`;
+
+export const CardViewTitle = styled.Text``;
+
+export const CardViewValue = styled.Text``;
+
+export const MeasurementHistory = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.7,
+})`
   flex-direction: row;
   gap: 8px;
   position: absolute;
@@ -40,11 +68,3 @@ export const Text = styled.Text`
   font-size: ${({ theme }) => theme.fontSize.normal}px;
 `;
 
-export const Temperature = styled.View`
-  align-items: center;
-  bottom: 0;
-  flex-direction: row;
-  gap: 4px;
-  position: absolute;
-  right: 0;
-`;

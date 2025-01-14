@@ -1,5 +1,6 @@
 import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
+import { rgba } from 'polished';
 
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.colors.light};
@@ -13,8 +14,22 @@ export const Image = styled.Image`
   width: 100%;
 `;
 
+interface IAsset {
+  status: 'S' | 'W' | 'D';
+}
 export const Asset = styled.View`
-  background-color: rgba(30, 41, 59, 0.8);
+  background-color: ${({ theme, status }) => {
+    switch (status) {
+      case 'S':
+        return rgba(22, 163, 74, 0.8);
+      case 'W':
+        return rgba(250, 204, 21, 1);
+      case 'D':
+        return rgba(238, 68, 68, 0.8);
+      default:
+        return rgba(30, 41, 59, 0.8);
+    }
+  }};
   bottom: 0;
   flex-direction: row;
   gap: 8px;

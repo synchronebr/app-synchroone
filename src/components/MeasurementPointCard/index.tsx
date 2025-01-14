@@ -18,6 +18,8 @@ import {
   Text,
   LastMeasurementInfo,
   LastMeasurementTextInfo,
+  CardStatusSafe,
+  CardStatusSafeText,
 } from "./styles";
 import { IMeasuringPoint } from "../../services/dtos/IMeasuringPoint";
 
@@ -29,7 +31,6 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
   const navigation = useNavigation<MeasurementPointCardNavigationProps>();
 
   const THEME = useTheme();
-  console.log(item)
 
   return (
     <Container
@@ -40,6 +41,9 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
         resizeMode="cover"
         source={{ uri: "https://synchroone.s3.amazonaws.com/white-mp-sensor.png"}}
       />
+      {item.readings[0]?.securityStatus === 'S' && (<CardStatusSafe status={item.readings[0]?.securityStatus}><CardStatusSafeText>Seguro</CardStatusSafeText></CardStatusSafe>)}
+      {item.readings[0]?.securityStatus === 'W' && (<CardStatusSafe status={item.readings[0]?.securityStatus}><CardStatusSafeText>Alerta</CardStatusSafeText></CardStatusSafe>)}
+      {item.readings[0]?.securityStatus === 'D' && (<CardStatusSafe status={item.readings[0]?.securityStatus}><CardStatusSafeText>Perigo</CardStatusSafeText></CardStatusSafe>)}
 
       <Content>
         <Title>{item.name}</Title>
@@ -48,12 +52,6 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
 
         <LastMeasurementInfo>
           <Text>{item?.device?.readingWindow} min</Text>
-
-          <LastMeasurementTextInfo status={item.status}>
-            {item.status === 'S' && (<>Seguro</>)}
-            {item.status === 'W' && (<>Alerta</>)}
-            {item.status === 'D' && (<>Perigo</>)}
-          </LastMeasurementTextInfo>
         </LastMeasurementInfo>
       </Content>
 

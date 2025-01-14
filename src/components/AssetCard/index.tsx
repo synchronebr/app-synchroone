@@ -15,7 +15,8 @@ import {
   Text,
   LastMeasurementInfo,
   LastMeasurementText,
-  LastMeasurementTextInfo,
+  CardStatusSafe,
+  CardStatusSafeText,
   Elipses,
   DangerElipse,
   WarningElipse,
@@ -50,12 +51,14 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
     buildReadings()
   }, [])
 
-
   return (
     <Container onPress={() => navigation.navigate("AssetDetails", { id: item.id })} {...rest} status={readings[0]?.securityStatus}>
       <Image
         source={{ uri: "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png"}}
       />
+      {readings[0]?.securityStatus === 'S' && (<CardStatusSafe status={readings[0]?.securityStatus}><CardStatusSafeText>Seguro</CardStatusSafeText></CardStatusSafe>)}
+      {readings[0]?.securityStatus === 'W' && (<CardStatusSafe status={readings[0]?.securityStatus}><CardStatusSafeText>Alerta</CardStatusSafeText></CardStatusSafe>)}
+      {readings[0]?.securityStatus === 'D' && (<CardStatusSafe status={readings[0]?.securityStatus}><CardStatusSafeText>Perigo</CardStatusSafeText></CardStatusSafe>)}
       <Content>
         <Title>{item.description}</Title>
 
@@ -65,13 +68,6 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
 
         <LastMeasurementInfo>
           <LastMeasurementText>Últimas medições:</LastMeasurementText>
-
-          <LastMeasurementTextInfo status={readings[0]?.securityStatus}>
-            {readings[0]?.securityStatus === 'S' && (<>Seguro</>)}
-            {readings[0]?.securityStatus === 'W' && (<>Alerta</>)}
-            {readings[0]?.securityStatus === 'D' && (<>Perigo</>)}
-          </LastMeasurementTextInfo>
-          
         </LastMeasurementInfo>
 
         <Elipses>

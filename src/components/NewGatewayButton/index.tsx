@@ -20,8 +20,8 @@ export function NewGatewayButton() {
   async function getCameraPermission() {
     const { granted } = await requestPermission();
 
-    // if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'ConfigureGateway' });
-    if (granted) navigation.navigate("ConfigureGateway" as never, { nextPage: 'ConfigureGateway' });
+    if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'ConfigureGateway' });
+    // if (granted) navigation.navigate("ConfigureGateway" as never, { nextPage: 'ConfigureGateway' });
   }
 
   return (

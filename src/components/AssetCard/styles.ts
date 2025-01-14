@@ -25,7 +25,7 @@ export const Container = styled.TouchableOpacity.attrs({
   border-width: 1px;
   flex-direction: row;
   gap: 12px;
-  padding: 8px 16px;
+  padding: 8px 16px 8px 8px;
 `;
 
 export const Image = styled.Image`
@@ -63,6 +63,7 @@ export const LastMeasurementInfo = styled.View`
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 4px;
 `;
 
 export const LastMeasurementText = styled.Text`
@@ -72,11 +73,11 @@ export const LastMeasurementText = styled.Text`
   line-height: 15px;
 `;
 
-interface ILastMeasurementTextInfo {
+interface ICardStatusSafe {
   status: 'S' | 'W' | 'D';
 }
 
-export const LastMeasurementTextInfo = styled.Text<ILastMeasurementTextInfo>`
+export const CardStatusSafe = styled.View<ICardStatusSafe>`
   background-color: ${({ theme, status }) => {
     switch (status) {
       case 'S':
@@ -89,13 +90,18 @@ export const LastMeasurementTextInfo = styled.Text<ILastMeasurementTextInfo>`
         return theme.colors.light; 
     }
   }};
+  /* line-height: 15px; */
+  padding: 6px;
+  border-radius: 8px;
+  position: absolute;
+  top: 6px;
+  left: 5px;
+`;
+
+export const CardStatusSafeText = styled.Text`
   color: ${({ theme }) => theme.colors.light};
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.smallest}px;
-  line-height: 15px;
-  margin-bottom: 6px;
-  padding: 4px;
-  border-radius: 128px;
 `;
 
 export const Elipses = styled.View`

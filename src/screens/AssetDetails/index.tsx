@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { View } from "react-native";
+import React, { useCallback, useState, useEffect } from "react";
+import { View, ScrollView } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
@@ -33,6 +33,7 @@ export function AssetDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [piece, setPiece] = useState<IPiece>(null);
   const [ isFavorite, setIsFavorite ] = useState(true);
+  const [readings, setReadings] = useState([])
 
   const THEME = useTheme();
 
@@ -68,10 +69,31 @@ export function AssetDetails() {
     }, [])
   );
 
+  const buildReadings = async () => {
+    const items = [] as IReading[];
+    if (piece.measuringPoints) {
+      const mapMP = piece.measuringPoints.map(mp => {
+        mp.readings?.map(reading => {
+          items.push(reading);
+        });
+      })
+      await Promise.all(mapMP);
+
+      items.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
+      setReadings(items);
+    }
+  }
+
+  useEffect(() => {
+    if (piece) buildReadings();
+    console.log(piece)
+  }, [piece])
+
   if (isLoading) return <Loading />;
 
   return (
     <Container>
+      <ScrollView>
         {piece && (
           <>
         <Header>
@@ -102,7 +124,7 @@ export function AssetDetails() {
             />
           </View>
 
-          <Asset>
+          <Asset status={readings[0]?.securityStatus}>
             <Title>{piece?.description}</Title>
             <Subtitle>{piece?.machine.name}</Subtitle>
           </Asset>
@@ -123,15 +145,15 @@ export function AssetDetails() {
               isLoading ?
               <Loading />
               :
-              <Content>
-                 <Text>Nenhum ponto de medição</Text>
-              </Content>
+              <View>
+                 {/* <Text>Nenhum ponto de medição</Text> */}
+              </View>
             }
           />
         </Content>
           </>
         )}
-
+    </ScrollView>
     </Container>
   );
 }

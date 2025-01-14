@@ -15,6 +15,9 @@ import {
   Subtitle,
   Content,
   Text,
+  CardStatusHealth,
+  CardStatusHealthText,
+  CardStatusHealthSubtext,
 } from "./styles";
 import { differenceInMinutes } from "date-fns";
 
@@ -54,11 +57,11 @@ export function MeasurementPointDetails({ route, nabigation }) {
       <Header>
         <Image
           resizeMode="cover"
-          source={{ uri: "https://synchroone.s3.amazonaws.com/asset-image.png"}}
+          source={{ uri: "https://synchroone.s3.amazonaws.com/white-mp-sensor.png"}}
         />
 
         <Entypo
-          color={THEME.colors.light}
+          color={THEME.colors.dark}
           name="chevron-left"
           onPress={() => navigation.goBack()}
           size={32}
@@ -69,7 +72,7 @@ export function MeasurementPointDetails({ route, nabigation }) {
           }}
         />
 
-        <Asset>
+        <Asset status={route.params.item.readings[0]?.securityStatus}>
           <Detail>
             <Title>{route.params.item?.device?.battery} %</Title>
             <Subtitle>Bateria</Subtitle>

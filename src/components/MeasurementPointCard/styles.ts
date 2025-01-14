@@ -10,7 +10,7 @@ export const Container = styled.TouchableOpacity.attrs({
   border-radius: 12px;
   flex-direction: row;
   gap: 12px;
-  padding: 8px 16px;
+  padding: 8px 16px 8px 8px;
 `;
 
 export const Image = styled.Image`
@@ -74,4 +74,35 @@ export const LastMeasurementTextInfo = styled.Text<ILastMeasurementTextInfo>`
   line-height: 15px;
   margin-bottom: 6px;
   padding: 4px;
+`;
+
+interface ICardStatusSafe {
+  status: 'S' | 'W' | 'D';
+}
+
+export const CardStatusSafe = styled.View<ICardStatusSafe>`
+  background-color: ${({ theme, status }) => {
+    switch (status) {
+      case 'S':
+        return theme.colors.success;
+      case 'W':
+        return theme.colors.warning;
+      case 'D':
+        return theme.colors.danger;
+      default:
+        return theme.colors.light; 
+    }
+  }};
+  /* line-height: 15px; */
+  padding: 6px;
+  border-radius: 8px;
+  position: absolute;
+  top: 6px;
+  left: 5px;
+`;
+
+export const CardStatusSafeText = styled.Text`
+  color: ${({ theme }) => theme.colors.light};
+  font-family: ${({ theme }) => theme.fonts.medium};
+  font-size: ${({ theme }) => theme.fontSize.smallest}px;
 `;
