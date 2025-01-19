@@ -11,6 +11,7 @@ import { Dropdown } from "../../components/Dropdown";
 import { PickerData } from "../../components/Dropdown/types";
 import { MinutesIntervalButton } from "../../components/MinutesIntervalButton";
 import { Button } from "../../components/Button";
+import Select from "../../components/Select";
 import { FormData } from "./types";
 
 import {
@@ -22,6 +23,7 @@ import {
   MinutesInterval,
   ButtonWrapper,
   Content,
+  ButtonTryAgain,
 } from "./styles";
 import { Loading } from "../../components/Loading";
 import { getCompaniesForSelect } from "../../services/Companies";
@@ -36,7 +38,7 @@ import { Toast } from "react-native-toast-notifications";
 export function ConfigureParameters( { route } ) {
   const THEME = useTheme();
   const navigation = useNavigation();
-  const { allowed, isLoading, connectedDevice, getPermissions, scanDevices, sendCommand } = useBLEManager();
+  const { allowed, isLoading, connectedDevice, getPermissions, scanDevices, sendCommand, disconnectDevice } = useBLEManager();
   const [interval, setInterval] = useState(60);
   const [data, setData] = useState({ companyId: 0, areaId: 0, sectorId: 0, machineId: 0, pieceId: 0, measuringPointId: 0 });
   const [companies, setCompanies] = useState([] as any[]);
@@ -50,11 +52,11 @@ export function ConfigureParameters( { route } ) {
   const getCompanies = async () => {
     const companiesGet = await getCompaniesForSelect();
     setCompanies(companiesGet);
-    console.log(companiesGet)
   }
 
   useEffect(() => {
     getCompanies();
+    verifyConnecton()
   }, [])
 
   const handleChangeCompanies = async (value: any) => {
@@ -118,7 +120,7 @@ export function ConfigureParameters( { route } ) {
     sendCommand(connectedDevice, "SYNC-SB:10");
     sendCommand(connectedDevice, "SYNC-TPB:10");
     sendCommand(connectedDevice, "SYNC-TBLE:30");
-    sendCommand(connectedDevice, "SYNC-FS:1");
+    sendCommand(connectedDevice, "SYNC-FS:16");
     sendCommand(connectedDevice, "SYNC-BW:00");
     sendCommand(connectedDevice, "SYNC-AVD:123");
     sendCommand(connectedDevice, "SYNC-FINISH");
@@ -128,10 +130,6 @@ export function ConfigureParameters( { route } ) {
     if (!allowed) await getPermissions();
     const connectedByScan = await scanDevices(route.params.bluetoothDeviceName);
   }
-
-  useEffect(() => {
-    verifyConnecton()
-  }, [])
 
   const schema = yup.object().shape({
     companyId: yup.string().required("Empresa é obrigatório"),
@@ -156,15 +154,15 @@ export function ConfigureParameters( { route } ) {
     try {
       await sendCommands()
 
-      // const url = `companies/${formData.companyId}/devices/${route.params.bluetoothDeviceName}`;
-      const url = `companies/${formData.companyId}/devices/SSYNC-AAA1`;
+      const url = `companies/${formData.companyId}/devices/${route.params.bluetoothDeviceName}/set-up`;
+      // const url = `companies/${formData.companyId}/devices/SSYNC-AAA1/set-up`;
       const request = await api.post(url, {
         measuringPointId: Number(formData.measuringPointId),
         readingWindow: interval,
         scale: 16,
       });
 
-      console.log(request);
+      // console.log(request);
       Toast.show(
         "Novo sensor configurado com sucesso!",
         { type: "success" }
@@ -174,6 +172,7 @@ export function ConfigureParameters( { route } ) {
         index: 0,
         routes: [{ name: "Home" as never }],
       });
+      navigation.navigate("Home")
     } catch (error) {
       Toast.show(
         "Ocorreu um erro ao tentar configurar o sensor. Por favor, tente novamente.",
@@ -184,6 +183,11 @@ export function ConfigureParameters( { route } ) {
     }
   }
 
+  const handleTryConnectionDevice = async () => {
+    await disconnectDevice();
+    await scanDevices(route.params.bluetoothDeviceName);
+  }
+
   return (
     <Container>
       {isLoading && (
@@ -192,7 +196,15 @@ export function ConfigureParameters( { route } ) {
 
       {!isLoading && !connectedDevice && (
         <Content>
-          <Text>Não foi possível encontrar o sensor {route.params.bluetoothDeviceName}, tente novamente</Text>
+          <Text>Não foi possível conectar com o sensor {route.params.bluetoothDeviceName}</Text>
+
+          <ButtonTryAgain>
+            <Button
+              title="Tentar novamente"
+              onPress={() => handleTryConnectionDevice()}
+              // loading={isLoadingPost}
+            />
+          </ButtonTryAgain>
         </Content>
       )}
 
@@ -204,15 +216,15 @@ export function ConfigureParameters( { route } ) {
               name="companyId"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Dropdown 
+                <Select 
                   editable 
-                  data={companies} 
+                  values={companies}
+                  selected={value}
+                  onSelect={(value) => {onChange(value);handleChangeCompanies(value)}}
                   label="Empresa" 
                   error={errors?.companyId?.message}
                   errorTextColor={THEME.colors.danger}
-                  onValueChange={value => {onChange(value);handleChangeCompanies(value)}}
                   placeholder="Selecione uma empresa"
-                  selectedValue={value}
                 />
               )}
             />
@@ -223,15 +235,15 @@ export function ConfigureParameters( { route } ) {
                 name="areaId"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Dropdown 
+                  <Select 
                     editable 
-                    data={areas} 
+                    values={areas}
+                    selected={value}
+                    onSelect={(value) => {onChange(value);handleChangeAreas(value)}}
                     label="Área" 
-                    error={errors?.areaId?.message}
+                    error={errors?.companyId?.message}
                     errorTextColor={THEME.colors.danger}
-                    onValueChange={value => {onChange(value);handleChangeAreas(value)}}
                     placeholder="Selecione uma area"
-                    selectedValue={value}
                   />
                 )}
               />
@@ -242,15 +254,15 @@ export function ConfigureParameters( { route } ) {
               name="sectorId"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Dropdown 
+                <Select 
                   editable 
-                  data={sectors} 
+                  values={sectors}
+                  selected={value}
+                  onSelect={(value) => {onChange(value);handleChangeSector(value)}}
                   label="Setor" 
-                  error={errors?.sectorId?.message}
+                  error={errors?.companyId?.message}
                   errorTextColor={THEME.colors.danger}
-                  onValueChange={value => {onChange(value);handleChangeSector(value)}}
                   placeholder="Selecione uma setor"
-                  selectedValue={value}
                 />
               )}
             />
@@ -261,15 +273,15 @@ export function ConfigureParameters( { route } ) {
               name="machineId"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Dropdown 
+                <Select 
                   editable 
-                  data={machines} 
+                  values={machines}
+                  selected={value}
+                  onSelect={(value) => {onChange(value);handleChangeMachine(value)}}
                   label="Máquina" 
-                  error={errors?.machineId?.message}
+                  error={errors?.companyId?.message}
                   errorTextColor={THEME.colors.danger}
-                  onValueChange={value => {onChange(value);handleChangeMachine(value)}}
                   placeholder="Selecione uma máquina"
-                  selectedValue={value}
                 />
               )}
             />
@@ -280,15 +292,15 @@ export function ConfigureParameters( { route } ) {
               name="pieceId"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Dropdown 
+                <Select 
                   editable 
-                  data={pieces} 
+                  values={pieces}
+                  selected={value}
+                  onSelect={(value) => {onChange(value);handleChangePiece(value)}}
                   label="Ativo" 
-                  error={errors?.pieceId?.message}
+                  error={errors?.companyId?.message}
                   errorTextColor={THEME.colors.danger}
-                  onValueChange={value => {onChange(value);handleChangePiece(value)}}
                   placeholder="Selecione uma ativo"
-                  selectedValue={value}
                 />
               )}
             />
@@ -299,15 +311,15 @@ export function ConfigureParameters( { route } ) {
               name="measuringPointId"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Dropdown 
+                <Select 
                   editable 
-                  data={measuringPoints} 
+                  values={measuringPoints}
+                  selected={value}
+                  onSelect={(value) => {onChange(value);handleChangeMeasuringPoint(value)}}
                   label="Ponto de Medição" 
-                  error={errors?.measuringPointId?.message}
+                  error={errors?.companyId?.message}
                   errorTextColor={THEME.colors.danger}
-                  onValueChange={value => {onChange(value);handleChangeMeasuringPoint(value)}}
                   placeholder="Selecione uma ponto de medição"
-                  selectedValue={value}
                 />
               )}
             />

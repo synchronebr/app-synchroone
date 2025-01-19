@@ -9,7 +9,6 @@ import { DashboardTab } from "./dashboard-tab";
 import { QRCodeScanner } from "../screens/QRCodeScanner";
 import { ConfigureParameters } from "../screens/ConfigureParameters";
 import { ConfigureGateway } from "../screens/ConfigureGateway";
-import { BluetoothManager } from "../screens/BluetoothManager";
 import { AssetDetails } from "../screens/AssetDetails";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
@@ -80,7 +79,7 @@ export function Dashboard() {
           headerTitleAlign: "center",
         }}
       />
-      <Screen
+      {/* <Screen
         component={BluetoothManager}
         name="BluetoothManager"
         options={{
@@ -93,7 +92,7 @@ export function Dashboard() {
           headerTintColor: THEME.colors.light,
           headerTitle: "Gerenciador Bluetooth",
         }}
-      />
+      /> */}
       <Screen
         component={Notifications}
         name="Notifications"

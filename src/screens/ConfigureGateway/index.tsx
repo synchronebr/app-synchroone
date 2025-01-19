@@ -13,6 +13,7 @@ import { Input } from "../../components/Input";
 import { useBLEManager } from "../../hooks/useBLEManager";
 
 import { Button } from "../../components/Button";
+import { Loading } from "../../components/Loading";
 
 import api from "../../services/api";
 import { Toast } from "react-native-toast-notifications";
@@ -23,8 +24,11 @@ import {
   Container,
   ConnectionButtons,
   Inputs,
+  Text,
   InputWrapper,
   ButtonWrapper,
+  Content,
+  ButtonTryAgain,
 } from "./styles";
 import { KeyboardAvoidingView } from "react-native";
 import { ConnectionTypeButton } from "../../components/ConnectionTypeButton";
@@ -34,8 +38,6 @@ export function ConfigureGateway( { route } ) {
   const THEME = useTheme();
   const navigation = useNavigation();
   const { allowed, isLoading, connectedDevice, getPermissions, scanDevices, sendCommand } = useBLEManager();
-  const [interval, setInterval] = useState(60);
-  const [data, setData] = useState({ companyId: 0, areaId: 0, sectorId: 0, machineId: 0, pieceId: 0, measuringPointId: 0 });
   const [isLoadingPost, setIsLoadingPost] = useState(false);
   const [isActive, setIsActive] = useState<string | number>(1);
   const passwordInputRef = useRef<TextInput>();
@@ -52,8 +54,8 @@ export function ConfigureGateway( { route } ) {
     sendCommand(connectedDevice, "PASS:5enh@SYNC24#end");
     sendCommand(connectedDevice, `SYNC-TD:10#end`);
     sendCommand(connectedDevice, "SYNC-MODE:1#end");
-    sendCommand(connectedDevice, "SSID:${ssid}#end");
-    sendCommand(connectedDevice, "PS:${password}#end");
+    sendCommand(connectedDevice, `SSID:${ssid}#end`);
+    sendCommand(connectedDevice, `PS:${password}#end`);
     sendCommand(connectedDevice, "URL1:https://sensors.synchroone.com/sensors#end");
     sendCommand(connectedDevice, "URL2:https://sensors.synchroone.com/sensors/api_key#end");
     sendCommand(connectedDevice, "URL2:https://sensors.synchroone.com/sensors/gateways#end");
@@ -109,10 +111,9 @@ export function ConfigureGateway( { route } ) {
     setIsLoadingPost(true);
 
     try {
-      // await sendCommands(formData.ssid, formData.password)
+      await sendCommands(formData.ssid, formData.password)
 
       const url = `devices/${route.params.bluetoothDeviceName}/gateways/set-up`;
-      // const url = `companies/${formData.companyId}/devices/SSYNC-AAA1`;
       const request = await api.post(url, {
         connectionType: formData.isActive,
       });
@@ -125,9 +126,11 @@ export function ConfigureGateway( { route } ) {
       navigation.navigate("Home" as never);
     } catch (error) {
       Toast.show(
-        "Ocorreu um erro ao tentar configurar o sensor. Por favor, tente novamente.",
+        "Ocorreu um erro ao tentar configurar o gateway. Por favor, tente novamente.",
         { type: "danger" }
       );
+
+      navigation.navigate("Home" as never);
       setIsLoadingPost(false);
       console.log(error)
     }
@@ -135,6 +138,25 @@ export function ConfigureGateway( { route } ) {
 
   return (
     <Scroll>
+
+      {isLoading && (
+        <Loading bgColor={'transparent'} color={THEME.colors.primary} />
+      )}
+
+      {!isLoading && !connectedDevice && (
+        <Content>
+          <Text>Não foi possível conectar com o gateway {route.params.bluetoothDeviceName}</Text>
+
+          <ButtonTryAgain>
+            <Button
+              title="Tentar novamente"
+              onPress={() => handleTryConnectionDevice()}
+            />
+          </ButtonTryAgain>
+        </Content>
+      )}
+
+      {!isLoading && connectedDevice && (
       <Container>
         <KeyboardAvoidingView behavior="position">
 
@@ -216,10 +238,11 @@ export function ConfigureGateway( { route } ) {
 
 
           <ButtonWrapper>
-            <Button onPress={handleSubmit(handleFormSubmit)} title="Avançar" />
+            <Button onPress={/*handleSubmit(handleFormSubmit)*/() => handleFormSubmit()} title="Avançar" />
           </ButtonWrapper>
         </KeyboardAvoidingView>
       </Container>
+      )}
     </Scroll>
   );
 }

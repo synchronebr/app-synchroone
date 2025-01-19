@@ -1,28 +1,50 @@
 
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Picker, { PickerStyle } from "react-native-picker-select";
-import { SelectProps } from "./types";
-import THEME from "../../global/styles/theme";
 
-export default function Select<T>({ label, placeholder, values, selected, onSelect }: SelectProps<T>) {
+import THEME from "../../global/styles/theme";
+import { SelectProps } from "./types";
+import { Text, Container, ErrorText } from "./styles";
+
+export default function Select<T>({ label, placeholder, values, selected, onSelect, editable, error, errorTextColor }: SelectProps<T>) {
   function onValueChange(newValue: T) {
     onSelect(newValue);
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}> { label } </Text>
+      <Text style={[styles.label, error && { color: errorTextColor } ]}> { label } </Text>
 
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, error && { borderColor: errorTextColor }]}>
         <Picker
+          style={{
+            ...pickerSelectStyles,
+            placeholder: [
+              pickerSelectStyles.placeholder,
+              error && { color: errorTextColor }, // Cor vermelha no texto para iOS
+            ],
+            inputIOS: [
+              pickerSelectStyles.inputIOS,
+              error && { color: errorTextColor }, // Cor vermelha no texto para iOS
+            ],
+            inputAndroid: [
+              pickerSelectStyles.inputAndroid,
+              error && { color: errorTextColor }, // Cor vermelha no texto para Android
+            ],
+          }}
+          enabled={editable}
           placeholder={{ label: placeholder, value: null }}
           value={selected}
           onValueChange={onValueChange}
           items={values}
-          style={pickerSelectStyles}
         />
       </View>
+      {error && (
+        <ErrorText errorTextColor={errorTextColor}>
+          {error}
+        </ErrorText>
+      )}
     </View>
   );
 }
@@ -32,7 +54,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   label: {
-    fontSize: THEME.fontSize.largest,
+    fontSize: THEME.fontSize.medium,
     fontFamily: THEME.fonts.semiBold,
     marginBottom: 6,
     color: THEME.colors.dark,
@@ -43,24 +65,31 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
     backgroundColor: "#f9f9f9",
-    color: THEME.colors.gray_dark,
-    fontSize: THEME.fontSize.smaller,
+    justifyContent: "center",
   },
 });
 
-const pickerSelectStyles: PickerStyle = {
-  placeholder: {
-    color: THEME.colors.dark,
-  },
+const pickerSelectStyles = {
   viewContainer: {
     height: 40,
-    justifyContent: 'center',
+    justifyContent: "center",
     borderColor: THEME.colors.gray_dark,
   },
   inputIOS: {
+    fontFamily: THEME.fonts.medium,
+    fontSize: THEME.fontSize.normal,
     color: THEME.colors.dark,
+    paddingHorizontal: 8,
   },
   inputAndroid: {
+    fontFamily: THEME.fonts.medium,
+    fontSize: THEME.fontSize.normal,
     color: THEME.colors.dark,
+    paddingHorizontal: 8,
+  },
+  placeholder: {
+    fontFamily: THEME.fonts.medium,
+    fontSize: THEME.fontSize.normal,
+    color: THEME.colors.primary,
   },
 };

@@ -33,3 +33,24 @@ export const InputWrapper = styled.View``;
 export const ButtonWrapper = styled.View`
   margin-bottom: 48px;
 `;
+
+export const Content = styled.View`
+  padding: 18px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ButtonTryAgain = styled.View`
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  margin-top: 16px;
+`;
+
+export const Text = styled.Text`
+  color: ${({ theme }) => theme.colors.dark};
+  font-family: ${({ theme }) => theme.fonts.semiBold};
+  font-size: ${({ theme }) => theme.fontSize.normal}px;
+  line-height: 21px;
+`;

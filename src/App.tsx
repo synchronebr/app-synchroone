@@ -1,5 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
+import {LogBox} from 'react-native';
 import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import {
@@ -43,6 +44,8 @@ export default function App() {
     return null;
   }
 
+  LogBox.ignoreAllLogs();
+  
   return (
     <ThemeProvider theme={THEME}>
       <ToastProvider

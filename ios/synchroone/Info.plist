@@ -16,9 +16,9 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>1.0.1</string>
     <key>CFBundleVersion</key>
-	<string>13</string>
+	<string>15</string>
     
     <key>LSApplicationQueriesSchemes</key>
     <array>
@@ -47,7 +47,10 @@
     
     <key>NSBluetoothPeripheralUsageDescription</key>
     <string>$(PRODUCT_NAME) precisa de acesso ao Bluetooth para se conectar a dispositivos periféricos.</string>
-    
+
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>O aplicativo requer acesso à localização para escanear dispositivos Bluetooth.</string>
+
     <!-- Configuração de Segurança para Redes e Conteúdo -->
     <key>NSAppTransportSecurity</key>
     <dict>

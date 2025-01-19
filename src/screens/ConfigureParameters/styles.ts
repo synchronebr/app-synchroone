@@ -40,3 +40,10 @@ export const Content = styled.View`
   justify-content: center;
   align-items: center;
 `;
+
+export const ButtonTryAgain = styled.View`
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  margin-top: 16px;
+`;

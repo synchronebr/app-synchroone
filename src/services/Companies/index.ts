@@ -6,9 +6,9 @@ import { IPiece } from "../dtos/IPiece";
 export async function getCompaniesForSelect(): Promise<{ label: string, value: string }[] | any> {
   let response = await api.get("companies");
 
-  let companies = [{ label: "Selecione uma empresa", value: null }];
+  let companies = [];
   if (response.data) {
-    response.data.map(item => companies.push({ label: item.name, value: item.id }))
+    response.data.data.map(item => companies.push({ label: item.name, value: item.id }))
   }
 
   return companies;

@@ -11,13 +11,14 @@ import {
 
 const BLEManagerContext = createContext({} as IBLEManagerContextData);
 
+const manager = new BleManager();
+
 const serviceUUID = "ab0828b1-198e-4351-b779-901fa0e0371e";
 const characteristicUUID = "4ac8a682-9736-4e5d-932b-e9b31405049c";
 
 export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
   const [isBluetoothOn, setIsBluetoothOn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [manager] = useState(new BleManager());
   const [allowed, setAllowed] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
@@ -47,6 +48,7 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
   async function connectDevice(device: Device) {
     setConnecting(true);
     try {
+      console.log(device)
       await device.connect();
       await device.discoverAllServicesAndCharacteristics();
       setConnectedDevice(device);
@@ -75,7 +77,7 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
           setIsLoading(false);
           return;
         }
-
+        // console.log(device.name)
         if (device.name === bluetoothDeviceName) {
           manager.stopDeviceScan();
           connectDevice(device);
@@ -123,14 +125,35 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
     }
   }
 
+  async function disconnectDevice() {
+    if (connectedDevice) {
+      try {
+        await connectedDevice.cancelConnection();
+        setConnectedDevice(null);
+        console.log("Dispositivo desconectado com sucesso.");
+        // Toast.show("Dispositivo desconectado com sucesso.");
+      } catch (error) {
+        console.error("Erro ao desconectar do dispositivo:", error);
+        // Toast.show("Erro ao desconectar do dispositivo. Tente novamente.");
+      }
+    } else {
+      console.log("Nenhum dispositivo conectado.");
+      // Toast.show("Nenhum dispositivo conectado.");
+    }
+  }
+
   useEffect(() => {
     const subscription = manager.onStateChange((state) => {
       if (state === "PoweredOn") {
         setIsBluetoothOn(true);
         // getPermissions();
         subscription.remove();
-      } else {
-        setIsBluetoothOn(false);
+        console.log('BLe PoweredOn...')
+      } else if (state === "Unauthorized") {
+        Toast.show("Bluetooth não autorizado. Por favor, habilite nas configurações.");
+      } else if (state === "Unknown") {
+        Toast.show("Estado do Bluetooth desconhecido. Verifique as configurações.");
+        restartBleManager();
       }
     }, true);
     return () => {
@@ -152,6 +175,7 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
         connectDevice,
         scanDevices,
         getPermissions,
+        disconnectDevice,
       }}
     >
       {children}

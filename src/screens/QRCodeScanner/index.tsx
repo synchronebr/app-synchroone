@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
+
+import { useBLEManager } from "../../hooks/useBLEManager";
 
 import { QRCodeScannerNavigationProps } from "./types";
 import { Container, Camera, Scanner } from "./styles";
 
 export function QRCodeScanner({ route }) {
   const navigation = useNavigation<QRCodeScannerNavigationProps>();
+  const { disconnectDevice } = useBLEManager();
 
   function onScannerData(data: string) {
     const scannerData = {
@@ -16,7 +19,7 @@ export function QRCodeScanner({ route }) {
     navigation.navigate(route.params.nextPage, scannerData);
   }
 
-  console.log(route);
+  useEffect(() => { disconnectDevice() }, [])
 
   return (
     <Container>

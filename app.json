@@ -2,12 +2,25 @@
   "expo": {
     "name": "synchroone",
     "slug": "synchroone",
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "icon": "./assets/images/app-icon.png",
     "assetBundlePatterns": [
       "**/*"
     ],
     "plugins": [
-      "expo-font"
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#1C2C3C",
+          "image": "./assets/images/splash_screen.png",
+          "dark": {
+            "image": "./assets/images/splash_screen.png",
+            "backgroundColor": "#1C2C3C"
+          },
+          "imageWidth": 200
+        }
+      ]
     ],
     "extra": {
       "eas": {

@@ -5,7 +5,7 @@ import api from "../../../../api";
 export async function getMachinesForSelect(companyId: number, areaId: number, sectorId: number): Promise<{ label: string, value: string }[] | any> {
   let response = await api.get(`companies/${companyId}/areas/${areaId}/sectors/${sectorId}/machines`);
 
-  let items = [{ label: "Selecione uma máquina", value: null }];
+  let items = [];
   if (response.data) {
     response.data.map(item => items.push({ label: item.name, value: item.id }))
   }
