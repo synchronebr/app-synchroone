@@ -1,5 +1,4 @@
 import React from "react";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import TuneIcon from "../../assets/icons/tune.svg";
 
@@ -13,7 +12,7 @@ export function Notifications() {
   return (
     <Container>
       <TuneIconContainer>
-        <TuneIcon height={RFValue(18)} width={RFValue(18)} />
+        <TuneIcon height={18} width={18} />
       </TuneIconContainer>
 
       <List

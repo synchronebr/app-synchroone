@@ -15,9 +15,6 @@ import {
   Subtitle,
   Content,
   Text,
-  CardStatusHealth,
-  CardStatusHealthText,
-  CardStatusHealthSubtext,
 } from "./styles";
 import { differenceInMinutes } from "date-fns";
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { useTheme } from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
 
@@ -16,8 +15,8 @@ export function ManualCard({ title, ...rest }: ManualCardProps) {
 
       <ArrowForwardIcon
         fill={THEME.colors.gray_dark}
-        height={RFValue(12)}
-        width={RFValue(12)}
+        height={12}
+        width={12}
       />
     </Container>
   );

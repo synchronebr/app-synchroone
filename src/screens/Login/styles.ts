@@ -1,6 +1,4 @@
-import { Platform } from "react-native";
 import styled from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import THEME from "../../global/styles/theme";
 
@@ -8,7 +6,7 @@ export const Scroll = styled.ScrollView.attrs({
   contentContainerStyle: {
     backgroundColor: THEME.colors.primary,
     minHeight: "100%",
-    paddingHorizontal: RFValue(20),
+    paddingHorizontal: 20,
   },
   keyboardShouldPersistTaps: "always",
 })``;
@@ -23,14 +21,6 @@ export const Content = styled.View`
   flex: 1;
   justify-content: center;
   gap: 100px;
-`;
-
-export const Title = styled.Text`
-  color: ${({ theme }) => theme.colors.light};
-  font-family: ${({ theme }) => theme.fonts.semiBold};
-  font-size: ${RFValue(Platform.OS === "android" ? 48 : 36)}px;
-  margin: ${RFValue(96)}px 0;
-  text-align: center;
 `;
 
 export const Form = styled.View`
@@ -51,6 +41,6 @@ export const CreateAccountButton = styled.TouchableOpacity`
 
 export const CreateAccountButtonText = styled.Text`
   color: ${({ theme }) => theme.colors.light};
-  font-size: ${RFValue(Platform.OS === "android" ? 12 : 10)}px;
+  font-size: 12px;
   font-family: 'RobotSlab-Regular';
 `;

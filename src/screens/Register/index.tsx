@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useTheme } from "styled-components/native";
 import * as yup from "yup";
 import { Toast } from "react-native-toast-notifications";
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@expo/vector-icons/MaterialIcons';
 
 import LogoWhiteIconIcon from "../../assets/icons/logo-white-text.svg";
 
@@ -29,7 +29,6 @@ import {
   CreateAccountButtonText,
   IconBack,
 } from "./styles";
-import { RFValue } from "react-native-responsive-fontsize";
 
 export function Register() {
   const [isLoading, setIsLoading] = useState(false);
@@ -117,7 +116,7 @@ export function Register() {
         <KeyboardAvoidingView behavior="position">
           {/* <Title>Synchroone</Title> */}
           <Content>
-            <IconBack onPress={() => navigation.navigate('Login')}>
+            <IconBack onPress={() => navigation.navigate('Login' as never)}>
               <Icon name="arrow-back" color="#ffffff" size={30} />
             </IconBack>
 

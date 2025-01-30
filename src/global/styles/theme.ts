@@ -1,6 +1,3 @@
-import { Platform } from "react-native";
-import { RFValue } from "react-native-responsive-fontsize";
-
 export default {
   colors: {
     primary: "#1E293B",
@@ -20,10 +17,10 @@ export default {
     bold: "Montserrat_700Bold",
   },
   fontSize: {
-    smallest: RFValue(Platform.OS === "android" ? 8 : 8),
-    smaller: RFValue(Platform.OS === "android" ? 10 : 10),
-    normal: RFValue(Platform.OS === "android" ? 12 : 12),
-    larger: RFValue(Platform.OS === "android" ? 14 : 14),
-    largest: RFValue(Platform.OS === "android" ? 16 : 16),
+    smallest: 11,
+    smaller: 12,
+    normal: 14,
+    larger: 16,
+    largest: 20,
   },
-};
+}

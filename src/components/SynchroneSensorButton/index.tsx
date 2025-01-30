@@ -2,7 +2,6 @@ import React from "react";
 import { Camera } from "expo-camera";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import SensorsIcon from "../../assets/icons/sensors.svg";
 
@@ -15,7 +14,7 @@ export function SynchroneSensorButton() {
   const navigation = useNavigation<QRCodeNavigationProps>();
   const THEME = useTheme();
 
-  const iconSize = RFValue(28);
+  const iconSize = 28;
 
   async function getCameraPermission() {
     const { granted } = await requestPermission();

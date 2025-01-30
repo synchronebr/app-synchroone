@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
 
@@ -83,8 +82,8 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
 
       <ArrowForwardIcon
         fill={THEME.colors.primary}
-        height={RFValue(12)}
-        width={RFValue(12)}
+        height={12}
+        width={12}
       />
     </Container>
   );

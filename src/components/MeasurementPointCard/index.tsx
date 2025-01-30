@@ -1,7 +1,6 @@
 import React from "react";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
 
@@ -57,8 +56,8 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
 
       <ArrowForwardIcon
         fill={THEME.colors.secondary}
-        height={RFValue(12)}
-        width={RFValue(12)}
+        height={12}
+        width={12}
       />
     </Container>
   );

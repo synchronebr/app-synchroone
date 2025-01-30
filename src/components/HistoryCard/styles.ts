@@ -1,5 +1,4 @@
 import styled from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import { HistoryCardCircleStyleProps, HistoryCardStyleProps } from "./types";
 
@@ -19,8 +18,8 @@ export const Circle = styled.View<HistoryCardCircleStyleProps>`
   border-color: ${({ theme }) => theme.colors.secondary};
   border-radius: 64px;
   border-width: 2px;
-  height: ${RFValue(12)}px;
-  width: ${RFValue(12)}px;
+  height: 12px;
+  width: 12px;
 `;
 
 export const Line = styled.View`

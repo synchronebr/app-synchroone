@@ -19,7 +19,6 @@ import {
   Scroll,
   Container,
   Content,
-  Title,
   Form,
   InputWrapper,
   ButtonWrapper,

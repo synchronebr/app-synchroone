@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import HomeSolidIcon from "../assets/icons/home-solid.svg";
 import HomeOutlineIcon from "../assets/icons/home-outline.svg";
@@ -52,8 +51,8 @@ export function DashboardTab() {
           headerTitleAlign: "center",
           headerTitleStyle: {
             fontFamily: THEME.fonts.semiBold,
-            fontSize: THEME.fontSize.normal,
-            lineHeight: RFValue(24),
+            fontSize: THEME.fontSize.larger,
+            lineHeight: 24,
             marginLeft: 8,
           },
           tabBarActiveTintColor: THEME.colors.primary,
@@ -67,7 +66,7 @@ export function DashboardTab() {
             fontSize: THEME.fontSize.smaller,
           },
           tabBarStyle: {
-            height: RFValue(62),
+            height: 62,
             paddingHorizontal: 20,
           },
         }}
@@ -140,8 +139,8 @@ function AlertFilterButton () {
   return (
     <TuneIcon
       style={{ marginRight: 20 }}
-      height={RFValue(18)}
-      width={RFValue(18)}
+      height={18}
+      width={18}
       onPress={() => {
         openFilter();
       }}

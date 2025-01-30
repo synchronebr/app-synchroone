@@ -1,5 +1,4 @@
 import React from "react";
-import { RFValue } from "react-native-responsive-fontsize";
 import { useNavigation } from "@react-navigation/native";
 
 import NotificationsIcon from "../../assets/icons/notifications.svg";
@@ -24,7 +23,7 @@ import {
 export function Home() {
   const navigation = useNavigation();
 
-  const notificationsIconSize = RFValue(22);
+  const notificationsIconSize = 22;
 
   return (
     <Container>
@@ -44,7 +43,7 @@ export function Home() {
       </Header>
 
       <GreetingsContainer>
-        <BlueLogoIcon width={RFValue(36)} height={RFValue(68)} />
+        <BlueLogoIcon width={36} height={68} />
         <GreetingsMessage>Bem-vindo ao Synchroone!</GreetingsMessage>
       </GreetingsContainer>
 

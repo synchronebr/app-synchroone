@@ -12,7 +12,6 @@ import {
 } from "@expo-google-fonts/montserrat";
 import { ThemeProvider } from "styled-components/native";
 import { ToastProvider } from "react-native-toast-notifications";
-import { RFValue } from "react-native-responsive-fontsize";
 import {
   useQuery,
   useMutation,
@@ -64,7 +63,7 @@ export default function App() {
           duration={3500}
           placement="top"
           textStyle={{
-            fontSize: RFValue(12),
+            fontSize: 12,
             fontFamily: THEME.fonts.medium,
             textAlign: "center",
           }}

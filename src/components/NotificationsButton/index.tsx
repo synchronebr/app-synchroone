@@ -1,6 +1,5 @@
 import React from "react";
 import { useTheme } from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import NotificationsOutlineIcon from "../../assets/icons/notifications-outline.svg";
 import { TotalNotifications } from "../TotalNotifications";
@@ -14,7 +13,7 @@ export function NotificationsButton({ ...rest }: NotificationsButtonProps) {
   return (
     <Container {...rest}>
       <IconContainer>
-        <NotificationsOutlineIcon height={RFValue(28)} width={RFValue(28)} />
+        <NotificationsOutlineIcon height={28} width={28} />
 
         <TotalNotifications total={5} />
       </IconContainer>

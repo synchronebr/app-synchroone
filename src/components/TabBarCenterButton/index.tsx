@@ -1,6 +1,5 @@
 import React from "react";
 import { useTheme } from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import BellRingingIcon from "../../assets/icons/bell-ringing.svg";
 import BellRingingFilledIcon from "../../assets/icons/bell-ringing-filled.svg";
@@ -24,9 +23,9 @@ export function TabBarCenterButton({ isFocused, readingsCount }: TabBarCenterBut
     >
       <BellRingingIconContainer>
         {isFocused ? (
-          <BellRingingFilledIcon height={RFValue(24)} width={RFValue(24)} />
+          <BellRingingFilledIcon height={24} width={24} />
         ) : (
-          <BellRingingIcon height={RFValue(24)} width={RFValue(24)} />
+          <BellRingingIcon height={24} width={24} />
         )}
 
         <TotalNotifications total={readingsCount} />

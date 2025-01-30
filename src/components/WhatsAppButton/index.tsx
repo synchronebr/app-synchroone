@@ -1,7 +1,6 @@
 import React from "react";
 import { Linking } from "react-native";
 import { useTheme } from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 import { Toast } from "react-native-toast-notifications";
 
 import WhatsAppIcon from "../../assets/icons/whatsapp.svg";
@@ -32,7 +31,7 @@ export function WhatsAppButton() {
 
   return (
     <Container onPress={handleOpenWhatsApp}>
-      <WhatsAppIcon height={RFValue(28)} width={RFValue(28)} />
+      <WhatsAppIcon height={28} width={28} />
 
       <Content>
         <Title>Precisa de ajuda?</Title>
@@ -43,8 +42,8 @@ export function WhatsAppButton() {
       <ArrowForwardIcon
         style={{ marginRight: 4 }}
         fill={THEME.colors.primary}
-        height={RFValue(15)}
-        width={RFValue(15)}
+        height={15}
+        width={15}
       />
     </Container>
   );

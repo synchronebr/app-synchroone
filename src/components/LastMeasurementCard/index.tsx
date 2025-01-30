@@ -2,7 +2,6 @@ import React from "react";
 import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import ThermometerIcon from "../../assets/icons/thermometer.svg";
 
@@ -71,7 +70,7 @@ export function LastMeasurementCard({ item }: ILastMeasurementCard) {
         <CardViewsTitle>Temperatura</CardViewsTitle>
         <CardViews>
           <CardViewTemperature>
-            <ThermometerIcon height={RFValue(16)} width={RFValue(24)} />
+            <ThermometerIcon height={16} width={24} />
             <CardViewValue>{item.readings[0]?.temperature > 0 ? (`${Number(item.readings[0]?.temperature.toFixed(4))} °C`) : (`-`)}</CardViewValue>
           </CardViewTemperature>
         </CardViews>

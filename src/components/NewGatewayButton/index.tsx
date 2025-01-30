@@ -2,7 +2,6 @@ import React from "react";
 import { Camera } from "expo-camera";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import GatewayIcon from "../../assets/icons/wireless.svg";
 
@@ -15,7 +14,7 @@ export function NewGatewayButton() {
   const navigation = useNavigation<QRCodeNavigationProps>();
   const THEME = useTheme();
 
-  const iconSize = RFValue(22);
+  const iconSize = 22;
 
   async function getCameraPermission() {
     const { granted } = await requestPermission();

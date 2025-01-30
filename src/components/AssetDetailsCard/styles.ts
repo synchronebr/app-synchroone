@@ -1,5 +1,4 @@
 import styled from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 export const Container = styled.View`
   align-items: center;
@@ -30,9 +29,9 @@ export const IconContainer = styled.View`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.secondary};
   border-radius: 128px;
-  height: ${RFValue(40)}px;
+  height: 40px;
   justify-content: center;
-  width: ${RFValue(40)}px;
+  width: 40px;
 `;
 
 export const Icon = styled.View``;

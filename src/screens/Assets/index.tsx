@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { RFValue } from "react-native-responsive-fontsize";
 import {
   ActivityIndicator,
   View,
@@ -129,7 +128,7 @@ export function Assets() {
           editable={!isLoading}
         />
 
-        <TuneIcon height={RFValue(18)} width={RFValue(18)} onPress={openFilter} />
+        <TuneIcon height={18} width={18} onPress={openFilter} />
 
         <Drawer isOpen={isFiltersOpen} height="85%">
           <View style={styles.filterWrapper}>

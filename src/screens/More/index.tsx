@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { RFValue } from "react-native-responsive-fontsize";
 import DeviceInfo from 'react-native-device-info';
 
 import LabProfileIcon from "../../assets/icons/lab-profile.svg";
@@ -60,17 +59,17 @@ export function More() {
           title="Ajuda"
         /> */}
         <SettingButton
-          icon={() => <InfoIcon height={RFValue(18)} width={RFValue(18)} />}
+          icon={() => <InfoIcon height={18} width={18} />}
           title="Meus Dados"
           onPress={() => navigation.navigate("MyData" as never)}
         />
         <SettingButton
-          icon={() => <InfoIcon height={RFValue(18)} width={RFValue(18)} />}
+          icon={() => <InfoIcon height={18} width={18} />}
           onPress={showAbout}
           title="Sobre"
         />
         <SettingButton
-          icon={() => <InfoIcon height={RFValue(18)} width={RFValue(18)} />}
+          icon={() => <InfoIcon height={18} width={18} />}
           title="Sair"
           onPress={handleLogout}
         />

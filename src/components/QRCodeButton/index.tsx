@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import QRCodeScannerIcon from "../../assets/icons/qr-code-scanner.svg";
 
@@ -16,7 +15,7 @@ export function QRCodeButton() {
 
   const navigation = useNavigation<QRCodeNavigationProps>();
 
-  const iconSize = RFValue(16);
+  const iconSize = 16;
 
   async function getCameraPermission() {
     const { granted } = await requestPermission();

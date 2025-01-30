@@ -1,7 +1,6 @@
 import { Entypo } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "styled-components/native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 import { QRCodeButton } from "../components/QRCodeButton";
 
@@ -37,8 +36,8 @@ export function Dashboard() {
         headerTintColor: THEME.colors.primary,
         headerTitleStyle: {
           fontFamily: THEME.fonts.semiBold,
-          fontSize: THEME.fontSize.normal,
-          lineHeight: RFValue(24),
+          fontSize: THEME.fontSize.larger,
+          lineHeight: 24,
         },
       }}
     >
