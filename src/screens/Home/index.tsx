@@ -1,5 +1,7 @@
 import React from "react";
+import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "styled-components/native";
 
 import NotificationsIcon from "../../assets/icons/notifications.svg";
 import BlueLogoIcon from "../../assets/icons/blue-logo.svg";
@@ -22,12 +24,20 @@ import {
 
 export function Home() {
   const navigation = useNavigation();
+  const THEME = useTheme();
 
   const notificationsIconSize = 22;
 
   return (
     <Container>
       <Header>
+        <Entypo
+          onPress={() => navigation.openDrawer()}
+          name="menu"
+          size={24}
+          color={THEME.colors.primary}
+        />
+
         <Title>Synchroone</Title>
 
         <NotificationsIconContainer

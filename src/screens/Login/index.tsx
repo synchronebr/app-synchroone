@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTheme } from "styled-components/native";
 import * as yup from "yup";
+import { RFValue } from "react-native-responsive-fontsize";
 import { Toast } from "react-native-toast-notifications";
 
 import LogoWhiteIconIcon from "../../assets/icons/logo-white-text.svg";
@@ -13,6 +14,8 @@ import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 
 import { useAuth } from "../../hooks/useAuth";
+
+import { getAccessLevels } from "../../services/AccessLevels";
 
 import { FormData } from "./types";
 import {
@@ -25,7 +28,6 @@ import {
   CreateAccountButton,
   CreateAccountButtonText,
 } from "./styles";
-import { RFValue } from "react-native-responsive-fontsize";
 
 export function Login() {
   const [isLogginIn, setIsLoggingIn] = useState(false);
@@ -59,13 +61,14 @@ export function Login() {
 
     try {
       await login(formData);
+      await getAccessLevels();
 
       navigation.reset({
         index: 0,
-        routes: [{ name: "Dashboard" as never }],
+        routes: [{ name: "DashboardDrawer" as never }],
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       Toast.show(
         "Ocorreu um erro ao fazer login. Por favor, verifique suas credenciais e tente novamente.",
         { type: "danger" }
@@ -80,7 +83,7 @@ export function Login() {
         <KeyboardAvoidingView behavior="position">
           {/* <Title>Synchroone</Title> */}
           <Content>
-            <LogoWhiteIconIcon height={RFValue(50)} width={'100%'} />
+            <LogoWhiteIconIcon height={RFValue(50)} width={"100%"} />
 
             <Form>
               <InputWrapper>
@@ -133,8 +136,12 @@ export function Login() {
                 />
               </InputWrapper>
 
-              <CreateAccountButton onPress={() => navigation.navigate('Register')}>
-                <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
+              <CreateAccountButton
+                onPress={() => navigation.navigate("Register")}
+              >
+                <CreateAccountButtonText>
+                  Criar uma conta
+                </CreateAccountButtonText>
               </CreateAccountButton>
 
               <ButtonWrapper>

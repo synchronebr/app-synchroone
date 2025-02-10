@@ -25,7 +25,7 @@ export function Splash() {
 
       navigation.reset({
         index: 0,
-        routes: [{ name: "Dashboard" as never }],
+        routes: [{ name: "DashboardDrawer" as never }],
       });
     } else {
       navigation.reset({

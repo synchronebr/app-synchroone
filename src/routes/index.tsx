@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { Splash } from "../screens/Splash";
 import { Auth } from "./auth";
-import { Dashboard } from "./dashboard";
+import { DashboardDrawer } from "./dashboard-drawer";
 
 export function Routes() {
   const { Navigator, Screen } = createStackNavigator();
@@ -17,7 +17,7 @@ export function Routes() {
       >
         <Screen component={Splash} name="Splash" />
         <Screen component={Auth} name="Auth" />
-        <Screen component={Dashboard} name="Dashboard" />
+        <Screen component={DashboardDrawer} name="DashboardDrawer" />
       </Navigator>
     </NavigationContainer>
   );

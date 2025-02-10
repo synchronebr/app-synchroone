@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
-import {LogBox} from 'react-native';
+import { LogBox } from "react-native";
 import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import {
@@ -18,15 +18,17 @@ import {
   useQueryClient,
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query'
+} from "@tanstack/react-query";
 
 import THEME from "./global/styles/theme";
 
 import { AuthProvider } from "./hooks/useAuth";
-import { Routes } from "./routes";
+import { AccessLevelsProvider } from "./hooks/useAccessLevels";
 import { BLEManagerProvider } from "./hooks/useBLEManager";
 
-const queryClient = new QueryClient()
+import { Routes } from "./routes";
+
+const queryClient = new QueryClient();
 
 export default function App() {
   if (Platform.OS === "android")
@@ -44,7 +46,7 @@ export default function App() {
   }
 
   LogBox.ignoreAllLogs();
-  
+
   return (
     <ThemeProvider theme={THEME}>
       <ToastProvider
@@ -72,17 +74,19 @@ export default function App() {
           warningColor={THEME.colors.warning}
         >
           <AuthProvider>
-            <QueryClientProvider client={queryClient}>
-              <StatusBar
-                backgroundColor={THEME.colors.primary}
-                barStyle="light-content"
-              />
-              <BLEManagerProvider>
-                <SafeAreaView style={styles.safeArea}>
-                  <Routes />
-                </SafeAreaView>
-              </BLEManagerProvider>
-            </QueryClientProvider>
+            <AccessLevelsProvider>
+              <QueryClientProvider client={queryClient}>
+                <StatusBar
+                  backgroundColor={THEME.colors.primary}
+                  barStyle="light-content"
+                />
+                <BLEManagerProvider>
+                  <SafeAreaView style={styles.safeArea}>
+                    <Routes />
+                  </SafeAreaView>
+                </BLEManagerProvider>
+              </QueryClientProvider>
+            </AccessLevelsProvider>
           </AuthProvider>
         </ToastProvider>
       </ToastProvider>

@@ -15,6 +15,7 @@ export const Header = styled.View`
 
 export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.primary};
+  flex: 1;
   font-family: ${({ theme }) => theme.fonts.bold};
   font-size: 28px;
   text-align: center;
