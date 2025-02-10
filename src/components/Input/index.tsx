@@ -69,6 +69,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
             editable ? THEME.colors.gray_dark : THEME.colors.gray
           }
           secureTextEntry={passwordHidden}
+          textContentType="oneTimeCode"
           {...rest}
           ref={ref}
           {...rest}
