@@ -1,13 +1,36 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { useQuery } from "@tanstack/react-query";
-import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subDays, startOfYear, endOfYear, endOfToday, startOfToday } from 'date-fns';
+import {
+  startOfDay,
+  endOfDay,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  subDays,
+  startOfYear,
+  endOfYear,
+  endOfToday,
+  startOfToday,
+} from "date-fns";
 
 import api from "../../services/api";
 import { IDiagnose } from "../../services/dtos/IDiagnose";
 
 import THEME from "../../global/styles/theme";
-import { Container, WeekDayFilterContainer, List, Content, Text } from "./styles";
+import {
+  Container,
+  WeekDayFilterContainer,
+  List,
+  Content,
+  Text,
+} from "./styles";
 import Drawer from "../../components/Drawer";
 import { WeekDayFilter } from "../../components/WeekDayFilter";
 import { HistoryCard } from "../../components/HistoryCard";
@@ -17,10 +40,11 @@ import { Loading } from "../../components/Loading";
 import Select from "../../components/Select";
 import Checkbox from "../../components/Checkbox";
 import { useAlertFilter } from "../../hooks/useAlertFilter";
+import { useAccessLevels } from "../../hooks/useAccessLevels";
 
 type IAlertsHistoryProps = {
-  setReadingsCount: (value: number) => void
-}
+  setReadingsCount: (value: number) => void;
+};
 
 enum RangeFilters {
   CURRENT_WEEK = "current_week",
@@ -36,7 +60,7 @@ const RangeFiltersLabels = {
   [RangeFilters.LAST_WEEK]: "Semana anterior",
   [RangeFilters.LAST_MONTH]: "Mês anterior",
   [RangeFilters.CURRENT_YEAR]: "Ano atual",
-}
+};
 enum HazardousnessFilters {
   D = "D",
   W = "W",
@@ -46,50 +70,67 @@ enum HazardousnessFilters {
 
 export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
   const THEME = useTheme();
-  const { isFilterOpen, setIsFilterOpen } = useAlertFilter()
+  const { isFilterOpen, setIsFilterOpen } = useAlertFilter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [initRange, setInitRange] = useState(startOfToday());
   const [endRange, setEndRange] = useState(endOfToday());
 
-  const [selectedRangeFilter, setSelectedRangeFilter] = useState(RangeFilters.CURRENT_WEEK);
+  const [selectedRangeFilter, setSelectedRangeFilter] = useState(
+    RangeFilters.CURRENT_WEEK
+  );
 
   const [dangerChecked, setDangerChecked] = useState(false);
   const [alertChecked, setAlertChecked] = useState(false);
   const [severeChecked, setSevereChecked] = useState(false);
 
+  const { getAccessLevelsData } = useAccessLevels();
+  const { currentCompany } = getAccessLevelsData();
+
   const diagnoses = useQuery<IDiagnose[]>({
-    queryKey: ["diagnoses", initRange, endRange, dangerChecked, alertChecked, severeChecked],
+    queryKey: [
+      "diagnoses",
+      initRange,
+      endRange,
+      dangerChecked,
+      alertChecked,
+      severeChecked,
+    ],
     queryFn: async () => {
       setIsLoading(true);
       let hazardousness = [
         ...(dangerChecked ? [HazardousnessFilters.D] : []),
         ...(severeChecked ? [HazardousnessFilters.P] : []),
-        ...((alertChecked ? [HazardousnessFilters.W, HazardousnessFilters.A] : []).filter(Boolean)),
-      ].join(',')
+        ...(alertChecked
+          ? [HazardousnessFilters.W, HazardousnessFilters.A]
+          : []
+        ).filter(Boolean),
+      ].join(",");
 
       if (!hazardousness) {
-        hazardousness = null
+        hazardousness = null;
       }
 
-      const response = await api.get('/diagnoses', {
+      const response = await api.get("/diagnoses", {
         params: {
           read: false,
-          startDate: initRange,
-          endDate: endRange,
+          startDate: initRange.toISOString().split("T")[0],
+          endDate: endRange.toISOString().split("T")[0],
           ...(hazardousness ? { hazardousness } : {}),
-          page: 1,
-          pageSize: 10000,
-        }
+          companyId: currentCompany.companyId,
+        },
       });
 
-      const { count, diagnoses: diagnosesData } = response.data?.data ?? { count: 0, diagnoses: [] };
+      const { count } = response.data?.data ?? {
+        count: 0,
+        diagnoses: [],
+      };
       setReadingsCount(count);
       setIsLoading(false);
 
-      return diagnosesData
+      return response?.data?.data?.data;
     },
-  })
+  });
 
   function closeFilter() {
     setIsFilterOpen(false);
@@ -100,7 +141,17 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
     setEndRange(endOfDay(date));
   }
 
-  function applyFilters({ range, alert, danger, severe }: { range: RangeFilters, alert: boolean, danger: boolean, severe: boolean }) {
+  function applyFilters({
+    range,
+    alert,
+    danger,
+    severe,
+  }: {
+    range: RangeFilters;
+    alert: boolean;
+    danger: boolean;
+    severe: boolean;
+  }) {
     setDangerChecked(danger);
     setAlertChecked(alert);
     setSevereChecked(severe);
@@ -151,48 +202,54 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
 
   return (
     <Container>
-      {
-        selectedRangeFilter === RangeFilters.CURRENT_WEEK ? (
-          <WeekDayFilterContainer>
-            <WeekDayFilter selectedDate={new Date(initRange)} setSelectedDate={changeDataValue} />
-          </WeekDayFilterContainer>
-        )
-          : (
-            <View style={styles.rangeFilterContainer}>
-              <Text style={styles.rangeFilterLabel}>Listando alertas para: {RangeFiltersLabels[selectedRangeFilter]}</Text>
-            </View>
-          )
-      }
+      {selectedRangeFilter === RangeFilters.CURRENT_WEEK ? (
+        <WeekDayFilterContainer>
+          <WeekDayFilter
+            selectedDate={new Date(initRange)}
+            setSelectedDate={changeDataValue}
+          />
+        </WeekDayFilterContainer>
+      ) : (
+        <View style={styles.rangeFilterContainer}>
+          <Text style={styles.rangeFilterLabel}>
+            Listando alertas para: {RangeFiltersLabels[selectedRangeFilter]}
+          </Text>
+        </View>
+      )}
 
       <Content>
-
-      {isLoading ? (
-        <View>
-          <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />
-          <ActivityIndicator color={THEME.colors.light} />
-        </View>
-      ) : (
-        <List
-          data={diagnoses.data}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <HistoryCard item={item} />}
-          ListEmptyComponent={
-            diagnoses.isLoading ?
-              <Loading bgColor={'transparent'} color={THEME.colors.primary} />
-              :
-              <Content>
-                <Text
-                  style={{
-                    alignSelf: 'center',
-                    textAlign: 'center',
-                  }}
-                >
-                  Felizmente não temos nenhum diagnóstico criado para esses filtros.
-                </Text>
-              </Content>
-          }
-        />
-      )}
+        {isLoading ? (
+          <View>
+            <Loading
+              bgColor={THEME.colors.light}
+              color={THEME.colors.primary}
+            />
+            <ActivityIndicator color={THEME.colors.light} />
+          </View>
+        ) : (
+          <List
+            data={diagnoses.data}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <HistoryCard item={item} />}
+            ListEmptyComponent={
+              diagnoses.isLoading ? (
+                <Loading bgColor={"transparent"} color={THEME.colors.primary} />
+              ) : (
+                <Content>
+                  <Text
+                    style={{
+                      alignSelf: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    Felizmente não temos nenhum diagnóstico criado para esses
+                    filtros.
+                  </Text>
+                </Content>
+              )
+            }
+          />
+        )}
       </Content>
 
       <AlertFiltersDrawer
@@ -201,7 +258,6 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
         applyFilters={applyFilters}
         clearFilters={clearFilters}
       />
-
     </Container>
   );
 }
@@ -209,11 +265,23 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
 type AlertFiltersDrawerProps = {
   isOpen: boolean;
   closeDrawer: () => void;
-  applyFilters: (filters: { range: RangeFilters, alert: boolean, danger: boolean, severe: boolean }) => void;
+  applyFilters: (filters: {
+    range: RangeFilters;
+    alert: boolean;
+    danger: boolean;
+    severe: boolean;
+  }) => void;
   clearFilters: () => void;
 };
-function AlertFiltersDrawer({ isOpen, closeDrawer, applyFilters, clearFilters }: AlertFiltersDrawerProps) {
-  const [selectedRangeFilter, setSelectedRangeFilter] = useState<RangeFilters>(RangeFilters.CURRENT_WEEK);
+function AlertFiltersDrawer({
+  isOpen,
+  closeDrawer,
+  applyFilters,
+  clearFilters,
+}: AlertFiltersDrawerProps) {
+  const [selectedRangeFilter, setSelectedRangeFilter] = useState<RangeFilters>(
+    RangeFilters.CURRENT_WEEK
+  );
   const [dangerChecked, setDangerChecked] = useState(false);
   const [alertChecked, setAlertChecked] = useState(false);
   const [severeChecked, setSevereChecked] = useState(false);
@@ -249,28 +317,49 @@ function AlertFiltersDrawer({ isOpen, closeDrawer, applyFilters, clearFilters }:
           label="Período"
           placeholder="Selecione um período"
           selected={selectedRangeFilter}
-          values={Object.entries(RangeFiltersLabels).map(([value, label]) => ({ label, value }))}
+          values={Object.entries(RangeFiltersLabels).map(([value, label]) => ({
+            label,
+            value,
+          }))}
           onSelect={(value) => setSelectedRangeFilter(value as RangeFilters)}
         />
 
         <View style={styles.container}>
           <Text style={styles.label}>Criticidade</Text>
 
-          <Checkbox label="Alerta" checked={alertChecked} onChange={setAlertChecked} />
-          <Checkbox label="Grave" checked={severeChecked} onChange={setSevereChecked} />
-          <Checkbox label="Perigo" checked={dangerChecked} onChange={setDangerChecked} />
+          <Checkbox
+            label="Alerta"
+            checked={alertChecked}
+            onChange={setAlertChecked}
+          />
+          <Checkbox
+            label="Grave"
+            checked={severeChecked}
+            onChange={setSevereChecked}
+          />
+          <Checkbox
+            label="Perigo"
+            checked={dangerChecked}
+            onChange={setDangerChecked}
+          />
         </View>
 
-        <TouchableOpacity style={styles.clearFilterButton} onPress={handleClearFilters}>
+        <TouchableOpacity
+          style={styles.clearFilterButton}
+          onPress={handleClearFilters}
+        >
           <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.applyButton} onPress={handleFilterSubmit}>
+        <TouchableOpacity
+          style={styles.applyButton}
+          onPress={handleFilterSubmit}
+        >
           <Text style={styles.applyButtonText}>Aplicar filtro</Text>
         </TouchableOpacity>
       </View>
     </Drawer>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -283,10 +372,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   filterHeader: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 16,
   },
   title: {
@@ -305,7 +394,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     color: THEME.colors.light,
     fontFamily: THEME.fonts.medium,
-    fontSize: THEME.fontSize.larger
+    fontSize: THEME.fontSize.larger,
   },
   clearFilterButton: {
     borderWidth: 1,
@@ -320,7 +409,7 @@ const styles = StyleSheet.create({
   clearFilterButtonText: {
     color: THEME.colors.primary,
     fontFamily: THEME.fonts.medium,
-    fontSize: THEME.fontSize.larger
+    fontSize: THEME.fontSize.larger,
   },
   container: {
     marginTop: 16,
@@ -339,5 +428,5 @@ const styles = StyleSheet.create({
   },
   rangeFilterContainer: {
     paddingVertical: 5,
-  }
-})
+  },
+});
