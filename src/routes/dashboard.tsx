@@ -9,6 +9,7 @@ import { QRCodeScanner } from "../screens/QRCodeScanner";
 import { ConfigureParameters } from "../screens/ConfigureParameters";
 import { ConfigureGateway } from "../screens/ConfigureGateway";
 import { AssetDetails } from "../screens/AssetDetails";
+import { Camera } from "../screens/Camera";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
 import { NotificationDetails } from "../screens/NotificationDetails";
@@ -103,6 +104,13 @@ export function Dashboard() {
       <Screen
         component={AssetDetails}
         name="AssetDetails"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={Camera}
+        name="Camera"
         options={{
           headerShown: false,
         }}
