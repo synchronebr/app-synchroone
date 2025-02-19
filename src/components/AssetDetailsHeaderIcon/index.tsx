@@ -5,16 +5,23 @@ import EmptyHeartIcon from "../../assets/icons/empty-heart.svg";
 
 import { IAssetDetailHeaderIconProps } from "./types";
 
-export function AssetDetailHeaderIcon({ isFavorite, toggleIsFavorite }: IAssetDetailHeaderIconProps ) {
+export function AssetDetailHeaderIcon({
+  isFavorite,
+  toggleIsFavorite,
+}: IAssetDetailHeaderIconProps) {
   return (
-    <View style={{
-      backgroundColor: 'white',
-      padding: 10,
-      borderRadius: 50,
-    }}>
+    <View
+      style={{
+        alignItems: "center",
+        backgroundColor: "white",
+        justifyContent: "center",
+        padding: 10,
+        borderRadius: 50,
+      }}
+    >
       <TouchableOpacity onPress={toggleIsFavorite}>
-        { isFavorite ? <FilledHeartIcon /> : <EmptyHeartIcon /> }
+        {isFavorite ? <FilledHeartIcon /> : <EmptyHeartIcon />}
       </TouchableOpacity>
     </View>
-  )
+  );
 }
