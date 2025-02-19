@@ -86,7 +86,7 @@ export function AssetDetails() {
 
     const formData = new FormData();
 
-    formData.append("Image", {
+    formData.append("image", {
       uri: result.assets[0].uri,
       name: result.assets[0].fileName || "photo.jpg",
       type: result.assets[0].mimeType || "image/jpeg",
@@ -108,6 +108,7 @@ export function AssetDetails() {
         });
       }
     } catch (error) {
+      console.log(error)
       Toast.show(
         "Houve um erro ao enviar a imagem. Por favor, verifique sua conexão, ou tente novamente mais tarde."
       );
