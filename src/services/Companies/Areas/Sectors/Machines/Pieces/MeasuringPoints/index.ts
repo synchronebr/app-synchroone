@@ -10,7 +10,12 @@ export async function getMeasuringPointsForSelect(
   pieceId: number
 ): Promise<{ label: string; value: string }[] | any> {
   let response = await api.get(
-    `companies/${companyId}/areas/${areaId}/sectors/${sectorId}/machines/${machineId}/pieces/${pieceId}/measuringPoints`
+    `companies/${companyId}/areas/${areaId}/sectors/${sectorId}/machines/${machineId}/pieces/${pieceId}/measuringPoints`,
+    {
+      params: {
+        notSetUp: true,
+      }
+    }
   );
 
   let items = [];

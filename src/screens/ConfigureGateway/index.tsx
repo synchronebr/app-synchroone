@@ -49,13 +49,13 @@ export function ConfigureGateway( { route } ) {
     } 
     
     await connectedDevice.discoverAllServicesAndCharacteristics();
-    sendCommand(connectedDevice, "SSYNC-OK#end");
+    sendCommand(connectedDevice, "GSYNC-OK#end");
     sendCommand(connectedDevice, `SN:${route.params.bluetoothDeviceName}#end`);
     sendCommand(connectedDevice, "PASS:5enh@SYNC24#end");
     sendCommand(connectedDevice, `SYNC-TD:10#end`);
     sendCommand(connectedDevice, "SYNC-MODE:1#end");
-    sendCommand(connectedDevice, `SSID:${ssid}#end`);
-    sendCommand(connectedDevice, `PS:${password}#end`);
+    if (ssid) sendCommand(connectedDevice, `SSID:${ssid}#end`);
+    if (password) sendCommand(connectedDevice, `PS:${password}#end`);
     sendCommand(connectedDevice, "URL1:https://sensors.synchroone.com/sensors#end");
     sendCommand(connectedDevice, "URL2:https://sensors.synchroone.com/sensors/api_key#end");
     sendCommand(connectedDevice, "URL2:https://sensors.synchroone.com/sensors/gateways#end");
@@ -109,13 +109,15 @@ export function ConfigureGateway( { route } ) {
 
   async function handleFormSubmit(formData: FormData) {
     setIsLoadingPost(true);
+    console.log(formData)
+    console.log(isActive)
 
     try {
-      await sendCommands(formData.ssid, formData.password)
+      await sendCommands(formData?.ssid, formData?.password)
 
       const url = `devices/${route.params.bluetoothDeviceName}/gateways/set-up`;
       const request = await api.post(url, {
-        connectionType: formData.isActive,
+        connectionType: isActive,
       });
 
       Toast.show(
@@ -125,6 +127,8 @@ export function ConfigureGateway( { route } ) {
 
       navigation.navigate("Home" as never);
     } catch (error) {
+      // console.log('ERRROOOOO')
+      // console.log(error)
       Toast.show(
         "Ocorreu um erro ao tentar configurar o gateway. Por favor, tente novamente.",
         { type: "danger" }
