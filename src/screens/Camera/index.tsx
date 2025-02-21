@@ -7,6 +7,8 @@ import { useTheme } from "styled-components/native";
 import ImagePicker from "react-native-image-crop-picker";
 import { Toast } from "react-native-toast-notifications";
 
+import { Loading } from "../../components/Loading";
+
 import { updatePieceImage } from "../../services/Companies/Areas/Sectors/Machines/Pieces/MeasuringPoints";
 
 import { Container, CloseIcon, FlashIcon, TakePicture } from "./styles";
@@ -29,7 +31,7 @@ export function Camera() {
 
     const formData = new FormData();
 
-    formData.append("Image", {
+    formData.append("image", {
       uri: imageUri,
       name: "photo.jpg",
       type: "image/jpeg",
@@ -63,11 +65,14 @@ export function Camera() {
 
   async function openCropper(uri: string) {
     const croppedImage = await ImagePicker.openCropper({
-      path: uri,
-      width: 1080,
-      height: 1080,
+      compressImageMaxHeight: 1000,
+      compressImageMaxWidth: 1000,
+      compressImageQuality: 0.7,
       cropping: true,
+      height: 1000,
       mediaType: "photo",
+      path: uri,
+      width: 1000,
     });
 
     if (croppedImage && croppedImage.path) {
@@ -90,6 +95,8 @@ export function Camera() {
       setIsCroppingImage(false);
     }
   }
+
+  if (isSendingImage) return <Loading />;
 
   return (
     <Container>

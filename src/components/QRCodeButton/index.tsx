@@ -20,12 +20,15 @@ export function QRCodeButton() {
   async function getCameraPermission() {
     const { granted } = await requestPermission();
 
-    if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'BluetoothManager' });
+    if (granted)
+      navigation.navigate("QRCodeScanner" as never, {
+        nextPage: "AssetDetails",
+      });
   }
 
   return (
     <Container style={styles.container} onPress={getCameraPermission}>
-      <QRCodeScannerIcon height={iconSize} width={iconSize}/>
+      <QRCodeScannerIcon height={iconSize} width={iconSize} />
     </Container>
   );
 }

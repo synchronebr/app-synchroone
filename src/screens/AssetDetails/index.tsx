@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 import { Camera as ExpoCamera } from "expo-camera";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { Toast } from "react-native-toast-notifications";
@@ -22,6 +23,7 @@ import {
 } from "../../services/Equipments";
 import { IReading } from "../../services/dtos/IReading";
 import { IPiece } from "../../services/dtos/IPiece";
+import { updatePieceImage } from "../../services/Companies/Areas/Sectors/Machines/Pieces/MeasuringPoints";
 
 import { AssetDetailsRouteProps } from "./types";
 import {
@@ -35,13 +37,11 @@ import {
   Text,
   List,
 } from "./styles";
-import { updatePieceImage } from "../../services/Companies/Areas/Sectors/Machines/Pieces/MeasuringPoints";
 
 export function AssetDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [piece, setPiece] = useState<IPiece>(null);
   const [isFavorite, setIsFavorite] = useState(true);
-  const [isSendingImage, setIsSendingImage] = useState(false);
   const [readings, setReadings] = useState([]);
 
   const route = useRoute();
@@ -82,17 +82,25 @@ export function AssetDetails() {
   }
 
   async function sendImagem(result: ImagePicker.ImagePickerResult) {
-    setIsSendingImage(true);
-
-    const formData = new FormData();
-
-    formData.append("image", {
-      uri: result.assets[0].uri,
-      name: result.assets[0].fileName || "photo.jpg",
-      type: result.assets[0].mimeType || "image/jpeg",
-    });
-
     try {
+      const imageUri = result.assets[0].uri;
+
+      const fileInfo = await FileSystem.getInfoAsync(imageUri);
+      const maxSizeInBytes = 1 * 1024 * 1024;
+
+      if (fileInfo.size > maxSizeInBytes) {
+        Toast.show("A imagem excede 1MB. Escolha uma imagem menor.");
+        return;
+      }
+
+      const formData = new FormData();
+
+      formData.append("image", {
+        uri: result.assets[0].uri,
+        name: result.assets[0].fileName || "photo.jpg",
+        type: result.assets[0].mimeType || "image/jpeg",
+      });
+
       const { status } = await updatePieceImage(
         piece.machine.sector.area.company.id,
         piece.machine.sector.area.id,
@@ -106,15 +114,15 @@ export function AssetDetails() {
         Toast.show("Foto salva com sucesso!", {
           type: "success",
         });
+
+        loadScreen();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       Toast.show(
         "Houve um erro ao enviar a imagem. Por favor, verifique sua conexão, ou tente novamente mais tarde."
       );
     }
-
-    setIsSendingImage(false);
   }
 
   async function loadImage() {
@@ -176,7 +184,7 @@ export function AssetDetails() {
               <Entypo
                 color={THEME.colors.light}
                 name="chevron-left"
-                onPress={() => navigation.goBack()}
+                onPress={() => navigation.navigate("Assets" as never)}
                 size={32}
                 style={styles.backIcon}
               />

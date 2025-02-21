@@ -19,7 +19,10 @@ export function SynchroneSensorButton() {
   async function getCameraPermission() {
     const { granted } = await requestPermission();
 
-    if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'ConfigureParameters' });
+    if (granted)
+      navigation.navigate("QRCodeScanner" as never, {
+        nextPage: "ConfigureParameters",
+      });
   }
 
   return (
