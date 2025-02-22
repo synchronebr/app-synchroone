@@ -17,4 +17,5 @@ export type IBLEManagerContextData = {
   scanDevices: (bluetoothDeviceName: string) => void;
   getPermissions: () => Promise<boolean>;
   disconnectDevice: () => void;
+  scanAvailableDevices: (type: string) => Promise<Device[]>;
 };

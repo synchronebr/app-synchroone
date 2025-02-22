@@ -6,6 +6,8 @@ import { QRCodeButton } from "../components/QRCodeButton";
 
 import { DashboardTab } from "./dashboard-tab";
 import { QRCodeScanner } from "../screens/QRCodeScanner";
+import { PreConfigureSensor } from "../screens/PreConfigureSensor";
+import { PreConfigureGateway } from "../screens/PreConfigureGateway";
 import { ConfigureParameters } from "../screens/ConfigureParameters";
 import { ConfigureGateway } from "../screens/ConfigureGateway";
 import { AssetDetails } from "../screens/AssetDetails";
@@ -47,6 +49,34 @@ export function Dashboard() {
         name="DashboardTab"
         options={{
           headerShown: false,
+        }}
+      />
+      <Screen
+        component={PreConfigureSensor}
+        name="PreConfigureSensor"
+        options={{
+          headerBackImage: () => (
+            <Entypo color={THEME.colors.light} name="chevron-left" size={28} />
+          ),
+          headerStyle: {
+            backgroundColor: THEME.colors.primary,
+          },
+          headerTintColor: THEME.colors.light,
+          headerTitle: "Configurar Sensor",
+        }}
+      />
+      <Screen
+        component={PreConfigureGateway}
+        name="PreConfigureGateway"
+        options={{
+          headerBackImage: () => (
+            <Entypo color={THEME.colors.light} name="chevron-left" size={28} />
+          ),
+          headerStyle: {
+            backgroundColor: THEME.colors.primary,
+          },
+          headerTintColor: THEME.colors.light,
+          headerTitle: "Configurar Gateway",
         }}
       />
       <Screen

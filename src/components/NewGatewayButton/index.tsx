@@ -9,17 +9,13 @@ import { Container, Content, Title, Subtitle } from "./styles";
 import { QRCodeNavigationProps } from "./types";
 
 export function NewGatewayButton() {
-  const [, requestPermission] = Camera.useCameraPermissions();
-
   const navigation = useNavigation<QRCodeNavigationProps>();
   const THEME = useTheme();
 
   const iconSize = 22;
 
   async function getCameraPermission() {
-    const { granted } = await requestPermission();
-
-    if (granted) navigation.navigate("QRCodeScanner" as never, { nextPage: 'ConfigureGateway' });
+    navigation.navigate("PreConfigureGateway" as never, { type: 'G' });
   }
 
   return (

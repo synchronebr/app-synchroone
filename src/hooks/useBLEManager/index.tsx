@@ -52,7 +52,7 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
       await device.connect();
       await device.discoverAllServicesAndCharacteristics();
       setConnectedDevice(device);
-      console.log(`Conectado ao dispositivo: ${device.name}`);
+      // console.log(`Conectado ao dispositivo: ${device.name}`);
     } catch (error) {
       console.log(error);
       Toast.show(
@@ -96,6 +96,46 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
       );
       setIsLoading(false);
     }
+  }
+
+  async function scanAvailableDevices(type: string): Promise<Device[]> {
+    const devicesSet = new Set<string>(); // Para evitar dispositivos duplicados
+    const devices: Device[] = [];
+
+    return new Promise((resolve, reject) => {
+        try {
+            setIsLoading(true);
+
+            manager.startDeviceScan(null, null, (error, device) => {
+                if (error) {
+                    console.log(error);
+                    Toast.show("Erro ao escanear dispositivos Bluetooth. Verifique e tente novamente.");
+                    setIsLoading(false);
+                    reject(error);
+                    return;
+                }
+
+                // device.name.includes(type+"SYNC-")
+                if (device && device.id && !devicesSet.has(device.id)) {
+                    devicesSet.add(device.id);
+                    devices.push(device);
+                }
+            });
+
+            // Aguarda 5 segundos antes de finalizar a busca
+            setTimeout(() => {
+                manager.stopDeviceScan();
+                setIsLoading(false);
+                resolve(devices);
+            }, 5000);
+
+        } catch (error) {
+            console.log(error);
+            Toast.show("Erro ao escanear dispositivos Bluetooth. Verifique e tente novamente.");
+            setIsLoading(false);
+            reject([]);
+        }
+    });
   }
 
   async function getPermissions(): Promise<boolean> {
@@ -176,6 +216,7 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
         scanDevices,
         getPermissions,
         disconnectDevice,
+        scanAvailableDevices,
       }}
     >
       {children}

@@ -328,6 +328,7 @@ export function ConfigureParameters( { route } ) {
           <Text>Intervalo de Medição (minutos)</Text>
 
           <MinutesInterval>
+            <MinutesIntervalButton title="2" selected={interval===2} onPress={() => setInterval(2)}/>
             <MinutesIntervalButton title="10" selected={interval===10} onPress={() => setInterval(10)}/>
             <MinutesIntervalButton title="20" selected={interval===20} onPress={() => setInterval(20)}/>
             <MinutesIntervalButton title="30" selected={interval===30} onPress={() => setInterval(30)}/>

@@ -9,20 +9,13 @@ import { Container, Content, Title, Subtitle } from "./styles";
 import { QRCodeNavigationProps } from "./types";
 
 export function SynchroneSensorButton() {
-  const [, requestPermission] = Camera.useCameraPermissions();
-
   const navigation = useNavigation<QRCodeNavigationProps>();
   const THEME = useTheme();
 
   const iconSize = 28;
 
   async function getCameraPermission() {
-    const { granted } = await requestPermission();
-
-    if (granted)
-      navigation.navigate("QRCodeScanner" as never, {
-        nextPage: "ConfigureParameters",
-      });
+    navigation.navigate("PreConfigureSensor" as never, { type: 'S' });
   }
 
   return (
