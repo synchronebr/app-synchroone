@@ -4,6 +4,7 @@ import { Camera } from "expo-camera";
 import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
+import { Toast } from "react-native-toast-notifications";
 
 import {
   Container,
@@ -42,6 +43,12 @@ export function PreConfigureSensor({ route }) {
     setBleLoading(true);
     const devices = await scanAvailableDevices(route.params.type);
     setDevices(devices);
+    if (!devices || devices.length === 0) {
+      Toast.show(
+        "Não foi possível encontrar nenhum device! Tente novamente mais tarde.",
+        { type: "danger" }
+      );
+    }
     setBleLoading(false);
   }
 

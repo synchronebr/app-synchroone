@@ -115,8 +115,7 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
                     return;
                 }
 
-                // device.name.includes(type+"SYNC-")
-                if (device && device.id && !devicesSet.has(device.id)) {
+                if (device && device.id && !devicesSet.has(device.id) && device.name?.includes(type+"SYNC-")) {
                     devicesSet.add(device.id);
                     devices.push(device);
                 }
