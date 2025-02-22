@@ -5,17 +5,23 @@ export const Container = styled.View`
 `;
 
 export const Header = styled.View`
+  flex: 1;
+  flex-direction: row;
   align-items: center;
   gap: 8px;
-  justify-content: center;
+  /* justify-content: center; */
   margin-bottom: 4px;
-  padding: 24px 12px;
+  padding: 24px 8px;
+`;
+
+export const HeaderTextDiv = styled.View`
+  width: 200px;
 `;
 
 export const Logo = styled.Image`
-  border-radius: 16px;
-  height: 96px;
-  width: 96px;
+  border-radius: 8px;
+  height: 56px;
+  width: 56px;
 `;
 
 export const CompanyName = styled.Text`

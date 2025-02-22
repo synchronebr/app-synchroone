@@ -14,7 +14,7 @@ import { useAccessLevels } from "../../hooks/useAccessLevels";
 import { updateCurrentCompany } from "../../services/AccessLevels";
 import { UpdateCurrentCompanyRequest } from "../../services/AccessLevels/types";
 
-import { Container, Header, Logo, CompanyName, AccessLevel } from "./styles";
+import { Container, Header, HeaderTextDiv, Logo, CompanyName, AccessLevel } from "./styles";
 
 export function CustomDrawer(props: DrawerContentComponentProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -86,8 +86,10 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
             }
           />
 
-          <CompanyName>{accessLevels?.currentCompany?.companyName}</CompanyName>
-          <AccessLevel>{accessLevels?.currentCompany?.accessLevel}</AccessLevel>
+          <HeaderTextDiv>
+            <CompanyName>{accessLevels?.currentCompany?.companyName}</CompanyName>
+            <AccessLevel>{accessLevels?.currentCompany?.accessLevel}</AccessLevel>
+          </HeaderTextDiv>
         </Header>
 
         <DrawerItemList {...props} />
