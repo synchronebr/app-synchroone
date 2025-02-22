@@ -75,10 +75,10 @@ api.interceptors.response.use(
       await AsyncStorage.removeItem(USER_STORAGE_KEY);
 
       // Perform navigation reset to Auth stack, preventing back navigation
-      navigationRef.current?.reset({
-        index: 0,
-        routes: [{ name: "Auth", params: { screen: "Login" } }],
-      });
+      // navigationRef.current?.reset({
+      //   index: 0,
+      //   routes: [{ name: "Auth", params: { screen: "Login" } }],
+      // });
 
       return;
     }

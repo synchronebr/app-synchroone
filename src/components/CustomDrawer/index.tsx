@@ -100,6 +100,7 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
             )
             .map((company) => (
               <DrawerItem
+                key={company.companyId}
                 label={company.companyName}
                 labelStyle={{
                   color: THEME.colors.primary,

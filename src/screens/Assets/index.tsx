@@ -4,7 +4,8 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 
 import TuneIcon from "../../assets/icons/tune.svg";
@@ -20,12 +21,15 @@ import { useTheme, withTheme } from "styled-components";
 import { Loading } from "../../components/Loading";
 import Drawer from "../../components/Drawer";
 import Select from "../../components/Select";
+import { useAccessLevels } from "../../hooks/useAccessLevels";
 
 export function Assets() {
+  const { getAccessLevelsData } = useAccessLevels();
   const [searchFieldValue, setSearchFieldValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [assets, setAssets] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [areas, setAreas] = useState([]);
   const [machines, setMachines] = useState([]);
@@ -42,10 +46,10 @@ export function Assets() {
   // filters as params here because the way React updates states
   // is asynchronous, so we need to pass the filters as params,
   // otherwise the filters will be outdated (old state values were being used)
-  const getEquips = useCallback(async (filters) => {
+  const getEquips = async (filters) => {
     setIsLoading(true);
-
-    const getEquipResponse = await getEquipments(filters);
+    const accessLevels = getAccessLevelsData();
+    const getEquipResponse = await getEquipments({ companyId: accessLevels.currentCompany.companyId });
     const assets = getEquipResponse.data.data;
 
     setAssets(assets);
@@ -56,7 +60,14 @@ export function Assets() {
     // setResponsibles(responseFilters.responsibles);
 
     setIsLoading(false);
-  }, []);
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    getEquips({});
+    setRefreshing(false);
+  };
 
   function openFilter() {
     if (isLoading) return;
@@ -201,6 +212,7 @@ export function Assets() {
               data={assets}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => <AssetCard item={item} key={`asset-${item.id.toString()}`} />}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             />
           ) : (
             <Content>
