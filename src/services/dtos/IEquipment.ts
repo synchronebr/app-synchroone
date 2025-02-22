@@ -6,4 +6,5 @@ export interface IEquipment {
   description: string;
   machine: IMachine;
   measuringPoints: IMeasuringpoint[]
+  image?: string;
 }
