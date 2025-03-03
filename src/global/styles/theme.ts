@@ -9,6 +9,7 @@ export default {
     gray_dark: "#94A3B8",
     danger: "#EF4444",
     warning: "#FACC15",
+    warning_dark: "#dbb311",
     success: "#16A34A",
   },
   fonts: {

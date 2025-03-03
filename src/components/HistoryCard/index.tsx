@@ -1,8 +1,9 @@
 import React from "react";
 import { format } from "date-fns";
 import { ptBR } from 'date-fns/locale';
+import { useNavigation } from "@react-navigation/native";
 
-import { HistoryCardProps } from "./types";
+import { HistoryCardNavigationProps, HistoryCardProps } from "./types";
 import {
   Container,
   Progress,
@@ -17,8 +18,9 @@ import {
 } from "./styles";
 
 export function HistoryCard({ isLastCard, item, ...rest }: HistoryCardProps) {
+  const navigation = useNavigation<HistoryCardNavigationProps>();
   return (
-    <Container {...rest}>
+    <Container {...rest} onPress={() => navigation.navigate("AlertDetails", { item })}>
       <Progress>
         <Circle type={item.hazardousness} isLastCard={isLastCard} />
         <Line type={item.hazardousness} />

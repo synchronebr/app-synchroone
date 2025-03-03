@@ -1,7 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  ActivityIndicator,
+} from "react-native";
 
-import { HistoryCard } from "../../components/HistoryCard";
+import { useTheme } from "styled-components/native";
+import THEME from "../../global/styles/theme";
+import { Loading } from "../../components/Loading";
+
 import { ShareButton } from "../../components/ShareButton";
+import { AlertCardProps } from "./types";
 
 import {
   Container,
@@ -16,31 +24,58 @@ import {
   SeeMore,
   ShareButtonContainer,
 } from "./styles";
+import { useRoute } from "@react-navigation/native";
+import api from "../../services/api";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import { IDiagnose } from "../../services/dtos/IDiagnose";
 
 export function AlertDetails() {
-  const [seeMore, setSeeMore] = useState(false);
+  const route = useRoute();
+  const params = route.params as AlertCardProps;
+  const { item } = params;
+
+  const THEME = useTheme();
+  // const [isLoading, setIsLoading] = useState(true);
+
+  const { isLoading, data } = useQuery<IDiagnose>({
+    queryKey: [
+      "diagnose",
+      item,
+    ],
+    queryFn: async () => {
+      const response = await api.get(`/diagnoses/${item.id}`);
+      return response.data || {};
+    },
+  });
+
+  useEffect(() => {console.log('dt-----', data)}, [data])
 
   return (
     <Container>
+      {isLoading ? (
+        <View>
+          <Loading
+            bgColor={THEME.colors.light}
+            color={THEME.colors.primary}
+          />
+          <ActivityIndicator color={THEME.colors.light} />
+        </View>
+      ) : 
+      (
       <Scroll>
         <Header>
-          <Title>Detalhes alerta</Title>
+          <Title>{data?.title}</Title>
 
           <Subtitle>Há 5 min</Subtitle>
         </Header>
 
-        <Text>
-          Lorem ipsum dolor sit amet consectetur. Pretium sollicitudin id tempus
-          viverra quis sem. Libero risus eget elementum elit pharetra ac odio
-          pulvinar ac. Auctor lorem risus viverra semper non sed mi cras. Diam
-          vel nec tortor volutpat.
-        </Text>
+        <Text>{data?.description}</Text>
 
         <Divider />
 
         <Title>Histórico de alertas</Title>
 
-        <HistoryCards>
+        {/* <HistoryCards>
           <HistoryCard isLastCard type="danger" />
           <HistoryCard type="warning" />
           <HistoryCard type="warning" />
@@ -56,12 +91,14 @@ export function AlertDetails() {
           <SeeMoreButton onPress={() => setSeeMore(!seeMore)}>
             <SeeMore>{!seeMore ? "Ver mais" : "Ver menos"}</SeeMore>
           </SeeMoreButton>
-        </HistoryCards>
+        </HistoryCards> */}
 
         <ShareButtonContainer>
           <ShareButton />
         </ShareButtonContainer>
       </Scroll>
+        
+    )}
     </Container>
   );
 }

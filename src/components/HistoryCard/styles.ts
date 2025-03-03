@@ -23,7 +23,7 @@ export const Circle = styled.View<HistoryCardCircleStyleProps>`
       : type === "S"
       ? theme.colors.success
       : type === "W"
-      ? theme.colors.warning
+      ? theme.colors.warning_dark
       : theme.colors.success}; 
   border-radius: 64px;
   border-width: 2px;
@@ -38,7 +38,7 @@ export const Line = styled.View`
       : type === "S"
       ? theme.colors.success
       : type === "W"
-      ? theme.colors.warning
+      ? theme.colors.warning_dark
       : theme.colors.success}; 
   flex: 1;
   width: 1px;
@@ -60,7 +60,7 @@ export const Card = styled.View<HistoryCardStyleProps>`
       : type === "S"
       ? theme.colors.success
       : type === "W"
-      ? theme.colors.warning
+      ? theme.colors.warning_dark
       : theme.colors.success};
   border-radius: 8px;
   border-width: 1px;
@@ -83,7 +83,7 @@ export const Title = styled.Text`
       : type === "S"
       ? theme.colors.success
       : type === "W"
-      ? theme.colors.warning
+      ? theme.colors.warning_dark
       : theme.colors.success};
   font-family: ${({ theme }) => theme.fonts.semiBold};
   font-size: ${({ theme }) => theme.fontSize.normal}px;
@@ -97,7 +97,7 @@ export const Time = styled.Text`
       : type === "S"
       ? theme.colors.success
       : type === "W"
-      ? theme.colors.warning
+      ? theme.colors.warning_dark
       : theme.colors.success};
   font-family: ${({ theme }) => theme.fonts.semiBold};
   font-size: ${({ theme }) => theme.fontSize.smaller}px;
@@ -113,7 +113,7 @@ export const Text = styled.Text`
       : type === "S"
       ? theme.colors.success
       : type === "W"
-      ? theme.colors.warning
+      ? theme.colors.warning_dark
       : theme.colors.success};
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.smaller}px;
