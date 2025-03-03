@@ -17,7 +17,14 @@ export const Progress = styled.View`
 export const Circle = styled.View<HistoryCardCircleStyleProps>`
   background-color: ${({ isLastCard, theme }) =>
     isLastCard ? theme.colors.secondary : null};
-  border-color: ${({ theme }) => theme.colors.secondary};
+  border-color: ${({ type, theme }) =>
+    type === "D"
+      ? theme.colors.danger
+      : type === "S"
+      ? theme.colors.success
+      : type === "W"
+      ? theme.colors.warning
+      : theme.colors.success}; 
   border-radius: 64px;
   border-width: 2px;
   height: 12px;
@@ -25,13 +32,29 @@ export const Circle = styled.View<HistoryCardCircleStyleProps>`
 `;
 
 export const Line = styled.View`
-  background-color: ${({ theme }) => theme.colors.secondary};
+  background-color: ${({ type, theme }) =>
+    type === "D"
+      ? theme.colors.danger
+      : type === "S"
+      ? theme.colors.success
+      : type === "W"
+      ? theme.colors.warning
+      : theme.colors.success}; 
   flex: 1;
   width: 1px;
 `;
 
 export const Card = styled.View<HistoryCardStyleProps>`
-  background-color: ${({ type, theme }) =>
+  /* background-color: ${({ type, theme }) =>
+    type === "D"
+      ? theme.colors.danger
+      : type === "S"
+      ? theme.colors.success
+      : type === "W"
+      ? theme.colors.warning
+      : theme.colors.success}; */
+
+  border-color: ${({ type, theme }) =>
     type === "D"
       ? theme.colors.danger
       : type === "S"
@@ -40,6 +63,7 @@ export const Card = styled.View<HistoryCardStyleProps>`
       ? theme.colors.warning
       : theme.colors.success};
   border-radius: 8px;
+  border-width: 1px;
   flex: 1;
   padding: 8px 8px;
 `;
@@ -53,24 +77,46 @@ export const Header = styled.View`
 `;
 
 export const Title = styled.Text`
-  color: ${({ theme }) => theme.colors.light};
+  color: ${({ type, theme }) =>
+    type === "D"
+      ? theme.colors.danger
+      : type === "S"
+      ? theme.colors.success
+      : type === "W"
+      ? theme.colors.warning
+      : theme.colors.success};
   font-family: ${({ theme }) => theme.fonts.semiBold};
   font-size: ${({ theme }) => theme.fontSize.normal}px;
   line-height: 21px;
 `;
 
 export const Time = styled.Text`
-  color: ${({ theme }) => theme.colors.light};
+  color: ${({ type, theme }) =>
+    type === "D"
+      ? theme.colors.danger
+      : type === "S"
+      ? theme.colors.success
+      : type === "W"
+      ? theme.colors.warning
+      : theme.colors.success};
   font-family: ${({ theme }) => theme.fonts.semiBold};
-  font-size: ${({ theme }) => theme.fontSize.normal}px;
+  font-size: ${({ theme }) => theme.fontSize.smaller}px;
   line-height: 24px;
 `;
 
 export const Content = styled.View``;
 
 export const Text = styled.Text`
-  color: ${({ theme }) => theme.colors.light};
+  color: ${({ type, theme }) =>
+    type === "D"
+      ? theme.colors.danger
+      : type === "S"
+      ? theme.colors.success
+      : type === "W"
+      ? theme.colors.warning
+      : theme.colors.success};
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.smaller}px;
   line-height: 18px;
+  margin-bottom: 8px;
 `;

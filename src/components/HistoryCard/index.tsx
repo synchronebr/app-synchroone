@@ -1,5 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
+import { ptBR } from 'date-fns/locale';
 
 import { HistoryCardProps } from "./types";
 import {
@@ -19,17 +20,20 @@ export function HistoryCard({ isLastCard, item, ...rest }: HistoryCardProps) {
   return (
     <Container {...rest}>
       <Progress>
-        <Circle isLastCard={isLastCard} />
-        <Line />
+        <Circle type={item.hazardousness} isLastCard={isLastCard} />
+        <Line type={item.hazardousness} />
       </Progress>
       <Card type={item.hazardousness}>
         <Header>
-          <Title>{item.title}</Title>
-          <Time>{format(item.createdAt, "hh:mm")}</Time>
+          <Title type={item.hazardousness}>{item.title}</Title>
         </Header>
 
         <Content>
-          <Text>{item.description}</Text>
+          <Text type={item.hazardousness}>{item.description}</Text>
+        </Content>
+
+        <Content>
+        <Time type={item.hazardousness}>{format(item.createdAt, "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR })}</Time>
         </Content>
       </Card>
     </Container>
