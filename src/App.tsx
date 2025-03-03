@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React from "react";
+import React, { useEffect } from "react";
 import { LogBox } from "react-native";
 import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
@@ -10,6 +10,7 @@ import {
   Montserrat_600SemiBold,
   Montserrat_700Bold,
 } from "@expo-google-fonts/montserrat";
+import { OneSignal } from "react-native-onesignal";
 import { ThemeProvider } from "styled-components/native";
 import { ToastProvider } from "react-native-toast-notifications";
 import {
@@ -43,6 +44,10 @@ export default function App() {
 
   if (!fontsLoaded && !fontError) {
     return null;
+  }
+
+  function initializeOneSignal() {
+    OneSignal.initialize("ONESIGNAL_APP_ID");
   }
 
   LogBox.ignoreAllLogs();

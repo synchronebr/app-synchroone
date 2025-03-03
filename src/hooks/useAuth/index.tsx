@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { OneSignal } from "react-native-onesignal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { sessions, deleteUser } from "../../services/Auth";
@@ -33,6 +34,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (response.status === 200) {
       const { refreshToken, token, user } = data;
 
+      OneSignal.login(user.email);
+
       await AsyncStorage.setItem(AUTH_TOKEN_STORAGE_KEY, JSON.stringify(token));
       await AsyncStorage.setItem(
         REFRESH_TOKEN_STORAGE_KEY,
@@ -53,13 +56,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function deleteRegister() {
     // await deleteUser(user.id);
-    console.log('delete...');
+    console.log("delete...");
   }
 
   return (
     <AuthContext.Provider
       value={{
         AUTH_TOKEN_STORAGE_KEY,
+        REFRESH_TOKEN_STORAGE_KEY,
         USER_STORAGE_KEY,
         user,
         setUser,

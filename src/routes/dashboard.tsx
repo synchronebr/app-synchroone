@@ -2,9 +2,9 @@ import { Entypo } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "styled-components/native";
 
-import { QRCodeButton } from "../components/QRCodeButton";
-
 import { DashboardTab } from "./dashboard-tab";
+import { Notifications } from "../screens/Notifications";
+import { NotificationDetails } from "../screens/NotificationDetails";
 import { QRCodeScanner } from "../screens/QRCodeScanner";
 import { PreConfigureSensor } from "../screens/PreConfigureSensor";
 import { PreConfigureGateway } from "../screens/PreConfigureGateway";
@@ -14,10 +14,9 @@ import { AssetDetails } from "../screens/AssetDetails";
 import { Camera } from "../screens/Camera";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
-import { NotificationDetails } from "../screens/NotificationDetails";
 import { Manuals } from "../screens/Manuals";
 import { MyData } from "../screens/MyData";
-import { Notifications } from "../screens/Notifications";
+import { AlertDetails } from "../screens/AlertDetails";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -127,7 +126,6 @@ export function Dashboard() {
         component={Notifications}
         name="Notifications"
         options={{
-          headerRight: () => <QRCodeButton />,
           title: "Notificações",
         }}
       />
@@ -178,6 +176,13 @@ export function Dashboard() {
         name="MyData"
         options={{
           title: "Meus Dados",
+        }}
+      />
+      <Screen
+        component={AlertDetails}
+        name="AlertDetails"
+        options={{
+          title: "Detalhes alerta",
         }}
       />
     </Navigator>

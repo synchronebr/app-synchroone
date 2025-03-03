@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   ActivityIndicator,
   View,
@@ -17,11 +17,11 @@ import { AssetCard } from "../../components/AssetCard";
 
 import { Container, Header, List, Content } from "./styles";
 import { getEquipments } from "../../services/Equipments";
-import { useTheme, withTheme } from "styled-components";
 import { Loading } from "../../components/Loading";
 import Drawer from "../../components/Drawer";
 import Select from "../../components/Select";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function Assets() {
   const { getAccessLevelsData } = useAccessLevels();
@@ -43,13 +43,18 @@ export function Assets() {
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedResponsible, setSelectedResponsible] = useState(null);
 
+  const accessLevels = getAccessLevelsData();
+  const { currentCompany } = accessLevels;
+
   // filters as params here because the way React updates states
   // is asynchronous, so we need to pass the filters as params,
   // otherwise the filters will be outdated (old state values were being used)
   const getEquips = async (filters) => {
     setIsLoading(true);
-    const accessLevels = getAccessLevelsData();
-    const getEquipResponse = await getEquipments({ companyId: accessLevels.currentCompany.companyId });
+
+    const getEquipResponse = await getEquipments({
+      companyId: accessLevels.currentCompany.companyId,
+    });
     const assets = getEquipResponse.data.data;
 
     setAssets(assets);
@@ -113,20 +118,22 @@ export function Assets() {
   }
 
   const setters = {
-    'areas': setSelectedArea,
-    'machines': setSelectedMachine,
-    'sectors': setSelectedSector,
-    'units': setSelectedUnit,
-    'responsibles': setSelectedResponsible,
+    areas: setSelectedArea,
+    machines: setSelectedMachine,
+    sectors: setSelectedSector,
+    units: setSelectedUnit,
+    responsibles: setSelectedResponsible,
   };
 
   function handleValueChange(key: string, value: any) {
     setters[key](value);
   }
 
-  useEffect(() => {
-    getEquips({});
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getEquips({});
+    }, [currentCompany])
+  );
 
   return (
     <Container>
@@ -152,47 +159,56 @@ export function Assets() {
                 label="Unidade"
                 placeholder="Selecione a unidade"
                 selected={selectedUnit}
-                values={units.map(u => ({ label: u.name, value: u.id }))}
-                onSelect={(value) => handleValueChange('units', value)}
+                values={units.map((u) => ({ label: u.name, value: u.id }))}
+                onSelect={(value) => handleValueChange("units", value)}
               />
 
               <Select
                 label="Área"
                 placeholder="Selecione a área"
                 selected={selectedArea}
-                values={areas.map(a => ({ label: a.name, value: a.id }))}
-                onSelect={(value) => handleValueChange('areas', value)}
+                values={areas.map((a) => ({ label: a.name, value: a.id }))}
+                onSelect={(value) => handleValueChange("areas", value)}
               />
 
               <Select
                 label="Setor"
                 placeholder="Selecione o setor"
                 selected={selectedSector}
-                values={sectors.map(s => ({ label: s.name, value: s.id }))}
-                onSelect={(value) => handleValueChange('sectors', value)}
+                values={sectors.map((s) => ({ label: s.name, value: s.id }))}
+                onSelect={(value) => handleValueChange("sectors", value)}
               />
 
               <Select
                 label="Máquina"
                 placeholder="Selecione a máquina"
                 selected={selectedMachine}
-                values={machines.map(m => ({ label: m.name, value: m.id }))}
-                onSelect={(value) => handleValueChange('machines', value)}
+                values={machines.map((m) => ({ label: m.name, value: m.id }))}
+                onSelect={(value) => handleValueChange("machines", value)}
               />
 
               <Select
                 label="Responsável"
                 placeholder="Selecione o responsável"
                 selected={selectedResponsible}
-                values={responsibles.map(r => ({ label: r.name, value: r.id }))}
-                onSelect={(value) => handleValueChange('responsibles', value)}
+                values={responsibles.map((r) => ({
+                  label: r.name,
+                  value: r.id,
+                }))}
+                onSelect={(value) => handleValueChange("responsibles", value)}
               />
 
-              <TouchableOpacity style={styles.clearFilterButton} onPress={clearFilters}>
+              <TouchableOpacity
+                style={styles.clearFilterButton}
+                onPress={clearFilters}
+              >
                 <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.applyButton} onPress={handleFilterSubmit}>
+              <TouchableOpacity
+                style={styles.applyButton}
+                onPress={handleFilterSubmit}
+              >
                 <Text style={styles.applyButtonText}>Aplicar filtro</Text>
               </TouchableOpacity>
             </View>
@@ -211,8 +227,12 @@ export function Assets() {
             <List
               data={assets}
               keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => <AssetCard item={item} key={`asset-${item.id.toString()}`} />}
-              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+              renderItem={({ item }) => (
+                <AssetCard item={item} key={`asset-${item.id.toString()}`} />
+              )}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             />
           ) : (
             <Content>
@@ -221,7 +241,6 @@ export function Assets() {
           )}
         </>
       )}
-
     </Container>
   );
 }
@@ -236,10 +255,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   filterHeader: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 16,
   },
   title: {
@@ -258,7 +277,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     color: THEME.colors.light,
     fontFamily: THEME.fonts.medium,
-    fontSize: THEME.fontSize.larger
+    fontSize: THEME.fontSize.larger,
   },
   clearFilterButton: {
     borderWidth: 1,
@@ -273,6 +292,6 @@ const styles = StyleSheet.create({
   clearFilterButtonText: {
     color: THEME.colors.primary,
     fontFamily: THEME.fonts.medium,
-    fontSize: THEME.fontSize.larger
+    fontSize: THEME.fontSize.larger,
   },
-})
+});

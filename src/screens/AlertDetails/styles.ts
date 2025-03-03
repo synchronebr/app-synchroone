@@ -44,3 +44,24 @@ export const Divider = styled.View`
   border-width: 0.5px;
   margin: 16px 0;
 `;
+
+export const HistoryCards = styled.View`
+  gap: 16px;
+  margin: 16px 0;
+`;
+
+export const SeeMoreButton = styled.TouchableOpacity.attrs({
+  activeOpacity: 1,
+})``;
+
+export const SeeMore = styled.Text`
+  color: ${({ theme }) => theme.colors.secondary};
+  font-family: ${({ theme }) => theme.fonts.medium};
+  font-size: ${({ theme }) => theme.fontSize.smaller}px;
+  line-height: 18px;
+  text-align: right;
+`;
+
+export const ShareButtonContainer = styled.View`
+  margin-bottom: 32px;
+`;

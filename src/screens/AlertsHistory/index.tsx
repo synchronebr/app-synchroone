@@ -248,6 +248,7 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
                 </Content>
               )
             }
+            showsVerticalScrollIndicator={false}
           />
         )}
       </Content>

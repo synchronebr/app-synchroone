@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useRoute } from "@react-navigation/native";
+import { formatDistanceToNow, differenceInSeconds } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-import { HistoryCard } from "../../components/HistoryCard";
-import { ShareButton } from "../../components/ShareButton";
+import { markNotificationAsRead as markNotificationAsReadService } from "../../services/Notifications";
 
+import { NotificationDetailsRouteProps } from "./types";
 import {
   Container,
   Scroll,
@@ -11,56 +14,48 @@ import {
   Subtitle,
   Text,
   Divider,
-  HistoryCards,
-  SeeMoreButton,
-  SeeMore,
-  ShareButtonContainer,
 } from "./styles";
 
 export function NotificationDetails() {
-  const [seeMore, setSeeMore] = useState(false);
+  const route = useRoute();
+  const params = route.params as NotificationDetailsRouteProps;
+  const { id, read, createdAt, title, content } = params;
+
+  const secondsDifference = differenceInSeconds(new Date(), createdAt);
+
+  async function markNotificationAsRead() {
+    if (read) return;
+
+    try {
+      await markNotificationAsReadService(id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    markNotificationAsRead();
+  }, []);
 
   return (
     <Container>
       <Scroll>
         <Header>
-          <Title>Detalhes Notificação</Title>
+          <Title>{title}</Title>
 
-          <Subtitle>há 5 min</Subtitle>
+          <Subtitle>
+            {secondsDifference < 60
+              ? "Agora mesmo"
+              : formatDistanceToNow(createdAt, {
+                  addSuffix: true,
+                  locale: ptBR,
+                })}
+          </Subtitle>
         </Header>
 
-        <Text>
-          Lorem ipsum dolor sit amet consectetur. Pretium sollicitudin id tempus
-          viverra quis sem. Libero risus eget elementum elit pharetra ac odio
-          pulvinar ac. Auctor lorem risus viverra semper non sed mi cras. Diam
-          vel nec tortor volutpat.{" "}
-        </Text>
+        <Text>{content}</Text>
 
         <Divider />
-
-        <Title>Histórico de alertas</Title>
-
-        <HistoryCards>
-          <HistoryCard isLastCard type="danger" />
-          <HistoryCard type="warning" />
-          <HistoryCard type="warning" />
-
-          {seeMore && (
-            <>
-              <HistoryCard type="success" />
-              <HistoryCard type="success" />
-              <HistoryCard type="success" />
-            </>
-          )}
-
-          <SeeMoreButton onPress={() => setSeeMore(!seeMore)}>
-            <SeeMore>{!seeMore ? "Ver mais" : "Ver menos"}</SeeMore>
-          </SeeMoreButton>
-        </HistoryCards>
-
-        <ShareButtonContainer>
-          <ShareButton />
-        </ShareButtonContainer>
       </Scroll>
     </Container>
   );

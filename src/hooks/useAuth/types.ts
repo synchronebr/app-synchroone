@@ -9,6 +9,7 @@ export type AuthProviderProps = {
 
 export type IAuthContextData = {
   AUTH_TOKEN_STORAGE_KEY: string;
+  REFRESH_TOKEN_STORAGE_KEY: string;
   USER_STORAGE_KEY: string;
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;

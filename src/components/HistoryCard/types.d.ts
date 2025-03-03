@@ -1,6 +1,8 @@
+import { TouchableOpacityProps } from "react-native";
+
 import { IDiagnose } from "../../services/dtos/IDiagnose";
 
-export type HistoryCardProps = {
+export type HistoryCardProps = TouchableOpacityProps & {
   isLastCard?: boolean;
   item: IDiagnose;
 };

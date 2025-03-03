@@ -1,4 +1,5 @@
 import React from "react";
+import { format } from "date-fns";
 
 import { HistoryCardProps } from "./types";
 import {
@@ -13,11 +14,10 @@ import {
   Content,
   Text,
 } from "./styles";
-import { format } from "date-fns";
 
-export function HistoryCard({ isLastCard, item }: HistoryCardProps) {
+export function HistoryCard({ isLastCard, item, ...rest }: HistoryCardProps) {
   return (
-    <Container>
+    <Container {...rest}>
       <Progress>
         <Circle isLastCard={isLastCard} />
         <Line />
@@ -25,13 +25,11 @@ export function HistoryCard({ isLastCard, item }: HistoryCardProps) {
       <Card type={item.hazardousness}>
         <Header>
           <Title>{item.title}</Title>
-          <Time>{format(item.createdAt, 'hh:mm')}</Time>
+          <Time>{format(item.createdAt, "hh:mm")}</Time>
         </Header>
 
         <Content>
-          <Text>
-            {item.description}
-          </Text>
+          <Text>{item.description}</Text>
         </Content>
       </Card>
     </Container>

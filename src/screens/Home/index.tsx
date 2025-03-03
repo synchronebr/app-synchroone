@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 
 import NotificationsIcon from "../../assets/icons/notifications.svg";
 import BlueLogoIcon from "../../assets/icons/blue-logo.svg";
 import LogoWhiteIconIcon from "../../assets/icons/logo-white-text.svg";
 
+import { Loading } from "../../components/Loading";
 import { TotalNotifications } from "../../components/TotalNotifications";
 import { SynchroneSensorButton } from "../../components/SynchroneSensorButton";
 import { NewGatewayButton } from "../../components/NewGatewayButton";
 import { WhatsAppButton } from "../../components/WhatsAppButton";
+
+import { HomeNavigationProps } from "./types";
+import { getAllNotifications } from "../../services/Notifications";
+import {
+  GetAllNotificationsResponse,
+  GetNotificationByIDResponse,
+} from "../../services/Notifications/types";
 
 import {
   Container,
@@ -23,10 +31,48 @@ import {
 } from "./styles";
 
 export function Home() {
-  const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [unreadNotificationsTotal, setUnreadNotificationsTotal] = useState<
+    number | null
+  >(null);
+  const [allNotifications, setAllNotifications] = useState<
+    GetNotificationByIDResponse[]
+  >([]);
+
+  const navigation = useNavigation<HomeNavigationProps>();
   const THEME = useTheme();
 
   const notificationsIconSize = 22;
+
+  async function getNotifications() {
+    setIsLoading(true);
+
+    try {
+      const response = await getAllNotifications();
+
+      if (response.status === 200) {
+        const { notifications, quantity } =
+          response.data as GetAllNotificationsResponse;
+        setUnreadNotificationsTotal(quantity.unread);
+        setAllNotifications(notifications);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getNotifications();
+    }, [])
+  );
+
+  if (isLoading)
+    return (
+      <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />
+    );
 
   return (
     <Container>
@@ -41,14 +87,17 @@ export function Home() {
         <Title>Synchroone</Title>
 
         <NotificationsIconContainer
-          onPress={() => navigation.navigate("Notifications" as never)}
+          onPress={() =>
+            navigation.navigate("Notifications", { ...allNotifications })
+          }
         >
           <NotificationsIcon
             height={notificationsIconSize}
             width={notificationsIconSize}
           />
-          {/* <TotalNotifications total={5} /> */}
-          <TotalNotifications />
+          {unreadNotificationsTotal && (
+            <TotalNotifications total={unreadNotificationsTotal} />
+          )}
         </NotificationsIconContainer>
       </Header>
 

@@ -1,13 +1,16 @@
 import React from "react";
+import { useRoute } from "@react-navigation/native";
 
 import TuneIcon from "../../assets/icons/tune.svg";
 
 import { NotificationCard } from "../../components/NotificationCard";
 
+import { NotificationsRouteProps } from "./types";
 import { Container, TuneIconContainer, List, Content, Text } from "./styles";
 
 export function Notifications() {
-  const data = [];
+  const route = useRoute();
+  const params = route.params as NotificationsRouteProps;
 
   return (
     <Container>
@@ -16,23 +19,20 @@ export function Notifications() {
       </TuneIconContainer>
 
       <List
-        data={data}
-        keyExtractor={(item) => item.toString()}
-        renderItem={({ item }) => <NotificationCard />}
+        data={Object.values(params)}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <NotificationCard {...item} />}
         ListEmptyComponent={
-          false ?
-            <Loading bgColor={'transparent'} color={THEME.colors.primary} />
-            :
-            <Content>
-              <Text
-                style={{
-                  alignSelf: 'center',
-                  textAlign: 'center',
-                }}
-              >
-                Nenhuma notificação para visualizar.
-              </Text>
-            </Content>
+          <Content>
+            <Text
+              style={{
+                alignSelf: "center",
+                textAlign: "center",
+              }}
+            >
+              Nenhuma notificação para visualizar.
+            </Text>
+          </Content>
         }
       />
     </Container>
