@@ -10,7 +10,7 @@ import {
 import { Container, Header, Title, Text } from "./styles";
 
 export function NotificationCard(props: NotificationCardProps) {
-  const { title, content, createdAt } = props;
+  const { read, title, content, createdAt } = props;
 
   const navigation = useNavigation<NotificationCardNavigationProps>();
 
@@ -18,18 +18,19 @@ export function NotificationCard(props: NotificationCardProps) {
 
   return (
     <Container
+      isRead={read}
       onPress={() => navigation.navigate("NotificationDetails", { ...props })}
     >
       <Header>
         <Title>{title}</Title>
-        <Text>
+        <Text isRead={read}>
           {secondsDifference < 60
             ? "Agora mesmo"
             : formatDistanceToNow(createdAt, { addSuffix: true, locale: ptBR })}
         </Text>
       </Header>
 
-      <Text>{content}</Text>
+      <Text isRead={read}>{content}</Text>
     </Container>
   );
 }

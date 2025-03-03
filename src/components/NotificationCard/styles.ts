@@ -1,8 +1,12 @@
 import styled from "styled-components/native";
 
+import { NotificationCardStyleProps } from "./types";
+
 export const Container = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
-})`
+})<NotificationCardStyleProps>`
+  background-color: ${({ isRead, theme }) =>
+    isRead ? theme.colors.light : "rgba(30, 41, 59, 0.1)"};
   border-color: ${({ theme }) => theme.colors.gray};
   border-radius: 8px;
   border-width: 1px;
@@ -23,8 +27,9 @@ export const Title = styled.Text`
   line-height: 21px;
 `;
 
-export const Text = styled.Text`
-  color: ${({ theme }) => theme.colors.gray_dark};
+export const Text = styled.Text<NotificationCardStyleProps>`
+  color: ${({ isRead, theme }) =>
+    isRead ? theme.colors.gray_dark : theme.colors.primary};
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.smaller}px;
   line-height: 18px;

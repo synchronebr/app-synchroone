@@ -13,12 +13,8 @@ import { SynchroneSensorButton } from "../../components/SynchroneSensorButton";
 import { NewGatewayButton } from "../../components/NewGatewayButton";
 import { WhatsAppButton } from "../../components/WhatsAppButton";
 
-import { HomeNavigationProps } from "./types";
 import { getAllNotifications } from "../../services/Notifications";
-import {
-  GetAllNotificationsResponse,
-  GetNotificationByIDResponse,
-} from "../../services/Notifications/types";
+import { GetAllNotificationsResponse } from "../../services/Notifications/types";
 
 import {
   Container,
@@ -35,11 +31,8 @@ export function Home() {
   const [unreadNotificationsTotal, setUnreadNotificationsTotal] = useState<
     number | null
   >(null);
-  const [allNotifications, setAllNotifications] = useState<
-    GetNotificationByIDResponse[]
-  >([]);
 
-  const navigation = useNavigation<HomeNavigationProps>();
+  const navigation = useNavigation();
   const THEME = useTheme();
 
   const notificationsIconSize = 22;
@@ -51,10 +44,8 @@ export function Home() {
       const response = await getAllNotifications();
 
       if (response.status === 200) {
-        const { notifications, quantity } =
-          response.data as GetAllNotificationsResponse;
+        const { quantity } = response.data as GetAllNotificationsResponse;
         setUnreadNotificationsTotal(quantity.unread);
-        setAllNotifications(notifications);
       }
     } catch (error) {
       console.log(error);
@@ -87,9 +78,7 @@ export function Home() {
         <Title>Synchroone</Title>
 
         <NotificationsIconContainer
-          onPress={() =>
-            navigation.navigate("Notifications", { ...allNotifications })
-          }
+          onPress={() => navigation.navigate("Notifications" as never)}
         >
           <NotificationsIcon
             height={notificationsIconSize}

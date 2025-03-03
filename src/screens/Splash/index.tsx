@@ -3,6 +3,7 @@ import { ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
+import { OneSignal } from "react-native-onesignal";
 
 import Logo from "../../assets/icons/logo.svg";
 
@@ -129,12 +130,20 @@ export function Splash() {
     }
   }
 
+  function initializeOneSignal() {
+    OneSignal.initialize("5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7");
+  }
+
   useEffect(() => {
     createAPIInterceptors();
   }, []);
 
   useEffect(() => {
     getToken();
+  }, []);
+
+  useEffect(() => {
+    initializeOneSignal();
   }, []);
 
   return (

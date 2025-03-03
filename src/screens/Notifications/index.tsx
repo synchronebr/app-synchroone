@@ -1,16 +1,57 @@
-import React from "react";
-import { useRoute } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useTheme } from "styled-components/native";
 
 import TuneIcon from "../../assets/icons/tune.svg";
 
+import { Loading } from "../../components/Loading";
 import { NotificationCard } from "../../components/NotificationCard";
 
-import { NotificationsRouteProps } from "./types";
+import { getAllNotifications } from "../../services/Notifications";
+import {
+  GetAllNotificationsResponse,
+  GetNotificationByIDResponse,
+} from "../../services/Notifications/types";
+
 import { Container, TuneIconContainer, List, Content, Text } from "./styles";
 
 export function Notifications() {
-  const route = useRoute();
-  const params = route.params as NotificationsRouteProps;
+  const THEME = useTheme();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [allNotifications, setAllNotifications] = useState<
+    GetNotificationByIDResponse[]
+  >([]);
+
+  async function getNotifications() {
+    setIsLoading(true);
+
+    try {
+      const response = await getAllNotifications();
+
+      if (response.status === 200) {
+        const { notifications } = response.data as GetAllNotificationsResponse;
+
+        setAllNotifications(notifications);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getNotifications();
+    }, [])
+  );
+
+  if (isLoading)
+    return (
+      <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />
+    );
 
   return (
     <Container>
@@ -19,7 +60,7 @@ export function Notifications() {
       </TuneIconContainer>
 
       <List
-        data={Object.values(params)}
+        data={allNotifications}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <NotificationCard {...item} />}
         ListEmptyComponent={

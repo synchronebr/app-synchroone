@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useEffect } from "react";
+import React from "react";
 import { LogBox } from "react-native";
 import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
@@ -10,7 +10,6 @@ import {
   Montserrat_600SemiBold,
   Montserrat_700Bold,
 } from "@expo-google-fonts/montserrat";
-import { OneSignal } from "react-native-onesignal";
 import { ThemeProvider } from "styled-components/native";
 import { ToastProvider } from "react-native-toast-notifications";
 import {
@@ -46,54 +45,39 @@ export default function App() {
     return null;
   }
 
-  function initializeOneSignal() {
-    OneSignal.initialize("ONESIGNAL_APP_ID");
-  }
-
   LogBox.ignoreAllLogs();
 
   return (
     <ThemeProvider theme={THEME}>
       <ToastProvider
         animationDuration={100}
+        animationType="zoom-in"
         duration={3500}
         placement="top"
         textStyle={{
+          fontSize: 12,
           fontFamily: THEME.fonts.medium,
-          fontSize: THEME.fontSize.smaller,
           textAlign: "center",
         }}
+        dangerColor={THEME.colors.danger}
+        successColor={THEME.colors.success}
+        warningColor={THEME.colors.warning}
       >
-        <ToastProvider
-          animationDuration={100}
-          animationType="zoom-in"
-          duration={3500}
-          placement="top"
-          textStyle={{
-            fontSize: 12,
-            fontFamily: THEME.fonts.medium,
-            textAlign: "center",
-          }}
-          dangerColor={THEME.colors.danger}
-          successColor={THEME.colors.success}
-          warningColor={THEME.colors.warning}
-        >
-          <AuthProvider>
-            <AccessLevelsProvider>
-              <QueryClientProvider client={queryClient}>
-                <StatusBar
-                  backgroundColor={THEME.colors.primary}
-                  barStyle="light-content"
-                />
-                <BLEManagerProvider>
-                  <SafeAreaView style={styles.safeArea}>
-                    <Routes />
-                  </SafeAreaView>
-                </BLEManagerProvider>
-              </QueryClientProvider>
-            </AccessLevelsProvider>
-          </AuthProvider>
-        </ToastProvider>
+        <AuthProvider>
+          <AccessLevelsProvider>
+            <QueryClientProvider client={queryClient}>
+              <StatusBar
+                backgroundColor={THEME.colors.primary}
+                barStyle="light-content"
+              />
+              <BLEManagerProvider>
+                <SafeAreaView style={styles.safeArea}>
+                  <Routes />
+                </SafeAreaView>
+              </BLEManagerProvider>
+            </QueryClientProvider>
+          </AccessLevelsProvider>
+        </AuthProvider>
       </ToastProvider>
     </ThemeProvider>
   );

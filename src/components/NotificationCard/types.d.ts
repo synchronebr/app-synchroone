@@ -5,3 +5,7 @@ export type NotificationCardNavigationProps = {
 };
 
 export type NotificationCardProps = GetNotificationByIDResponse;
+
+export type NotificationCardStyleProps = {
+  isRead: boolean;
+};
