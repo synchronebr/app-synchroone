@@ -15,13 +15,13 @@ export const Header = styled.View`
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  margin: 8px 0;
+  margin: 20px 0;
 `;
 
 export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.primary};
   font-family: ${({ theme }) => theme.fonts.semiBold};
-  font-size: ${({ theme }) => theme.fontSize.normal}px;
+  font-size: ${({ theme }) => theme.fontSize.larger}px;
 `;
 
 export const Subtitle = styled.Text`
@@ -34,7 +34,7 @@ export const Subtitle = styled.Text`
 export const Text = styled.Text`
   color: ${({ theme }) => theme.colors.dark};
   font-family: ${({ theme }) => theme.fonts.medium};
-  font-size: ${({ theme }) => theme.fontSize.smaller}px;
+  font-size: ${({ theme }) => theme.fontSize.medium}px;
   line-height: 18px;
 `;
 
@@ -64,4 +64,75 @@ export const SeeMore = styled.Text`
 
 export const ShareButtonContainer = styled.View`
   margin-bottom: 32px;
+`;
+
+
+export const DiagnoseDescription = styled.View`
+  background-color: ${({ theme }) => theme.colors.gray_light};
+  padding: 8px;
+  border-radius: 5px;
+`;
+
+export const DiagnoseDescriptionTitleDiv = styled.View`
+  align-items: center;
+  flex-direction: row;
+  gap: 4px;
+  margin-bottom: 16px;
+`;
+
+export const DiagnoseDescriptionTitle = styled.Text`
+`;
+
+export const DiagnoseDescriptionSubtitle = styled.Text``;
+
+export const CardsInfo = styled.View`
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const CardInfo = styled.View`
+  background-color: ${({ theme }) => theme.colors.danger_light};
+  border-color: ${({ theme }) => theme.colors.danger};
+  border-width: 1px;
+  padding: 16px;
+  text-align: center;
+  border-radius: 5px;
+  width: 100px;
+`;
+
+export const CardInfoTitle = styled.Text`
+  text-align: center;
+  font-family: ${({ theme }) => theme.fonts.medium};
+  font-size: ${({ theme }) => theme.fontSize.smaller}px;
+  margin-bottom: 5px;
+`;
+
+export const CardInfoSubtitle = styled.Text`
+  text-align: center;
+  font-family: ${({ theme }) => theme.fonts.bold};
+  font-size: ${({ theme }) => theme.fontSize.larger}px;
+`;
+
+
+export const CardCauses = styled.View`
+  margin-top: 25px;
+`;
+
+export const CardCause = styled.View`
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const CardCauseTitle = styled.Text``;
+
+export const CardCauseButton = styled.TouchableOpacity`
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 4px;
+  background-color: ${({ theme }) => theme.colors.gray_light};
+  padding: 16px;
+  border-radius: 5px;
 `;

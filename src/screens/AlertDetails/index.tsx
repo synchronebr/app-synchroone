@@ -5,10 +5,8 @@ import {
 } from "react-native";
 
 import { useTheme } from "styled-components/native";
-import THEME from "../../global/styles/theme";
 import { Loading } from "../../components/Loading";
 
-import { ShareButton } from "../../components/ShareButton";
 import { AlertCardProps } from "./types";
 
 import {
@@ -23,11 +21,25 @@ import {
   SeeMoreButton,
   SeeMore,
   ShareButtonContainer,
+  DiagnoseDescription,
+  DiagnoseDescriptionTitleDiv,
+  DiagnoseDescriptionTitle,
+  DiagnoseDescriptionSubtitle,
+  CardsInfo,
+  CardInfo,
+  CardInfoTitle,
+  CardInfoSubtitle,
+  CardCauses,
+  CardCause,
+  CardCauseTitle,
+  CardCauseButton,
 } from "./styles";
 import { useRoute } from "@react-navigation/native";
 import api from "../../services/api";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { IDiagnose } from "../../services/dtos/IDiagnose";
+import DangerIcon from "../../assets/icons/danger.svg";
+import BookOpenCheckIcon from "../../assets/icons/book-open-check.svg";
 
 export function AlertDetails() {
   const route = useRoute();
@@ -64,16 +76,53 @@ export function AlertDetails() {
       (
       <Scroll>
         <Header>
+          <DangerIcon fill={THEME.colors.gray} />
           <Title>{data?.title}</Title>
-
-          <Subtitle>Há 5 min</Subtitle>
         </Header>
-
-        <Text>{data?.description}</Text>
 
         <Divider />
 
-        <Title>Histórico de alertas</Title>
+        <DiagnoseDescription>
+          <DiagnoseDescriptionTitleDiv>
+            <DangerIcon fill={THEME.colors.gray} />
+            <DiagnoseDescriptionTitle>Falha Identificada (Perigo)</DiagnoseDescriptionTitle>
+          </DiagnoseDescriptionTitleDiv>
+          <DiagnoseDescriptionSubtitle>{data?.description}</DiagnoseDescriptionSubtitle>
+        </DiagnoseDescription>
+
+        <Divider />
+
+        <CardsInfo>
+          <CardInfo>
+            <CardInfoTitle>Criticidade</CardInfoTitle>
+            <CardInfoSubtitle>{data?.percent}</CardInfoSubtitle>
+          </CardInfo>
+          <CardInfo>
+            <CardInfoTitle>Chance</CardInfoTitle>
+            <CardInfoSubtitle>{data?.percent}</CardInfoSubtitle>
+          </CardInfo>
+          <CardInfo>
+            <CardInfoTitle>Status</CardInfoTitle>
+            <CardInfoSubtitle>{data?.percent}</CardInfoSubtitle>
+          </CardInfo>
+        </CardsInfo>
+
+        <Divider />
+
+        <Title>Possíveis causas</Title >
+
+        <CardCauses>
+          <CardCause>
+            <CardCauseTitle>Nível de óleo baixo</CardCauseTitle>
+            <CardCauseButton>
+              <BookOpenCheckIcon fill={THEME.colors.gray}/>
+              <CardCauseTitle>Prescrição</CardCauseTitle>
+            </CardCauseButton>
+          </CardCause>
+          <Divider />
+        </CardCauses>
+
+        {/* <Title>Histórico de alertas</Title> */}
 
         {/* <HistoryCards>
           <HistoryCard isLastCard type="danger" />
@@ -93,9 +142,9 @@ export function AlertDetails() {
           </SeeMoreButton>
         </HistoryCards> */}
 
-        <ShareButtonContainer>
+        {/* <ShareButtonContainer>
           <ShareButton />
-        </ShareButtonContainer>
+        </ShareButtonContainer> */}
       </Scroll>
         
     )}
