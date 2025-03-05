@@ -24,7 +24,7 @@ export function WhatsAppButton() {
         Toast.show("O WhatsApp não está instalado no teu dispositivo.");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       Toast.show("Erro ao abrir o WhatsApp.");
     }
   }
