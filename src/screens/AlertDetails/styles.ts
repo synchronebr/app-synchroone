@@ -14,7 +14,8 @@ export const Scroll = styled.ScrollView.attrs({
 export const Header = styled.View`
   align-items: center;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 4px;
   margin: 20px 0;
 `;
 
@@ -91,9 +92,22 @@ export const CardsInfo = styled.View`
   justify-content: space-between;
 `;
 
-export const CardInfo = styled.View`
-  background-color: ${({ theme }) => theme.colors.danger_light};
-  border-color: ${({ theme }) => theme.colors.danger};
+interface CardInfoProps {
+  hazardousness: 'S' | 'W' | 'D';
+}
+export const CardInfo = styled.View<CardInfoProps>`
+  background-color: ${({ theme, hazardousness }) =>
+    hazardousness === "S"
+      ? theme.colors.success_light
+      : hazardousness === "W"
+      ? theme.colors.warning_light
+      : theme.colors.danger_light};
+  border-color: ${({ theme, hazardousness }) =>
+    hazardousness === "S"
+      ? theme.colors.success
+      : hazardousness === "W"
+      ? theme.colors.warning
+      : theme.colors.danger};
   border-width: 1px;
   padding: 16px;
   text-align: center;
@@ -111,7 +125,7 @@ export const CardInfoTitle = styled.Text`
 export const CardInfoSubtitle = styled.Text`
   text-align: center;
   font-family: ${({ theme }) => theme.fonts.bold};
-  font-size: ${({ theme }) => theme.fontSize.larger}px;
+  font-size: ${({ theme }) => theme.fontSize.medium}px;
 `;
 
 

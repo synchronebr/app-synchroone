@@ -17,6 +17,7 @@ import { MeasurementHistory } from "../screens/MeasurementHistory";
 import { Manuals } from "../screens/Manuals";
 import { MyData } from "../screens/MyData";
 import { AlertDetails } from "../screens/AlertDetails";
+import { AlertPrescriptionDetails } from "../screens/AlertPrescriptionDetails";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -183,6 +184,13 @@ export function Dashboard() {
         name="AlertDetails"
         options={{
           title: "Detalhes alerta",
+        }}
+      />
+      <Screen
+        component={AlertPrescriptionDetails}
+        name="AlertPrescriptionDetails"
+        options={{
+          title: "Prescrição",
         }}
       />
     </Navigator>

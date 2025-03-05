@@ -7,7 +7,7 @@ import {
 import { useTheme } from "styled-components/native";
 import { Loading } from "../../components/Loading";
 
-import { AlertCardProps } from "./types";
+import { AlertCardNavigationProps, AlertCardProps } from "./types";
 
 import {
   Container,
@@ -34,14 +34,25 @@ import {
   CardCauseTitle,
   CardCauseButton,
 } from "./styles";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import api from "../../services/api";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { IDiagnose } from "../../services/dtos/IDiagnose";
 import DangerIcon from "../../assets/icons/danger.svg";
+import WarnIcon from "../../assets/icons/warn.svg";
 import BookOpenCheckIcon from "../../assets/icons/book-open-check.svg";
 
+const STATUS_HAZARDOUSNESS: Record<string, { title: string; }> = {
+  D: {
+    title: 'Perigo',
+  },
+  W: {
+    title: 'Alerta',
+  },
+};
+
 export function AlertDetails() {
+  const navigation = useNavigation<AlertCardNavigationProps>();
   const route = useRoute();
   const params = route.params as AlertCardProps;
   const { item } = params;
@@ -76,7 +87,9 @@ export function AlertDetails() {
       (
       <Scroll>
         <Header>
-          <DangerIcon fill={THEME.colors.gray} />
+          {data.hazardousness === 'D' && (<DangerIcon fill={THEME.colors.danger} />)}
+          {data.hazardousness === 'W' && (<WarnIcon fill={THEME.colors.warning} />)}
+          
           <Title>{data?.title}</Title>
         </Header>
 
@@ -85,7 +98,7 @@ export function AlertDetails() {
         <DiagnoseDescription>
           <DiagnoseDescriptionTitleDiv>
             <DangerIcon fill={THEME.colors.gray} />
-            <DiagnoseDescriptionTitle>Falha Identificada (Perigo)</DiagnoseDescriptionTitle>
+            <DiagnoseDescriptionTitle>Falha Identificada ({STATUS_HAZARDOUSNESS[data.hazardousness]?.title})</DiagnoseDescriptionTitle>
           </DiagnoseDescriptionTitleDiv>
           <DiagnoseDescriptionSubtitle>{data?.description}</DiagnoseDescriptionSubtitle>
         </DiagnoseDescription>
@@ -93,17 +106,17 @@ export function AlertDetails() {
         <Divider />
 
         <CardsInfo>
-          <CardInfo>
+          <CardInfo hazardousness={data?.hazardousness}>
             <CardInfoTitle>Criticidade</CardInfoTitle>
-            <CardInfoSubtitle>{data?.percent}</CardInfoSubtitle>
+            <CardInfoSubtitle>{STATUS_HAZARDOUSNESS[data.hazardousness]?.title}</CardInfoSubtitle>
           </CardInfo>
-          <CardInfo>
+          <CardInfo hazardousness={data?.hazardousness}>
             <CardInfoTitle>Chance</CardInfoTitle>
-            <CardInfoSubtitle>{data?.percent}</CardInfoSubtitle>
+            <CardInfoSubtitle>{data?.percent}%</CardInfoSubtitle>
           </CardInfo>
-          <CardInfo>
+          <CardInfo hazardousness={data?.hazardousness}>
             <CardInfoTitle>Status</CardInfoTitle>
-            <CardInfoSubtitle>{data?.percent}</CardInfoSubtitle>
+            <CardInfoSubtitle>{data?.read ? 'Pendente' : 'Avaliado'}</CardInfoSubtitle>
           </CardInfo>
         </CardsInfo>
 
@@ -112,14 +125,18 @@ export function AlertDetails() {
         <Title>Possíveis causas</Title >
 
         <CardCauses>
-          <CardCause>
-            <CardCauseTitle>Nível de óleo baixo</CardCauseTitle>
-            <CardCauseButton>
-              <BookOpenCheckIcon fill={THEME.colors.gray}/>
-              <CardCauseTitle>Prescrição</CardCauseTitle>
-            </CardCauseButton>
-          </CardCause>
-          <Divider />
+          {data?.causes.map(cause => (
+            <>
+            <CardCause>
+              <CardCauseTitle>Nível de óleo baixo</CardCauseTitle>
+              <CardCauseButton onPress={() => navigation.navigate("AlertPrescriptionDetails", { item: cause })}>
+                <BookOpenCheckIcon fill={THEME.colors.gray}/>
+                <CardCauseTitle>Prescrição</CardCauseTitle>
+              </CardCauseButton>
+            </CardCause>
+            <Divider />
+            </>
+          ))}
         </CardCauses>
 
         {/* <Title>Histórico de alertas</Title> */}

@@ -12,7 +12,9 @@ export default {
     danger_light: "#FFE9E9",
     warning: "#FACC15",
     warning_dark: "#dbb311",
+    warning_light: "#dbb31182",
     success: "#16A34A",
+    success_light: "#16a34a87",
   },
   fonts: {
     medium: "Montserrat_400Regular",

@@ -6,6 +6,7 @@ export interface IDiagnose {
     hazardousness: string;
     createdAt: Date; 
     percent: number;
+    read: boolean;
     reading: {
         id: string;
         measuringPoint: {
@@ -32,16 +33,18 @@ export interface IDiagnose {
             }
         }
     },
-    failures: {
-            failureType: {
-                id: string;
-                title: string;
-                description: string;
-            },
+    causes: {
+        causesType: {
+            id: string;
+            title: string;
+            description: string;
+        },
+        solutions: {
             solutionType: {
                 id: string;
                 title: string;
                 description: string;
             }
-        }[];
+        }[]
+    }[];
 }
