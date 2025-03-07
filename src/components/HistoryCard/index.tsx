@@ -15,6 +15,7 @@ import {
   Time,
   Content,
   Text,
+  TextPath,
 } from "./styles";
 
 export function HistoryCard({ isLastCard, item, ...rest }: HistoryCardProps) {
@@ -22,20 +23,24 @@ export function HistoryCard({ isLastCard, item, ...rest }: HistoryCardProps) {
   return (
     <Container {...rest} onPress={() => navigation.navigate("AlertDetails", { item })}>
       <Progress>
-        <Circle type={item.hazardousness} isLastCard={isLastCard} />
+        <Circle read={item.read} type={item.hazardousness} isLastCard={isLastCard} />
         <Line type={item.hazardousness} />
       </Progress>
       <Card type={item.hazardousness}>
         <Header>
-          <Title type={item.hazardousness}>{item.title}</Title>
+          <Title>{item.reading.measuringPoint.piece.description} - {item.title}</Title>
         </Header>
 
         <Content>
-          <Text type={item.hazardousness}>{item.description}</Text>
+          <TextPath>{`${item.reading.measuringPoint.piece.machine.name}`}</TextPath>
         </Content>
 
         <Content>
-        <Time type={item.hazardousness}>{format(item.createdAt, "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR })}</Time>
+          <Text>{item.description}</Text>
+        </Content>
+
+        <Content>
+        <Time>{format(item.createdAt, "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR })}</Time>
         </Content>
       </Card>
     </Container>

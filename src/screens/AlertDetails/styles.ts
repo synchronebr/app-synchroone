@@ -11,12 +11,34 @@ export const Scroll = styled.ScrollView.attrs({
   },
 })``;
 
+
+export const PieceDiv = styled.View`
+  align-items: start;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: start;
+  gap: 4px;
+  margin: 10px 0;
+`;
+
+export const PieceText = styled.Text`
+  color: ${({ theme }) => theme.colors.primary};
+  font-family: ${({ theme }) => theme.fonts.semiBold};
+  font-size: ${({ theme }) => theme.fontSize.larger}px;
+`;
+
+export const PiecePath = styled.Text`
+  color: ${({ theme }) => theme.colors.gray_dark};
+  font-family: ${({ theme }) => theme.fonts.medium};
+  font-size: ${({ theme }) => theme.fontSize.smaller}px;
+`;
+
 export const Header = styled.View`
   align-items: center;
   flex-direction: row;
   justify-content: center;
   gap: 4px;
-  margin: 20px 0;
+  margin: 6px 0;
 `;
 
 export const Title = styled.Text`
@@ -125,7 +147,7 @@ export const CardInfoTitle = styled.Text`
 export const CardInfoSubtitle = styled.Text`
   text-align: center;
   font-family: ${({ theme }) => theme.fonts.bold};
-  font-size: ${({ theme }) => theme.fontSize.medium}px;
+  font-size: 12px;
 `;
 
 

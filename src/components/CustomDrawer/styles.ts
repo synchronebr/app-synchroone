@@ -5,7 +5,6 @@ export const Container = styled.View`
 `;
 
 export const Header = styled.View`
-  flex: 1;
   flex-direction: row;
   align-items: center;
   gap: 8px;
@@ -33,5 +32,19 @@ export const CompanyName = styled.Text`
 export const AccessLevel = styled.Text`
   color: ${({ theme }) => theme.colors.primary};
   font-family: ${({ theme }) => theme.fonts.medium};
+  font-size: ${({ theme }) => theme.fontSize.normal}px;
+`;
+
+export const Title = styled.Text`
+  margin: 0px 0px 0px 12px;
+  color: ${({ theme }) => theme.colors.primary};
+  font-family: ${({ theme }) => theme.fonts.semiBold};
+  font-size: ${({ theme }) => theme.fontSize.normal}px;
+`;
+
+export const TitleSecond = styled.Text`
+  margin: 24px 0px 0px 12px;
+  color: ${({ theme }) => theme.colors.primary};
+  font-family: ${({ theme }) => theme.fonts.semiBold};
   font-size: ${({ theme }) => theme.fontSize.normal}px;
 `;

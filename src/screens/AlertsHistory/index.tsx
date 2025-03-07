@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -200,6 +202,16 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
     closeFilter();
   }
 
+  const onRefresh = async () => {
+    diagnoses.refetch();
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      diagnoses.refetch();
+    }, [])
+  );
+
   return (
     <Container>
       {selectedRangeFilter === RangeFilters.CURRENT_WEEK ? (
@@ -218,7 +230,7 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
       )}
 
       <Content>
-        {isLoading ? (
+        {/* {isLoading ? (
           <View>
             <Loading
               bgColor={THEME.colors.light}
@@ -226,7 +238,7 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
             />
             <ActivityIndicator color={THEME.colors.light} />
           </View>
-        ) : (
+        ) : ( */}
           <List
             data={diagnoses.data}
             keyExtractor={(item) => item.id.toString()}
@@ -249,8 +261,11 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
               )
             }
             showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={diagnoses.isLoading} onRefresh={onRefresh} />
+            }
           />
-        )}
+        {/* )} */}
       </Content>
 
       <AlertFiltersDrawer

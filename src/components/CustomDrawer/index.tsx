@@ -21,7 +21,10 @@ import {
   Logo,
   CompanyName,
   AccessLevel,
+  Title,
+  TitleSecond,
 } from "./styles";
+import { margin } from "polished";
 
 export function CustomDrawer(props: DrawerContentComponentProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -71,6 +74,9 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
     (company) => company.companyId === accessLevels?.currentCompany?.companyId
   )?.image;
 
+  const companies = accessLevels && accessLevels?.companies?.filter((company) => company.companyId !== accessLevels?.currentCompany?.companyId && company.companyType !== 'TP' )
+  const companiesPartTime = accessLevels && accessLevels?.companies?.filter((company) => company.companyId !== accessLevels?.currentCompany?.companyId && company.companyType === 'TP' )
+
   useEffect(() => {
     getDrawerContentData();
   }, []);
@@ -82,48 +88,68 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
 
   return (
     <Container>
+      <Header>
+        <Logo
+          resizeMode="contain"
+          source={
+            companyImage
+              ? { uri: companyImage }
+              : require("../../assets/images/app-icon.png")
+          }
+        />
+
+        <HeaderTextDiv>
+          <CompanyName>
+            {accessLevels?.currentCompany?.companyName}
+          </CompanyName>
+          <AccessLevel>
+            {accessLevels?.currentCompany?.accessLevel}
+          </AccessLevel>
+        </HeaderTextDiv>
+      </Header>
+
       <DrawerContentScrollView {...props}>
-        <Header>
-          <Logo
-            resizeMode="contain"
-            source={
-              companyImage
-                ? { uri: companyImage }
-                : require("../../assets/images/app-icon.png")
-            }
-          />
-
-          <HeaderTextDiv>
-            <CompanyName>
-              {accessLevels?.currentCompany?.companyName}
-            </CompanyName>
-            <AccessLevel>
-              {accessLevels?.currentCompany?.accessLevel}
-            </AccessLevel>
-          </HeaderTextDiv>
-        </Header>
-
         <DrawerItemList {...props} />
 
-        {accessLevels &&
-          accessLevels?.companies
-            .filter(
-              (company) =>
-                company.companyId !== accessLevels?.currentCompany?.companyId
-            )
-            .map((company) => (
+        {companies?.length > 0 && (
+          <>
+          <Title>Empresas</Title>
+          {companies.map((company) => (
               <DrawerItem
                 key={company.companyId}
                 label={company.companyName}
                 labelStyle={{
                   color: THEME.colors.primary,
                   fontFamily: THEME.fonts.medium,
+                  margin: 0.05,
                 }}
                 onPress={() =>
                   handleSelectCompany(company.companyId.toString())
                 }
               />
+          ))}
+          </>
+        )}
+
+        {companiesPartTime?.length > 0 && (
+          <>
+          <TitleSecond>Part Time</TitleSecond>
+          {companiesPartTime.map((company) => (
+                <DrawerItem
+                  key={company.companyId}
+                  label={company.companyName}
+                  labelStyle={{
+                    color: THEME.colors.primary,
+                    fontFamily: THEME.fonts.medium,
+                    margin: 0.05,
+                  }}
+                  onPress={() =>
+                    handleSelectCompany(company.companyId.toString())
+                  }
+                />
             ))}
+          </>
+        )}
       </DrawerContentScrollView>
     </Container>
   );

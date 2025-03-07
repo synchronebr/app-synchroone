@@ -15,8 +15,13 @@ export const Progress = styled.View`
 `;
 
 export const Circle = styled.View<HistoryCardCircleStyleProps>`
-  background-color: ${({ isLastCard, theme }) =>
-    isLastCard ? theme.colors.secondary : null};
+  background-color: ${({ read, type, theme }) => 
+    read ? theme.colors.neutral : 
+    type === "D" ? theme.colors.danger 
+    : type === "S" ? theme.colors.success
+    : type === "W" ? theme.colors.warning_dark
+    : null
+  };
   border-color: ${({ type, theme }) =>
     type === "D"
       ? theme.colors.danger
@@ -71,52 +76,39 @@ export const Card = styled.View<HistoryCardStyleProps>`
 export const Header = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   flex-flow: wrap;
   align-items: center;
 `;
 
 export const Title = styled.Text`
-  color: ${({ type, theme }) =>
-    type === "D"
-      ? theme.colors.danger
-      : type === "S"
-      ? theme.colors.success
-      : type === "W"
-      ? theme.colors.warning_dark
-      : theme.colors.success};
+  color: ${({ type, theme }) => theme.colors.primary};
   font-family: ${({ theme }) => theme.fonts.semiBold};
   font-size: ${({ theme }) => theme.fontSize.normal}px;
   line-height: 21px;
 `;
 
 export const Time = styled.Text`
-  color: ${({ type, theme }) =>
-    type === "D"
-      ? theme.colors.danger
-      : type === "S"
-      ? theme.colors.success
-      : type === "W"
-      ? theme.colors.warning_dark
-      : theme.colors.success};
-  font-family: ${({ theme }) => theme.fonts.semiBold};
-  font-size: ${({ theme }) => theme.fontSize.smaller}px;
+  color: ${({ type, theme }) => theme.colors.primary};
+  font-family: ${({ theme }) => theme.fonts.medium};
+  font-size: 10px;
   line-height: 24px;
 `;
 
 export const Content = styled.View``;
 
 export const Text = styled.Text`
-  color: ${({ type, theme }) =>
-    type === "D"
-      ? theme.colors.danger
-      : type === "S"
-      ? theme.colors.success
-      : type === "W"
-      ? theme.colors.warning_dark
-      : theme.colors.success};
+  color: ${({ type, theme }) => theme.colors.primary};
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.smaller}px;
   line-height: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+`;
+
+export const TextPath = styled.Text`
+  color: ${({ type, theme }) => theme.colors.primary};
+  font-family: ${({ theme }) => theme.fonts.medium};
+  font-size: 8px;
+  line-height: 18px;
+  margin-bottom: 2px;
 `;

@@ -17,6 +17,7 @@ export type HistoryCardStyleProps = {
 
 export type HistoryCardCircleStyleProps = {
   isLastCard?: boolean;
+  read?: boolean;
 };
 
 type Type = "S" | "D" | "W";
