@@ -2,8 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- Nome do Produto -->
-    <key>CFBundleDevelopmentRegion</key>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
@@ -11,58 +12,43 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-    <key>CFBundleName</key>
-    <string>$(PRODUCT_NAME)</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.2</string>
-    <key>CFBundleVersion</key>
+	<key>CFBundleVersion</key>
 	<string>16</string>
-    
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>whatsapp</string>
-    </array>
-
-    <!-- Descrição de Uso da Câmera -->
-    <key>NSCameraUsageDescription</key>
-    <string>$(PRODUCT_NAME) precisa de acesso à câmera para capturar imagens.</string>
-    
-    <!-- Descrição de Uso da Biblioteca de Fotos -->
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>$(PRODUCT_NAME) precisa de acesso à biblioteca de fotos para salvar ou carregar imagens.</string>
-    
-    <!-- Descrição de Uso do Microfone -->
-    <key>NSMicrophoneUsageDescription</key>
-    <string>$(PRODUCT_NAME) precisa de acesso ao microfone para gravação de áudio.</string>
-    
-    <!-- Descrição de Uso da Localização Durante o Uso -->
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>$(PRODUCT_NAME) precisa de acesso à localização enquanto o app está em uso.</string>
-    
-    <!-- Descrição de Uso do Bluetooth -->
-    <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>$(PRODUCT_NAME) precisa de acesso ao Bluetooth para comunicação com dispositivos próximos.</string>
-    
-    <key>NSBluetoothPeripheralUsageDescription</key>
-    <string>$(PRODUCT_NAME) precisa de acesso ao Bluetooth para se conectar a dispositivos periféricos.</string>
-
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>O aplicativo requer acesso à localização para escanear dispositivos Bluetooth.</string>
-
-    <!-- Configuração de Segurança para Redes e Conteúdo -->
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <false/>
-        <key>NSAllowsLocalNetworking</key>
-        <true/>
-    </dict>
-    
-    <!-- Configuração de Suporte a Rede -->
-    <key>CADisableMinimumFrameDurationOnPhone</key>
-    <true/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>$(PRODUCT_NAME) precisa de acesso ao Bluetooth para comunicação com dispositivos próximos.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>$(PRODUCT_NAME) precisa de acesso ao Bluetooth para se conectar a dispositivos periféricos.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) precisa de acesso à câmera para capturar imagens.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>O aplicativo requer acesso à localização para escanear dispositivos Bluetooth.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) precisa de acesso à localização enquanto o app está em uso.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) precisa de acesso ao microfone para gravação de áudio.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) precisa de acesso à biblioteca de fotos para salvar ou carregar imagens.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
