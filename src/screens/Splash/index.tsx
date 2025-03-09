@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 import { OneSignal } from "react-native-onesignal";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 
 import Logo from "../../assets/icons/logo.svg";
 
@@ -26,6 +26,18 @@ export function Splash() {
     setUser,
     logout,
   } = useAuth();
+
+  function initializeOneSignal() {
+    OneSignal.initialize("5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7");
+  }
+
+  async function requestPushNotificationPermissions() {
+    const { status } = await Notifications.requestPermissionsAsync();
+
+    if (status !== "granted") {
+      console.log(status);
+    }
+  }
 
   function createAPIInterceptors() {
     api.interceptors.request.use(
@@ -131,28 +143,11 @@ export function Splash() {
     }
   }
 
-  function initializeOneSignal() {
-    OneSignal.initialize("5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7");
-  }
-
-  async function requestPushNotificationPermissions() {
-    const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== 'granted') {
-      requestPushNotificationPermissions()
-    }
-  }
-
-  useEffect(() => {
-    createAPIInterceptors();
-  }, []);
-
-  useEffect(() => {
-    getToken();
-  }, []);
-
   useEffect(() => {
     initializeOneSignal();
     requestPushNotificationPermissions();
+    createAPIInterceptors();
+    getToken();
   }, []);
 
   return (
