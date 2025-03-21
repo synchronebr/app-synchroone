@@ -15,7 +15,6 @@ export const TuneIconContainer = styled.View`
 export const List = styled.FlatList.attrs({
   contentContainerStyle: {
     gap: 8,
-    paddingBottom: 24,
     paddingHorizontal: 20,
   },
 })`` as typeof FlatList;
@@ -26,3 +25,18 @@ export const Content = styled.View`
 `;
 
 export const Text = styled.Text``;
+
+export const Footer = styled.View`
+  align-items: center;
+  color: ${({ theme }) => theme.colors.primary};
+  padding: 16px;
+`;
+
+export const Pressable = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.7,
+})``;
+
+export const FooterText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.bold};
+  text-align: center;
+`;

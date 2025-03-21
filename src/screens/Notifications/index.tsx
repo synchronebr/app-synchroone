@@ -13,7 +13,16 @@ import {
   GetNotificationByIDResponse,
 } from "../../services/Notifications/types";
 
-import { Container, TuneIconContainer, List, Content, Text } from "./styles";
+import {
+  Container,
+  TuneIconContainer,
+  List,
+  Content,
+  Text,
+  Footer,
+  Pressable,
+  FooterText,
+} from "./styles";
 
 export function Notifications() {
   const THEME = useTheme();
@@ -23,6 +32,7 @@ export function Notifications() {
   const [allNotifications, setAllNotifications] = useState<
     GetNotificationByIDResponse[]
   >([]);
+  const [showReadNotifications, setShowReadNotifications] = useState(false);
 
   async function getNotifications() {
     setIsLoading(true);
@@ -60,7 +70,11 @@ export function Notifications() {
       </TuneIconContainer>
 
       <List
-        data={allNotifications}
+        data={
+          !showReadNotifications
+            ? allNotifications.filter((notification) => !notification.read)
+            : allNotifications
+        }
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <NotificationCard {...item} />}
         ListEmptyComponent={
@@ -76,6 +90,18 @@ export function Notifications() {
           </Content>
         }
       />
+
+      <Footer>
+        <Pressable
+          onPress={() => setShowReadNotifications(!showReadNotifications)}
+        >
+          <FooterText>
+            {showReadNotifications
+              ? "Ocultar notificações lidas"
+              : "Exibir notificações lidas"}
+          </FooterText>
+        </Pressable>
+      </Footer>
     </Container>
   );
 }

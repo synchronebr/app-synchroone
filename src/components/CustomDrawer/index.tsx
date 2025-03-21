@@ -74,8 +74,20 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
     (company) => company.companyId === accessLevels?.currentCompany?.companyId
   )?.image;
 
-  const companies = accessLevels && accessLevels?.companies?.filter((company) => company.companyId !== accessLevels?.currentCompany?.companyId && company.companyType !== 'TP' )
-  const companiesPartTime = accessLevels && accessLevels?.companies?.filter((company) => company.companyId !== accessLevels?.currentCompany?.companyId && company.companyType === 'TP' )
+  const companies =
+    accessLevels &&
+    accessLevels?.companies?.filter(
+      (company) =>
+        company.companyId !== accessLevels?.currentCompany?.companyId &&
+        company.companyType !== "TP"
+    );
+  const companiesPartTime =
+    accessLevels &&
+    accessLevels?.companies?.filter(
+      (company) =>
+        company.companyId !== accessLevels?.currentCompany?.companyId &&
+        company.companyType === "TP"
+    );
 
   useEffect(() => {
     getDrawerContentData();
@@ -99,12 +111,8 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
         />
 
         <HeaderTextDiv>
-          <CompanyName>
-            {accessLevels?.currentCompany?.companyName}
-          </CompanyName>
-          <AccessLevel>
-            {accessLevels?.currentCompany?.accessLevel}
-          </AccessLevel>
+          <CompanyName>{accessLevels?.currentCompany?.companyName}</CompanyName>
+          <AccessLevel>{accessLevels?.currentCompany?.accessLevel}</AccessLevel>
         </HeaderTextDiv>
       </Header>
 
@@ -113,40 +121,40 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
 
         {companies?.length > 0 && (
           <>
-          <Title>Empresas</Title>
-          {companies.map((company) => (
+            <Title>Empresas</Title>
+            {companies.map((company) => (
               <DrawerItem
                 key={company.companyId}
                 label={company.companyName}
                 labelStyle={{
                   color: THEME.colors.primary,
                   fontFamily: THEME.fonts.medium,
-                  margin: 0.05,
+                  marginVertical: -8,
                 }}
                 onPress={() =>
                   handleSelectCompany(company.companyId.toString())
                 }
               />
-          ))}
+            ))}
           </>
         )}
 
         {companiesPartTime?.length > 0 && (
           <>
-          <TitleSecond>Part Time</TitleSecond>
-          {companiesPartTime.map((company) => (
-                <DrawerItem
-                  key={company.companyId}
-                  label={company.companyName}
-                  labelStyle={{
-                    color: THEME.colors.primary,
-                    fontFamily: THEME.fonts.medium,
-                    margin: 0.05,
-                  }}
-                  onPress={() =>
-                    handleSelectCompany(company.companyId.toString())
-                  }
-                />
+            <TitleSecond>Part Time</TitleSecond>
+            {companiesPartTime.map((company) => (
+              <DrawerItem
+                key={company.companyId}
+                label={company.companyName}
+                labelStyle={{
+                  color: THEME.colors.primary,
+                  fontFamily: THEME.fonts.medium,
+                  marginVertical: -8,
+                }}
+                onPress={() =>
+                  handleSelectCompany(company.companyId.toString())
+                }
+              />
             ))}
           </>
         )}
