@@ -30,6 +30,7 @@ import {
   Container,
   Header,
   Image,
+  Icon,
   Asset,
   Title,
   Subtitle,
@@ -190,23 +191,27 @@ export function AssetDetails() {
               />
 
               <View style={styles.icons}>
-                <MaterialIcons
-                  style={styles.icon}
-                  color={THEME.colors.primary}
-                  name="add-a-photo"
-                  onPress={getCameraPermission}
-                  size={24}
-                />
+                <Icon>
+                  <MaterialIcons
+                    style={styles.icon}
+                    color={THEME.colors.primary}
+                    name="add-a-photo"
+                    onPress={getCameraPermission}
+                    size={24}
+                  />
+                </Icon>
 
-                <MaterialIcons
-                  style={styles.icon}
-                  color={THEME.colors.primary}
-                  name="add-photo-alternate"
-                  onPress={loadImage}
-                  size={24}
-                />
+                <Icon>
+                  <MaterialIcons
+                    style={styles.icon}
+                    color={THEME.colors.primary}
+                    name="add-photo-alternate"
+                    onPress={loadImage}
+                    size={24}
+                  />
+                </Icon>
 
-                <View style={styles.favouriteIcon}>
+                <View>
                   <AssetDetailHeaderIcon
                     isFavorite={isFavorite}
                     toggleIsFavorite={toggleIsFavorite}
@@ -261,10 +266,6 @@ export const styles = StyleSheet.create({
     top: 16,
   },
   icon: {
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 256,
-    justifyContent: "center",
     padding: 8,
   },
 });

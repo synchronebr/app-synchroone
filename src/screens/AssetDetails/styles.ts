@@ -1,6 +1,6 @@
 import { FlatList } from "react-native-gesture-handler";
 import { RFValue } from "react-native-responsive-fontsize";
-import { rgba } from 'polished';
+import { rgba } from "polished";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -15,17 +15,24 @@ export const Image = styled.Image`
   width: 100%;
 `;
 
+export const Icon = styled.View`
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 256px;
+  justify-content: center;
+`;
+
 interface IAsset {
-  status: 'S' | 'W' | 'D';
+  status: "S" | "W" | "D";
 }
 export const Asset = styled.View<IAsset>`
   background-color: ${({ theme, status }) => {
     switch (status) {
-      case 'S':
+      case "S":
         return rgba(22, 163, 74, 0.9);
-      case 'W':
+      case "W":
         return rgba(250, 204, 21, 0.9);
-      case 'D':
+      case "D":
         return rgba(238, 68, 68, 0.9);
       default:
         return rgba(30, 41, 59, 0.9);
