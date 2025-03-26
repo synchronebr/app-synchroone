@@ -33,16 +33,33 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
 
   return (
     <Container
-      onPress={() => navigation.navigate("MeasurementPointDetails", { id: item.id, item })}
+      disabled
+      onPress={() =>
+        navigation.navigate("MeasurementPointDetails", { id: item.id, item })
+      }
       {...rest}
     >
       <Image
         resizeMode="cover"
-        source={{ uri: "https://synchroone.s3.amazonaws.com/white-mp-sensor.png"}}
+        source={{
+          uri: "https://synchroone.s3.amazonaws.com/white-mp-sensor.png",
+        }}
       />
-      {item.readings[0]?.securityStatus === 'S' && (<CardStatusSafe status={item.readings[0]?.securityStatus}><CardStatusSafeText>Seguro</CardStatusSafeText></CardStatusSafe>)}
-      {item.readings[0]?.securityStatus === 'W' && (<CardStatusSafe status={item.readings[0]?.securityStatus}><CardStatusSafeText>Alerta</CardStatusSafeText></CardStatusSafe>)}
-      {item.readings[0]?.securityStatus === 'D' && (<CardStatusSafe status={item.readings[0]?.securityStatus}><CardStatusSafeText>Perigo</CardStatusSafeText></CardStatusSafe>)}
+      {item.readings[0]?.securityStatus === "S" && (
+        <CardStatusSafe status={item.readings[0]?.securityStatus}>
+          <CardStatusSafeText>Seguro</CardStatusSafeText>
+        </CardStatusSafe>
+      )}
+      {item.readings[0]?.securityStatus === "W" && (
+        <CardStatusSafe status={item.readings[0]?.securityStatus}>
+          <CardStatusSafeText>Alerta</CardStatusSafeText>
+        </CardStatusSafe>
+      )}
+      {item.readings[0]?.securityStatus === "D" && (
+        <CardStatusSafe status={item.readings[0]?.securityStatus}>
+          <CardStatusSafeText>Perigo</CardStatusSafeText>
+        </CardStatusSafe>
+      )}
 
       <Content>
         <Title>{item.name}</Title>
@@ -54,11 +71,7 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
         </LastMeasurementInfo>
       </Content>
 
-      <ArrowForwardIcon
-        fill={THEME.colors.secondary}
-        height={12}
-        width={12}
-      />
+      <ArrowForwardIcon fill={THEME.colors.secondary} height={12} width={12} />
     </Container>
   );
 }
