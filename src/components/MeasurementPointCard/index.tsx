@@ -33,7 +33,6 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
 
   return (
     <Container
-      disabled
       onPress={() =>
         navigation.navigate("MeasurementPointDetails", { id: item.id, item })
       }

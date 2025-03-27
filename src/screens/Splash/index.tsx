@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 import { OneSignal } from "react-native-onesignal";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 
 import Logo from "../../assets/icons/logo.svg";
 
@@ -137,8 +137,8 @@ export function Splash() {
 
   async function requestPushNotificationPermissions() {
     const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== 'granted') {
-      requestPushNotificationPermissions()
+    if (status !== "granted") {
+      requestPushNotificationPermissions();
     }
   }
 

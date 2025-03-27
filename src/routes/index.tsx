@@ -9,7 +9,36 @@ export function Routes() {
   const { Navigator, Screen } = createStackNavigator();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      linking={{
+        prefixes: ["synchroone://"],
+        config: {
+          screens: {
+            Splash: "splash",
+            Auth: "auth",
+            DashboardDrawer: {
+              path: "dashboard",
+              screens: {
+                Dashboard: {
+                  screens: {
+                    Notifications: "notifications",
+                    AssetDetails: {
+                      path: "asset/:id",
+                      parse: {
+                        id: (id: string) => Number(id),
+                      },
+                      stringify: {
+                        id: (id: number) => id.toString(),
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }}
+    >
       <Navigator
         screenOptions={{
           headerShown: false,
