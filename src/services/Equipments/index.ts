@@ -4,12 +4,13 @@ import { IPiece } from "../dtos/IPiece";
 import { EquipmentsResponse } from "./types";
 
 type EquipmentsFilters = {
-  areaId: number
-  machineId: number
-  sectorId: number
-  unitId: number
-  responsibleId: number
-  search: string
+  companyId: number
+  areaId?: number
+  machineId?: number
+  sectorId?: number
+  unitId?: number
+  responsibleId?: number
+  search?: string
 }
 
 export async function getEquipments(filters: EquipmentsFilters): Promise<EquipmentsResponse | any> {

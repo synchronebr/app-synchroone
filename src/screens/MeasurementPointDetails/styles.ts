@@ -121,6 +121,12 @@ export const Temperature = styled.View`
   gap: 4px;
 `;
 
+export const MeasuringPointPartTimeLastReadingsViewStepper = styled.View`
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+`;
+
 export const Graphics = styled.View`
   margin-bottom: 42px;
 `;

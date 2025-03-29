@@ -58,24 +58,24 @@ export function AlertDetails() {
   const navigation = useNavigation<AlertCardNavigationProps>();
   const route = useRoute();
   const params = route.params as AlertCardProps;
-  const { item } = params;
+  const { id } = params;
 
   const THEME = useTheme();
 
   const { isLoading, data } = useQuery<IDiagnose>({
     queryKey: [
       "diagnose",
-      item,
+      id,
     ],
     queryFn: async () => {
-      const response = await api.get(`/diagnoses/${item.id}`);
+      const response = await api.get(`/diagnoses/${id}`);
       return response.data || {};
     },
   });
 
   const setRead = async () => {
     try {
-      await api.post(`/diagnoses/${item.id}/read`);
+      await api.post(`/diagnoses/${id}/read`);
     } catch (error) {}
   }
 
@@ -99,9 +99,9 @@ export function AlertDetails() {
         {data ? (
           <Scroll>
           <PieceDiv>
-            <PieceText>{item.reading.measuringPoint.piece.description}</PieceText>
+            <PieceText>{data.reading.measuringPoint.piece.description}</PieceText>
             <PiecePath>{
-                `${item.reading.measuringPoint.piece.machine.sector.area.company.name} > ${item.reading.measuringPoint.piece.machine.sector.area.name} > ${item.reading.measuringPoint.piece.machine.sector.name} > ${item.reading.measuringPoint.piece.machine.name}`
+                `${data.reading.measuringPoint.piece.machine.sector.area.company.name} > ${data.reading.measuringPoint.piece.machine.sector.area.name} > ${data.reading.measuringPoint.piece.machine.sector.name} > ${data.reading.measuringPoint.piece.machine.name}`
             }</PiecePath>
           </PieceDiv>
   
@@ -150,7 +150,7 @@ export function AlertDetails() {
               <>
               <CardCause>
                 <CardCauseTitle>Nível de óleo baixo</CardCauseTitle>
-                <CardCauseButton onPress={() => navigation.navigate("AlertPrescriptionDetails", { item: cause })}>
+                <CardCauseButton onPress={() => navigation.navigate("AlertPrescriptionDetails", { data: cause })}>
                   <BookOpenCheckIcon fill={THEME.colors.gray}/>
                   <CardCauseTitle>Prescrição</CardCauseTitle>
                 </CardCauseButton>

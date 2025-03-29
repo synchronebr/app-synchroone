@@ -332,6 +332,7 @@ function AlertFiltersDrawer({
         <Select
           label="Período"
           placeholder="Selecione um período"
+          editable
           selected={selectedRangeFilter}
           values={Object.entries(RangeFiltersLabels).map(([value, label]) => ({
             label,

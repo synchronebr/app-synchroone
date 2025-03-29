@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { Toast } from "react-native-toast-notifications";
+import { format, differenceInDays } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-import { PieChart } from "react-native-svg-charts";
+// import { PieChart } from "react-native-svg-charts";
 
 import {
   Container,
@@ -23,6 +26,7 @@ import {
   CardSubtitle,
   TemperatureCard,
   Temperature,
+  MeasuringPointPartTimeLastReadingsViewStepper,
   Graphics,
   GraphicsButtons,
   GraphicButton,
@@ -33,6 +37,10 @@ import {
 } from "./styles";
 import { differenceInMinutes } from "date-fns";
 import { Dimensions } from "react-native";
+import { MeasuringPointPartTimeLastReadingsStepper } from "../../components/MeasuringPointPartTimeLastReadingsStepper";
+import { enums } from "../../utils/enums";
+import { getMeasuringPointById } from "../../services/MeasuringPoints";
+import { Loading } from "../../components/Loading";
 
 export function MeasurementPointDetails({ route, nabigation }) {
   const navigation = useNavigation();
@@ -40,6 +48,25 @@ export function MeasurementPointDetails({ route, nabigation }) {
     minutesSinceLast: 0,
     nextExecutionIn: 60,
   });
+  const [item, setItem] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function loadScreen() {
+      setIsLoading(true);
+  
+      try {
+        const response = await getMeasuringPointById(Number(route.params.equipmentId), Number(route.params.mesuringPointId));
+        const data = response;
+        setItem(data);
+      } catch (error) {
+        Toast.show(
+          "Houve um erro ao buscar o ponto de medição. Por favor, verifique sua conexão, ou tente novamente mais tarde.",
+          { duration: 5000, type: "danger" }
+        );
+      } finally {
+        setIsLoading(false);
+      }
+  }
 
   const THEME = useTheme();
 
@@ -68,15 +95,14 @@ export function MeasurementPointDetails({ route, nabigation }) {
 
   useEffect(() => {
     const calculateTime = () => {
-      const item = route.params.item;
       const now = new Date();
       let lastExecutionDate = new Date();
-      if (item.readings[0]) {
-        lastExecutionDate = new Date(item.readings[0].createdAt);
+      if (item.measuringPoint.readings && item.measuringPoint.readings[0]) {
+        lastExecutionDate = new Date(item.measuringPoint.readings[0].createdAt);
         const minutesSinceLast = differenceInMinutes(now, lastExecutionDate);
         let nextExecutionIn = 0;
-        if (item.device) {
-          const readingWindow = item.device.readingWindow;
+        if (item.measuringPoint.device) {
+          const readingWindow = item.measuringPoint.device.readingWindow;
           nextExecutionIn = readingWindow - minutesSinceLast;
           if (nextExecutionIn < 0) nextExecutionIn = 0;
         }
@@ -84,12 +110,22 @@ export function MeasurementPointDetails({ route, nabigation }) {
       }
     };
 
-    calculateTime();
+    if (item) {
+      calculateTime();
+    }
 
     const interval = setInterval(calculateTime, 1000 * 60);
 
     return () => clearInterval(interval);
-  }, [route.params.item]);
+  }, [item]);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadScreen();
+    }, [])
+  );
+
+  if (isLoading) return <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />;
 
   return (
     <Container>
@@ -101,136 +137,195 @@ export function MeasurementPointDetails({ route, nabigation }) {
           }}
         />
 
-        <Entypo
-          color={THEME.colors.dark}
-          name="chevron-left"
-          onPress={() => navigation.goBack()}
-          size={32}
-          style={{
-            position: "absolute",
-            left: 8,
-            top: 16,
-          }}
-        />
+        {item && (
+          <>
+          <Entypo
+            color={THEME.colors.dark}
+            name="chevron-left"
+            onPress={() => navigation.goBack()}
+            size={32}
+            style={{
+              position: "absolute",
+              left: 8,
+              top: 16,
+            }}
+          />
 
-        <Asset status={route.params.item.readings[0]?.securityStatus}>
-          <Detail>
-            <Title>{route.params.item?.device?.battery} %</Title>
-            <Subtitle>Bateria</Subtitle>
-          </Detail>
+          {item.measuringPoint.type === enums.MeasuringPoints.Type.Online && (
+            <Asset status={item.measuringPoint.readings[0]?.securityStatus}>
+              <Detail>
+                <Title>{item?.device?.battery} %</Title>
+                <Subtitle>Bateria</Subtitle>
+              </Detail>
 
-          <Detail>
-            <Title>{route.params.item?.device?.readingWindow} min</Title>
-            <Subtitle>Janela</Subtitle>
-          </Detail>
+              <Detail>
+                <Title>{item?.device?.readingWindow} min</Title>
+                <Subtitle>Janela</Subtitle>
+              </Detail>
 
-          <Detail>
-            <Title>{timeInfo?.nextExecutionIn} min</Title>
-            <Subtitle>Próxima</Subtitle>
-          </Detail>
-        </Asset>
+              <Detail>
+                <Title>{timeInfo?.nextExecutionIn} min</Title>
+                <Subtitle>Próxima</Subtitle>
+              </Detail>
+            </Asset>
+          )}
+
+          {item.measuringPoint.type === enums.MeasuringPoints.Type.PartTime && (
+            <Asset status={item.measuringPoint.readings[0]?.securityStatus}>
+              <Detail>
+                <Subtitle>Periodicidade</Subtitle>
+                <Title>{item.medianDays} dias</Title>
+              </Detail>
+
+              <Detail>
+                <Subtitle>Última</Subtitle>
+                <Title>{item.measuringPoint.readings.length === 0 ? 'Sem leitura': `há ${differenceInDays(new Date(), new Date(item.measuringPoint.readings[0].readingAt))} dias`}</Title>
+              </Detail>
+
+              <Detail>
+                <Subtitle>Medições</Subtitle>
+                <Title>{item.countReadings}</Title>
+              </Detail>
+
+            </Asset>
+          )}
+          </>
+        )}
       </Header>
 
-      <Content>
-        <Card>
-          <CardTitle>Aceleração</CardTitle>
+      {item && (
+        <Content>
 
-          <Info>
-            <InfoData>
-              <CardText>Axial</CardText>
-              <CardSubtitle>2.32 m/s</CardSubtitle>
-            </InfoData>
+          {item.measuringPoint.type === enums.MeasuringPoints.Type.Online && (
+            <>
+            <Card>
+              <CardTitle>Aceleração</CardTitle>
 
-            <InfoData>
-              <CardText>Vertical</CardText>
-              <CardSubtitle>2.32 m/s</CardSubtitle>
-            </InfoData>
+              <Info>
+                <InfoData>
+                  <CardText>Axial</CardText>
+                  <CardSubtitle>2.32 m/s</CardSubtitle>
+                </InfoData>
 
-            <InfoData>
-              <CardText>Horizontal</CardText>
-              <CardSubtitle>2.32 m/s</CardSubtitle>
-            </InfoData>
-          </Info>
-        </Card>
+                <InfoData>
+                  <CardText>Vertical</CardText>
+                  <CardSubtitle>2.32 m/s</CardSubtitle>
+                </InfoData>
 
-        <Card>
-          <CardTitle>Velocidade</CardTitle>
+                <InfoData>
+                  <CardText>Horizontal</CardText>
+                  <CardSubtitle>2.32 m/s</CardSubtitle>
+                </InfoData>
+              </Info>
+            </Card>
 
-          <Info>
-            <InfoData>
-              <CardText>Axial</CardText>
-              <CardSubtitle>2.32 m/s</CardSubtitle>
-            </InfoData>
+            <Card>
+              <CardTitle>Velocidade</CardTitle>
 
-            <InfoData>
-              <CardText>Vertical</CardText>
-              <CardSubtitle>2.32 m/s</CardSubtitle>
-            </InfoData>
+              <Info>
+                <InfoData>
+                  <CardText>Axial</CardText>
+                  <CardSubtitle>2.32 m/s</CardSubtitle>
+                </InfoData>
 
-            <InfoData>
-              <CardText>Horizontal</CardText>
-              <CardSubtitle>2.32 m/s</CardSubtitle>
-            </InfoData>
-          </Info>
-        </Card>
+                <InfoData>
+                  <CardText>Vertical</CardText>
+                  <CardSubtitle>2.32 m/s</CardSubtitle>
+                </InfoData>
 
-        <TemperatureCard>
-          <CardTitle>Temperatura</CardTitle>
+                <InfoData>
+                  <CardText>Horizontal</CardText>
+                  <CardSubtitle>2.32 m/s</CardSubtitle>
+                </InfoData>
+              </Info>
+            </Card>
 
-          <Temperature>
-            <FontAwesome
-              name="thermometer-three-quarters"
-              size={24}
-              color={THEME.colors.primary}
+            <TemperatureCard>
+              <CardTitle>Temperatura</CardTitle>
+
+              <Temperature>
+                <FontAwesome
+                  name="thermometer-three-quarters"
+                  size={24}
+                  color={THEME.colors.primary}
+                />
+
+                <CardTitle>43 C</CardTitle>
+              </Temperature>
+            </TemperatureCard>
+            </>
+          )}
+
+        {item.measuringPoint.type === enums.MeasuringPoints.Type.PartTime && (
+          <>
+          {item.measuringPoint.readings.length > 0 ? (
+              <>
+              <Text>Últimas Medições Part-Time</Text>
+              <MeasuringPointPartTimeLastReadingsViewStepper>
+                {item.measuringPoint.readings.map((reading, i) => (
+                  <MeasuringPointPartTimeLastReadingsStepper 
+                    key={reading.id}
+                    lastOne={i === item.measuringPoint.readings.length - 1}
+                    status={reading.securityStatus || "default"} // Passa o status para mapeamento
+                    date={format(new Date(reading.readingAt), "dd 'de' MMMM 'de' yyyy", {
+                      locale: ptBR,
+                    })}
+                    doneBy={reading.responsibleCompany.name}
+                  />
+                ))}
+              </MeasuringPointPartTimeLastReadingsViewStepper>
+              </>
+            ) : (
+              <Text>Ainda não temos nenhum registro de leitura para esse ponto de medição</Text>
+            )}
+          
+          </>
+        )}
+
+          {/* <Text>Gráficos</Text> */}
+
+          {/* <Graphics>
+            <GraphicsButtons>
+              <GraphicButton>
+                <GraphicButtonText>Aceleração RMS</GraphicButtonText>
+              </GraphicButton>
+
+              <GraphicButton>
+                <GraphicButtonText>Velocidade RMS</GraphicButtonText>
+              </GraphicButton>
+
+              <GraphicButton>
+                <GraphicButtonText>Temperatura Média</GraphicButtonText>
+              </GraphicButton>
+            </GraphicsButtons>
+
+            <GraphicImage
+              resizeMode="container"
+              source={require("../../assets/images/graphic-1.png")}
             />
 
-            <CardTitle>43 C</CardTitle>
-          </Temperature>
-        </TemperatureCard>
+            <StatusHistoryContainer>
+              <StatusHistory>Histórico de Status</StatusHistory>
+            </StatusHistoryContainer>
 
-        <Text>Gráficos</Text>
+            <PieChart
+              style={{ height: 200 }}
+              data={pieData}
+              innerRadius={50} // Define a aparência de "rosca"
+              outerRadius={"95%"}
+            />
 
-        <Graphics>
-          <GraphicsButtons>
-            <GraphicButton>
-              <GraphicButtonText>Aceleração RMS</GraphicButtonText>
-            </GraphicButton>
+            <StatusHistoryContainer>
+              <StatusHistory>Raio-X de Monitoramento</StatusHistory>
+            </StatusHistoryContainer>
 
-            <GraphicButton>
-              <GraphicButtonText>Velocidade RMS</GraphicButtonText>
-            </GraphicButton>
-
-            <GraphicButton>
-              <GraphicButtonText>Temperatura Média</GraphicButtonText>
-            </GraphicButton>
-          </GraphicsButtons>
-
-          <GraphicImage
-            resizeMode="container"
-            source={require("../../assets/images/graphic-1.png")}
-          />
-
-          <StatusHistoryContainer>
-            <StatusHistory>Histórico de Status</StatusHistory>
-          </StatusHistoryContainer>
-
-          <PieChart
-            style={{ height: 200 }}
-            data={pieData}
-            innerRadius={50} // Define a aparência de "rosca"
-            outerRadius={"95%"}
-          />
-
-          <StatusHistoryContainer>
-            <StatusHistory>Raio-X de Monitoramento</StatusHistory>
-          </StatusHistoryContainer>
-
-          <GraphicImage
-            resizeMode="container"
-            source={require("../../assets/images/graphic-3.png")}
-          />
-        </Graphics>
-      </Content>
+            <GraphicImage
+              resizeMode="container"
+              source={require("../../assets/images/graphic-3.png")}
+            />
+          </Graphics> */}
+          </Content>
+        )}
     </Container>
   );
 }

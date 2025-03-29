@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   ActivityIndicator,
   View,
@@ -15,13 +15,16 @@ import THEME from "../../global/styles/theme";
 import { Input } from "../../components/Input";
 import { AssetCard } from "../../components/AssetCard";
 
-import { Container, Header, List, Content } from "./styles";
+import { Container, Header, List, Content, Filter } from "./styles";
 import { getEquipments } from "../../services/Equipments";
 import { Loading } from "../../components/Loading";
 import Drawer from "../../components/Drawer";
 import Select from "../../components/Select";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
 import { useFocusEffect } from "@react-navigation/native";
+import { getSectorsForSelect } from "../../services/Companies/Areas/Sectors";
+import { getMachinesForSelect } from "../../services/Companies/Areas/Sectors/Machines";
+import { getAreasForSelect } from "../../services/Companies/Areas";
 
 export function Assets() {
   const { getAccessLevelsData } = useAccessLevels();
@@ -31,10 +34,10 @@ export function Assets() {
   const [assets, setAssets] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [dataFilters, setDataFilters] = useState({ companyId: 0, areaId: 0, sectorId: 0, machineId: 0, pieceId: 0, measuringPointId: 0 });
   const [areas, setAreas] = useState([]);
   const [machines, setMachines] = useState([]);
   const [sectors, setSectors] = useState([]);
-  const [units, setUnits] = useState([]);
   const [responsibles, setResponsibles] = useState([]);
 
   const [selectedArea, setSelectedArea] = useState(null);
@@ -51,19 +54,15 @@ export function Assets() {
   // otherwise the filters will be outdated (old state values were being used)
   const getEquips = async (filters) => {
     setIsLoading(true);
+    console.log('filters', filters)
 
     const getEquipResponse = await getEquipments({
       companyId: accessLevels.currentCompany.companyId,
+      ...filters
     });
     const assets = getEquipResponse.data.data;
 
     setAssets(assets);
-    // setAreas(responseFilters.areas);
-    // setMachines(responseFilters.machines);
-    // setSectors(responseFilters.sectors);
-    // setUnits(responseFilters.units);
-    // setResponsibles(responseFilters.responsibles);
-
     setIsLoading(false);
   };
 
@@ -75,7 +74,7 @@ export function Assets() {
   };
 
   function openFilter() {
-    if (isLoading) return;
+    // if (isLoading) return;
     setIsFiltersOpen(true);
   }
 
@@ -117,16 +116,50 @@ export function Assets() {
     getEquips(appliedFilters); // Pass applied filters
   }
 
-  const setters = {
-    areas: setSelectedArea,
-    machines: setSelectedMachine,
-    sectors: setSelectedSector,
-    units: setSelectedUnit,
-    responsibles: setSelectedResponsible,
-  };
+  const getAreas = async () => {
+    const companyId = accessLevels.currentCompany.companyId;
+      const items = await getAreasForSelect(Number(companyId));
+      setAreas(items);
+      setDataFilters((old) => ({ ...old, companyId: companyId }));
+  }
+  
+  useEffect(() => {
+    getAreas();
+  }, [])
+  
+  const handleChangeAreas = useCallback(async (value: any) => {
+    if (selectedArea === value) return; // Evita loop infinito se o valor já for o mesmo
+  
+    const id = Number(value);
+    setSelectedArea(value); // Atualiza o estado primeiro
+    
+    try {
+      const items = await getSectorsForSelect(dataFilters.companyId, id);
+      setSectors(items);
+      setDataFilters((old) => ({ ...old, areaId: id }));
+    } catch (error) {
+      console.error("Erro ao buscar setores:", error);
+    }
+  }, [selectedArea, dataFilters.companyId]);
 
-  function handleValueChange(key: string, value: any) {
-    setters[key](value);
+  const handleChangeSector = useCallback(async (value: any) => {
+    if (selectedSector === value) return; // Evita loop infinito se o valor já for o mesmo
+  
+    const id = Number(value);
+    setSelectedSector(value);
+    
+    try {
+      const items = await getMachinesForSelect(dataFilters.companyId, dataFilters.areaId, id);
+      setMachines(items);
+      setDataFilters((old) => ({ ...old, sectorId: id }));
+    } catch (error) {
+      console.error("Erro ao buscar maquinas:", error);
+    }
+  }, [selectedSector, dataFilters.areaId]);
+
+  const handleChangeMachine = async (value: any) => {
+    setDataFilters((old) => ({ ...old, machineId: value }));
+    setSelectedMachine(value);
   }
 
   useFocusEffect(
@@ -146,48 +179,46 @@ export function Assets() {
           editable={!isLoading}
         />
 
-        <TuneIcon height={18} width={18} onPress={openFilter} />
+        <Filter >
+          <TuneIcon height={18} width={18} onPress={openFilter}/>
+        </Filter>
 
-        <Drawer isOpen={isFiltersOpen} height="85%">
+        <Drawer isOpen={isFiltersOpen} height="55%">
           <View style={styles.filterWrapper}>
             <View style={styles.filterHeader}>
               <Text style={styles.title}>Filtrar ativos</Text>
               <CrossIcon onPress={closeFilter} />
             </View>
-            <View>
+            <View style={styles.filterContent}>
               <Select
-                label="Unidade"
-                placeholder="Selecione a unidade"
-                selected={selectedUnit}
-                values={units.map((u) => ({ label: u.name, value: u.id }))}
-                onSelect={(value) => handleValueChange("units", value)}
-              />
-
-              <Select
+                editable
                 label="Área"
                 placeholder="Selecione a área"
                 selected={selectedArea}
-                values={areas.map((a) => ({ label: a.name, value: a.id }))}
-                onSelect={(value) => handleValueChange("areas", value)}
+                values={areas}
+                onSelect={handleChangeAreas}
               />
 
               <Select
+                editable
                 label="Setor"
                 placeholder="Selecione o setor"
                 selected={selectedSector}
-                values={sectors.map((s) => ({ label: s.name, value: s.id }))}
-                onSelect={(value) => handleValueChange("sectors", value)}
+                values={sectors}
+                onSelect={handleChangeSector}
               />
 
               <Select
+                editable
                 label="Máquina"
                 placeholder="Selecione a máquina"
                 selected={selectedMachine}
-                values={machines.map((m) => ({ label: m.name, value: m.id }))}
-                onSelect={(value) => handleValueChange("machines", value)}
+                values={machines}
+                onSelect={handleChangeMachine}
               />
 
-              <Select
+              {/* <Select
+                editable
                 label="Responsável"
                 placeholder="Selecione o responsável"
                 selected={selectedResponsible}
@@ -196,19 +227,20 @@ export function Assets() {
                   value: r.id,
                 }))}
                 onSelect={(value) => handleValueChange("responsibles", value)}
-              />
-
+              /> */}
+            </View>
+            <View>
               <TouchableOpacity
-                style={styles.clearFilterButton}
-                onPress={clearFilters}
-              >
-                <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
-              </TouchableOpacity>
+                  style={styles.clearFilterButton}
+                  onPress={clearFilters}
+                >
+                  <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.applyButton}
-                onPress={handleFilterSubmit}
-              >
+                <TouchableOpacity
+                  style={styles.applyButton}
+                  onPress={handleFilterSubmit}
+                >
                 <Text style={styles.applyButtonText}>Aplicar filtro</Text>
               </TouchableOpacity>
             </View>
@@ -247,11 +279,13 @@ export function Assets() {
 
 const styles = StyleSheet.create({
   filterWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     width: "100%",
     height: "100%",
     backgroundColor: THEME.colors.light,
     padding: 16,
-    paddingBottom: 0,
     borderRadius: 10,
   },
   filterHeader: {
@@ -260,6 +294,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
+  },
+  filterContent: {
   },
   title: {
     fontFamily: THEME.fonts.semiBold,

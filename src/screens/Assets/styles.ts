@@ -9,9 +9,9 @@ export const Container = styled.View`
 export const Header = styled.View`
   align-items: center;
   flex-direction: row;
-  gap: 18px;
+  gap: 2px;
   margin-bottom: 16px;
-  padding: 0 30px;
+  padding: 0 30px 0 45px;
   justify-content: center;
 `;
 
@@ -28,4 +28,13 @@ export const Content = styled.View`
   gap: 8px;
   margin-bottom: 16px;
   padding: 0 20px;
+`;
+
+export const Filter = styled.View`
+  /* background-color: red; */
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

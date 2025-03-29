@@ -139,7 +139,7 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
           </>
         )}
 
-        {companiesPartTime?.length > 0 && (
+        {/* {companiesPartTime?.length > 0 && (
           <>
             <TitleSecond>Part Time</TitleSecond>
             {companiesPartTime.map((company) => (
@@ -157,7 +157,7 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
               />
             ))}
           </>
-        )}
+        )} */}
       </DrawerContentScrollView>
     </Container>
   );

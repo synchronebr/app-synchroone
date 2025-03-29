@@ -21,21 +21,22 @@ import {
   CardStatusSafeText,
 } from "./styles";
 import { IMeasuringPoint } from "../../services/dtos/IMeasuringPoint";
+import { enums } from "../../utils/enums";
 
 interface IMeasurementPointCard extends MeasurementPointCardProps {
+  equipmentId: number;
   item: IMeasuringPoint;
 }
 
-export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
+export function MeasurementPointCard({ equipmentId, item,...rest }: IMeasurementPointCard) {
   const navigation = useNavigation<MeasurementPointCardNavigationProps>();
 
   const THEME = useTheme();
 
   return (
     <Container
-      disabled
       onPress={() =>
-        navigation.navigate("MeasurementPointDetails", { id: item.id, item })
+        navigation.navigate("MeasurementPointDetails", { mesuringPointId: item.id, equipmentId })
       }
       {...rest}
     >
@@ -64,11 +65,24 @@ export function MeasurementPointCard({ item, ...rest }: IMeasurementPointCard) {
       <Content>
         <Title>{item.name}</Title>
 
-        <Subtitle>Descrição</Subtitle>
+        
+        {item.type === enums.MeasuringPoints.Type.PartTime ? (
+          <Subtitle>Leituras feitas por um técnico</Subtitle>
+        ) : (
+          <>
+          {item.device ? (
+            <Subtitle>{item.device.code}</Subtitle>
+          ) : (
+            <Subtitle>Nenhum sensor vinculado</Subtitle>
+          )}
+          </>
+        )}
 
+        {item && item.device && item.device.readingWindow && (
         <LastMeasurementInfo>
-          <Text>{item?.device?.readingWindow} min</Text>
+          <Text>{item.device.readingWindow} min</Text>
         </LastMeasurementInfo>
+        )}
       </Content>
 
       <ArrowForwardIcon fill={THEME.colors.secondary} height={12} width={12} />

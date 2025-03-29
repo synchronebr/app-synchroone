@@ -21,7 +21,7 @@ import {
 export function HistoryCard({ isLastCard, item, ...rest }: HistoryCardProps) {
   const navigation = useNavigation<HistoryCardNavigationProps>();
   return (
-    <Container {...rest} onPress={() => navigation.navigate("AlertDetails", { item })}>
+    <Container {...rest} onPress={() => navigation.navigate("AlertDetails", { id: item.id })}>
       <Progress>
         <Circle read={item.read} type={item.hazardousness} isLastCard={isLastCard} />
         <Line type={item.hazardousness} />

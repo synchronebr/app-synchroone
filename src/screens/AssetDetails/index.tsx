@@ -165,7 +165,7 @@ export function AssetDetails() {
     console.log(piece);
   }, [piece]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />;
 
   return (
     <Container>
@@ -182,13 +182,15 @@ export function AssetDetails() {
                 }}
               />
 
-              <Entypo
-                color={THEME.colors.light}
-                name="chevron-left"
-                onPress={() => navigation.navigate("Assets" as never)}
-                size={32}
-                style={styles.backIcon}
-              />
+              <Icon style={styles.backIcon}>
+                <Entypo
+                  color={THEME.colors.primary}
+                  name="chevron-left"
+                  onPress={() => navigation.navigate("Assets" as never)}
+                  size={32}
+                  // style={styles.backIcon}
+                />
+              </Icon>
 
               <View style={styles.icons}>
                 <Icon>
@@ -235,7 +237,7 @@ export function AssetDetails() {
               <List
                 data={piece.measuringPoints}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <MeasurementPointCard item={item} />}
+                renderItem={({ item }) => <MeasurementPointCard equipmentId={piece.id} item={item} />}
                 ListEmptyComponent={
                   isLoading ? (
                     <Loading />
