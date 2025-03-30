@@ -93,10 +93,10 @@ export function AssetDetails() {
       const imageUri = result.assets[0].uri;
 
       const fileInfo = await FileSystem.getInfoAsync(imageUri);
-      const maxSizeInBytes = 1 * 1024 * 1024;
+      const maxSizeInBytes = 3 * 1024 * 1024;
 
       if (fileInfo.size > maxSizeInBytes) {
-        Toast.show("A imagem excede 1MB. Escolha uma imagem menor.");
+        Toast.show("A imagem excede 3MB. Escolha uma imagem menor.");
         return;
       }
 

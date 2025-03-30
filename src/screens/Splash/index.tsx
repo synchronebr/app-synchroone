@@ -133,6 +133,10 @@ export function Splash() {
 
   function initializeOneSignal() {
     OneSignal.initialize("5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7");
+
+    OneSignal.Notifications.addEventListener("click", (event) => {
+      console.log("Notification clicked:", event);
+    });
   }
 
   async function requestPushNotificationPermissions() {
