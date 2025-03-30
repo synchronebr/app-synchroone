@@ -37,7 +37,7 @@ import { TextInput } from "react-native-gesture-handler";
 export function ConfigureGateway( { route } ) {
   const THEME = useTheme();
   const navigation = useNavigation();
-  const { allowed, isLoading, connectedDevice, getPermissions, scanDevices, sendCommand } = useBLEManager();
+  const { allowed, isLoading, connectedDevice, getPermissions, scanDevices, sendCommand, disconnectDevice } = useBLEManager();
   const [isLoadingPost, setIsLoadingPost] = useState(false);
   const [isActive, setIsActive] = useState<string | number>(1);
   const passwordInputRef = useRef<TextInput>();
@@ -138,6 +138,11 @@ export function ConfigureGateway( { route } ) {
       setIsLoadingPost(false);
       console.log(error)
     }
+  }
+
+  const handleTryConnectionDevice = async () => {
+    await disconnectDevice();
+    await scanDevices(route.params.bluetoothDeviceName);
   }
 
   return (
@@ -242,7 +247,7 @@ export function ConfigureGateway( { route } ) {
 
 
           <ButtonWrapper>
-            <Button onPress={/*handleSubmit(handleFormSubmit)*/() => handleFormSubmit()} title="Avançar" />
+            <Button onPress={handleSubmit(handleFormSubmit)} title="Avançar" />
           </ButtonWrapper>
         </KeyboardAvoidingView>
       </Container>

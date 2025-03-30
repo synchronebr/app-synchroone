@@ -46,7 +46,7 @@ export function PreConfigureGateway({ route }) {
   }
 
   async function goToConfigureParameters(name) {
-    navigation.navigate("ConfigureParameters" as never, {
+    navigation.navigate("ConfigureGateway" as never, {
       bluetoothDeviceName: name,
     });
   }
