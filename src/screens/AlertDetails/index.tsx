@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  ActivityIndicator,
-} from "react-native";
-
+import React, { useEffect } from "react";
+import { View, ActivityIndicator } from "react-native";
 import { useTheme } from "styled-components/native";
-import { Loading } from "../../components/Loading";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { OneSignal } from "react-native-onesignal";
 
+import { useAuth } from "../../hooks/useAuth";
+import api from "../../services/api";
+import { IDiagnose } from "../../services/dtos/IDiagnose";
 import { AlertCardNavigationProps, AlertCardProps } from "./types";
+import { SessionsResponse } from "../../services/Auth/types";
+
+import DangerIcon from "../../assets/icons/danger.svg";
+import WarnIcon from "../../assets/icons/warn.svg";
+import BookOpenCheckIcon from "../../assets/icons/book-open-check.svg";
+import { Loading } from "../../components/Loading";
 
 import {
   Container,
@@ -20,10 +28,6 @@ import {
   Subtitle,
   Text,
   Divider,
-  HistoryCards,
-  SeeMoreButton,
-  SeeMore,
-  ShareButtonContainer,
   DiagnoseDescription,
   DiagnoseDescriptionTitleDiv,
   DiagnoseDescriptionTitle,
@@ -37,21 +41,10 @@ import {
   CardCauseTitle,
   CardCauseButton,
 } from "./styles";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import api from "../../services/api";
-import { useQueries, useQuery } from "@tanstack/react-query";
-import { IDiagnose } from "../../services/dtos/IDiagnose";
-import DangerIcon from "../../assets/icons/danger.svg";
-import WarnIcon from "../../assets/icons/warn.svg";
-import BookOpenCheckIcon from "../../assets/icons/book-open-check.svg";
 
-const STATUS_HAZARDOUSNESS: Record<string, { title: string; }> = {
-  D: {
-    title: 'Perigo',
-  },
-  W: {
-    title: 'Alerta',
-  },
+const STATUS_HAZARDOUSNESS = {
+  D: { title: "Perigo" },
+  W: { title: "Alerta" },
 };
 
 export function AlertDetails() {
@@ -59,145 +52,180 @@ export function AlertDetails() {
   const route = useRoute();
   const params = route.params as AlertCardProps;
   const { id } = params;
-
   const THEME = useTheme();
-
   const { isLoading, data } = useQuery<IDiagnose>({
-    queryKey: [
-      "diagnose",
-      id,
-    ],
+    queryKey: ["diagnose", id],
     queryFn: async () => {
       const response = await api.get(`/diagnoses/${id}`);
       return response.data || {};
     },
   });
 
+  const {
+    AUTH_TOKEN_STORAGE_KEY,
+    REFRESH_TOKEN_STORAGE_KEY,
+    USER_STORAGE_KEY,
+    setUser,
+    logout,
+  } = useAuth();
+
+  useEffect(() => {
+    async function initialize() {
+      createAPIInterceptors();
+      getToken();
+      initializeOneSignal();
+      setRead();
+    }
+    initialize();
+  }, []);
+
   const setRead = async () => {
     try {
       await api.post(`/diagnoses/${id}/read`);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error marking as read", error);
+    }
+  };
+
+  function createAPIInterceptors() {
+    api.interceptors.request.use(
+      async (config) => {
+        const authToken = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
+        if (authToken)
+          config.headers.Authorization = `Bearer ${authToken.replace(
+            /"/g,
+            ""
+          )}`;
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    api.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (
+          error.response?.status === 401 &&
+          error.response.data?.code === "token.expired"
+        ) {
+          try {
+            const refreshToken = await AsyncStorage.getItem(
+              REFRESH_TOKEN_STORAGE_KEY
+            );
+            if (refreshToken) {
+              const response = await api.post("sessions/refreshToken", {
+                refreshToken: JSON.parse(refreshToken),
+              });
+              if (response.status === 200) {
+                const {
+                  token,
+                  refreshToken: newRefreshToken,
+                  user,
+                }: SessionsResponse = response.data;
+                await AsyncStorage.multiSet([
+                  [AUTH_TOKEN_STORAGE_KEY, JSON.stringify(token)],
+                  [REFRESH_TOKEN_STORAGE_KEY, JSON.stringify(newRefreshToken)],
+                  [USER_STORAGE_KEY, JSON.stringify(user)],
+                ]);
+                return api.request(error.config);
+              }
+            }
+          } catch (err) {
+            await logout();
+            navigation.reset({ index: 0, routes: [{ name: "Auth" as never }] });
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
   }
 
-  useEffect(() => {
-    setRead();
-  }, [])
+  async function getToken() {
+    const token = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
+    const userData = await AsyncStorage.getItem(USER_STORAGE_KEY);
+    if (token && userData) setUser(JSON.parse(userData));
+    else navigation.reset({ index: 0, routes: [{ name: "Auth" as never }] });
+  }
 
-  useEffect(() => {
-    console.log('data ----- ', data)
-    console.log('data.causes ----- ', data.causes)
-  }, [data])
+  function initializeOneSignal() {
+    OneSignal.initialize("5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7");
+  }
 
   return (
     <Container>
       {isLoading ? (
         <View style={{ marginTop: 50 }}>
-          <Loading
-            bgColor={THEME.colors.light}
-            color={THEME.colors.primary}
-          />
+          <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />
           <ActivityIndicator color={THEME.colors.light} />
         </View>
-      ) : 
-      (
-        <>
-        {data ? (
-          <Scroll>
+      ) : data ? (
+        <Scroll>
           <PieceDiv>
-            <PieceText>{data.reading.measuringPoint.piece.description}</PieceText>
-            <PiecePath>{
-                `${data.reading.measuringPoint.piece.machine.sector.area.company.name} > ${data.reading.measuringPoint.piece.machine.sector.area.name} > ${data.reading.measuringPoint.piece.machine.sector.name} > ${data.reading.measuringPoint.piece.machine.name}`
-            }</PiecePath>
+            <PieceText>
+              {data.reading.measuringPoint.piece.description}
+            </PieceText>
+            <PiecePath>
+              {`${data.reading.measuringPoint.piece.machine.sector.area.company.name} > ${data.reading.measuringPoint.piece.machine.sector.area.name} > ${data.reading.measuringPoint.piece.machine.sector.name} > ${data.reading.measuringPoint.piece.machine.name}`}
+            </PiecePath>
           </PieceDiv>
-  
+
           <Divider />
 
           <Header>
-            {data.hazardousness === 'D' && (<DangerIcon fill={THEME.colors.danger} />)}
-            {data.hazardousness === 'W' && (<WarnIcon fill={THEME.colors.warning} />)}
-            
+            {data.hazardousness === "D" && (
+              <DangerIcon fill={THEME.colors.danger} />
+            )}
+            {data.hazardousness === "W" && (
+              <WarnIcon fill={THEME.colors.warning} />
+            )}
             <Title>{data?.title}</Title>
           </Header>
-  
+
           <Divider />
-  
+
           <DiagnoseDescription>
             <DiagnoseDescriptionTitleDiv>
               <DangerIcon fill={THEME.colors.gray} />
-              <DiagnoseDescriptionTitle>Falha Identificada ({STATUS_HAZARDOUSNESS[data.hazardousness]?.title})</DiagnoseDescriptionTitle>
+              <DiagnoseDescriptionTitle>
+                Falha Identificada (
+                {STATUS_HAZARDOUSNESS[data.hazardousness]?.title})
+              </DiagnoseDescriptionTitle>
             </DiagnoseDescriptionTitleDiv>
-            <DiagnoseDescriptionSubtitle>{data?.description}</DiagnoseDescriptionSubtitle>
+            <DiagnoseDescriptionSubtitle>
+              {data?.description}
+            </DiagnoseDescriptionSubtitle>
           </DiagnoseDescription>
-  
+
           <Divider />
-  
-          <CardsInfo>
-            <CardInfo hazardousness={data?.hazardousness}>
-              <CardInfoTitle>Criticidade</CardInfoTitle>
-              <CardInfoSubtitle>{STATUS_HAZARDOUSNESS[data.hazardousness]?.title}</CardInfoSubtitle>
-            </CardInfo>
-            <CardInfo hazardousness={data?.hazardousness}>
-              <CardInfoTitle>Chance</CardInfoTitle>
-              <CardInfoSubtitle>{data?.percent}%</CardInfoSubtitle>
-            </CardInfo>
-            <CardInfo hazardousness={data?.hazardousness}>
-              <CardInfoTitle>Status</CardInfoTitle>
-              <CardInfoSubtitle>{data?.read ? 'Avaliado' : 'Pendente'}</CardInfoSubtitle>
-            </CardInfo>
-          </CardsInfo>
-  
-          <Divider />
-  
-          <Title>Possíveis causas</Title >
-  
+
+          <Title>Possíveis causas</Title>
           <CardCauses>
-            {data?.causes.map(cause => (
-              <>
-              <CardCause>
-                <CardCauseTitle>Nível de óleo baixo</CardCauseTitle>
-                <CardCauseButton onPress={() => navigation.navigate("AlertPrescriptionDetails", { data: cause, securityStatus: data.hazardousness })}>
-                  <BookOpenCheckIcon fill={THEME.colors.gray}/>
-                  <CardCauseTitle>Prescrição</CardCauseTitle>
-                </CardCauseButton>
-              </CardCause>
-              <Divider />
-              </>
+            {data?.causes.map((cause, index) => (
+              <React.Fragment key={index}>
+                <CardCause>
+                  <CardCauseTitle>Nível de óleo baixo</CardCauseTitle>
+                  <CardCauseButton
+                    onPress={() =>
+                      navigation.navigate("AlertPrescriptionDetails", {
+                        data: cause,
+                        securityStatus: data.hazardousness,
+                      })
+                    }
+                  >
+                    <BookOpenCheckIcon fill={THEME.colors.gray} />
+                    <CardCauseTitle>Prescrição</CardCauseTitle>
+                  </CardCauseButton>
+                </CardCause>
+                <Divider />
+              </React.Fragment>
             ))}
           </CardCauses>
-  
-          {/* <Title>Histórico de alertas</Title> */}
-  
-          {/* <HistoryCards>
-            <HistoryCard isLastCard type="danger" />
-            <HistoryCard type="warning" />
-            <HistoryCard type="warning" />
-  
-            {seeMore && (
-              <>
-                <HistoryCard type="success" />
-                <HistoryCard type="success" />
-                <HistoryCard type="success" />
-              </>
-            )}
-  
-            <SeeMoreButton onPress={() => setSeeMore(!seeMore)}>
-              <SeeMore>{!seeMore ? "Ver mais" : "Ver menos"}</SeeMore>
-            </SeeMoreButton>
-          </HistoryCards> */}
-  
-          {/* <ShareButtonContainer>
-            <ShareButton />
-          </ShareButtonContainer> */}
         </Scroll>
-          
-        ) : (
-          <Scroll>
+      ) : (
+        <Scroll>
           <Text>Dados não encontrados</Text>
-          </Scroll>
-        )}
-        </>
-      )
-    }
+        </Scroll>
+      )}
     </Container>
   );
 }

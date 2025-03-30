@@ -5,7 +5,6 @@ import { useTheme } from "styled-components/native";
 
 import NotificationsIcon from "../../assets/icons/notifications.svg";
 import BlueLogoIcon from "../../assets/icons/blue-logo.svg";
-import LogoWhiteIconIcon from "../../assets/icons/logo-white-text.svg";
 
 import { Loading } from "../../components/Loading";
 import { TotalNotifications } from "../../components/TotalNotifications";

@@ -59,8 +59,6 @@ export const Subtitle = styled.Text`
 
 export const Content = styled.ScrollView.attrs({
   contentContainerStyle: {
-    gap: 16,
-    marginTop: 16,
     paddingHorizontal: 20,
   },
 })``;

@@ -8,8 +8,45 @@ import { DashboardDrawer } from "./dashboard-drawer";
 export function Routes() {
   const { Navigator, Screen } = createStackNavigator();
 
+  const linking = {
+    prefixes: ["synchroone://"],
+    config: {
+      screens: {
+        DashboardDrawer: {
+          path: "dashboard",
+          screens: {
+            Dashboard: {
+              initialRouteName: "DashboardTab",
+              screens: {
+                Notifications: "notifications",
+                AssetDetails: {
+                  path: "asset/:id",
+                  parse: {
+                    id: (id: string) => Number(id),
+                  },
+                  stringify: {
+                    id: (id: number) => id.toString(),
+                  },
+                },
+                AlertDetails: {
+                  path: "diagnose/:id",
+                  parse: {
+                    id: (id: string) => Number(id),
+                  },
+                  stringify: {
+                    id: (id: number) => id.toString(),
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Navigator
         screenOptions={{
           headerShown: false,

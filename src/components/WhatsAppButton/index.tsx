@@ -29,30 +29,8 @@ export function WhatsAppButton() {
     }
   }
 
-  function handleSendPushNotification() {
-    const url = 'https://api.onesignal.com/notifications?c=push';
-    const options = {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Key os_v2_app_l57jrwm4zjhincvkhxq6r6rw27wlnvi2vjwecmvlpzztiyesdvxook6y45sy6h4xmq6ndfznwmal3zdtmzrgysn6pjonyspgjwfspkq',
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        app_id: '5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7',
-        contents: {en: 'Your message body here.'},
-        include_external_user_ids: ['jacksonmichalak@gmail.com']
-      })
-    };
-
-    fetch(url, options)
-      .then(res => res.json())
-      .then(json => console.log(json))
-      .catch(err => console.error(err));
-  }
-
   return (
-    <Container onPress={handleSendPushNotification}>
+    <Container onPress={handleOpenWhatsApp}>
       <WhatsAppIcon height={28} width={28} />
 
       <Content>

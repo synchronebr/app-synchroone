@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 import { OneSignal } from "react-native-onesignal";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 
 import Logo from "../../assets/icons/logo.svg";
 
@@ -133,12 +133,16 @@ export function Splash() {
 
   function initializeOneSignal() {
     OneSignal.initialize("5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7");
+
+    OneSignal.Notifications.addEventListener("click", (event) => {
+      console.log("Notification clicked:", event);
+    });
   }
 
   async function requestPushNotificationPermissions() {
     const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== 'granted') {
-      requestPushNotificationPermissions()
+    if (status !== "granted") {
+      requestPushNotificationPermissions();
     }
   }
 
