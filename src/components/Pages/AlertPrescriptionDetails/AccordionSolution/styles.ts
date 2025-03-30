@@ -7,7 +7,7 @@ export const AccordionDiv = styled.View`
   padding: 10px;
 `;
 
-export const AccordionHeader = styled.View`
+export const AccordionHeader = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: space-between;
 `;

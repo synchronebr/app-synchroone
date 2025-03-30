@@ -83,6 +83,11 @@ export function AlertDetails() {
     setRead();
   }, [])
 
+  useEffect(() => {
+    console.log('data ----- ', data)
+    console.log('data.causes ----- ', data.causes)
+  }, [data])
+
   return (
     <Container>
       {isLoading ? (
@@ -150,7 +155,7 @@ export function AlertDetails() {
               <>
               <CardCause>
                 <CardCauseTitle>Nível de óleo baixo</CardCauseTitle>
-                <CardCauseButton onPress={() => navigation.navigate("AlertPrescriptionDetails", { data: cause })}>
+                <CardCauseButton onPress={() => navigation.navigate("AlertPrescriptionDetails", { data: cause, securityStatus: data.hazardousness })}>
                   <BookOpenCheckIcon fill={THEME.colors.gray}/>
                   <CardCauseTitle>Prescrição</CardCauseTitle>
                 </CardCauseButton>

@@ -23,9 +23,9 @@ export default function AccordionSolution<T>({ description, viewKey, title }: Ac
 
   return (
     <AccordionDiv>
-      <AccordionHeader>
+      <AccordionHeader onPress={onPress} >
         <AccordionTitle>{title}</AccordionTitle>
-        <ChevronDownIcon onPress={onPress} />
+        <ChevronDownIcon/>
       </AccordionHeader>
     <Accordion isExpanded={open} viewKey={viewKey}>
       <AccordionChildren>

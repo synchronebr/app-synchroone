@@ -46,6 +46,7 @@ export const HeaderDescription = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.larger}px;
   line-height: 18px;
+  margin-top: 20px;
 `;
 
 export const Title = styled.Text`
