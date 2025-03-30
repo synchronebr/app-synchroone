@@ -19,6 +19,15 @@ export function Routes() {
               initialRouteName: "DashboardTab",
               screens: {
                 Notifications: "notifications",
+                NotificationDetails: {
+                  path: "notification/:id",
+                  parse: {
+                    id: (id: string) => Number(id),
+                  },
+                  stringify: {
+                    id: (id: number) => id.toString(),
+                  },
+                },
                 AssetDetails: {
                   path: "asset/:id",
                   parse: {
