@@ -85,7 +85,7 @@ export function MeasurementPointCard({ equipmentId, item,...rest }: IMeasurement
         )}
       </Content>
 
-      <ArrowForwardIcon fill={THEME.colors.secondary} height={12} width={12} />
+      <ArrowForwardIcon fill={THEME.colors.primary} height={12} width={12} />
     </Container>
   );
 }

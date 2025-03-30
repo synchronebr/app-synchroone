@@ -1,7 +1,8 @@
 import React from "react";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 import { View, Text } from "react-native";
 import DynamicIcon from "../DynamicIcon";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   Container,
@@ -16,6 +17,9 @@ import {
   StepperLine,
 } from "./styles";
 
+import { MeasurementPointCardNavigationProps } from "./types";
+import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
+
 // const CleanListWithStepper = ({ children, style }) => {
 //   return <Container style={style}>{children}</Container>;
 // };
@@ -27,11 +31,24 @@ const statusMapping = {
   default: { color: "#64748B", title: "Offline", iconName: "minus-circled" },
 };
 
-export const MeasuringPointPartTimeLastReadingsStepper = ({ status, date, doneBy, lastOne=false }) => {
+export const MeasuringPointPartTimeLastReadingsStepper = ({ id, status, date, doneBy, lastOne=false, diagnoseId=undefined }) => {
+  const navigation = useNavigation<MeasurementPointCardNavigationProps>();
   const statusDetails = statusMapping[status] || statusMapping.default;
 
+  const THEME = useTheme();
+
+  const navigateToDiagnose = (diagnoseId) => {
+    console.log('teste..1')
+    if (diagnoseId) {
+      console.log('teste..2')
+      navigation.navigate("AlertDetails", { id: diagnoseId })
+    } else {
+      console.log('teste..3')
+    }
+  }
+
   return (
-    <Container>
+    <Container onPress={() => navigateToDiagnose(diagnoseId)}>
       <ItemContainer>
         <LeftContainer>
           <StatusIconContainer color={statusDetails.color}>
@@ -49,6 +66,13 @@ export const MeasuringPointPartTimeLastReadingsStepper = ({ status, date, doneBy
             </InfoText>
           </InfoContainer>
         </LeftContainer>
+        {diagnoseId && (
+        <ArrowForwardIcon 
+          fill={THEME.colors.primary} 
+          height={12} 
+          width={12} 
+        />
+        )}
       </ItemContainer>
       {!lastOne && (
         <StepperContainer>

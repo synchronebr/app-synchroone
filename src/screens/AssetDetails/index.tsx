@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet, useWindowDimensions } from "react-native";
+import ContentLoader, { Rect, Circle } from 'react-content-loader/native'
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { Camera as ExpoCamera } from "expo-camera";
@@ -40,6 +41,7 @@ import {
 } from "./styles";
 
 export function AssetDetails() {
+  const { height, width } = useWindowDimensions();
   const [isLoading, setIsLoading] = useState(false);
   const [piece, setPiece] = useState<IPiece>(null);
   const [isFavorite, setIsFavorite] = useState(true);
@@ -165,10 +167,18 @@ export function AssetDetails() {
     console.log(piece);
   }, [piece]);
 
-  if (isLoading) return <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />;
+  // if (isLoading) return <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />;
 
   return (
     <Container>
+      {isLoading ? (
+        <ContentLoader viewBox={`0 0 ${width} ${height}`}>
+          <Rect x="1" y="10" rx="10" ry="10" width={width} height="200" />
+          <Rect x="1" y="230" rx="10" ry="10" width={width} height="100" />
+          <Rect x="1" y="350" rx="10" ry="10" width={width} height="100" />
+          <Rect x="1" y="470" rx="10" ry="10" width={width} height="100" />
+        </ContentLoader>
+      ) : (
       <ScrollView>
         {piece && (
           <>
@@ -213,12 +223,12 @@ export function AssetDetails() {
                   />
                 </Icon>
 
-                <View>
+                {/* <View>
                   <AssetDetailHeaderIcon
                     isFavorite={isFavorite}
                     toggleIsFavorite={toggleIsFavorite}
                   />
-                </View>
+                </View> */}
               </View>
 
               <Asset status={readings[0]?.securityStatus}>
@@ -250,6 +260,7 @@ export function AssetDetails() {
           </>
         )}
       </ScrollView>
+      )}
     </Container>
   );
 }

@@ -17,13 +17,13 @@ export function AssetDetailsCard({ piece }: IAssetDetailsCard) {
     <Container>
       <Details>
         <Text>
-          <Title>Tipo: </Title>{piece?.pieceType?.description}
+          <Title>Tipo: </Title>{piece && piece.pieceType ? piece.pieceType.description : '-'} 
         </Text>
         <Text>
-          <Title>Marca: </Title>{piece?.brand}
+          <Title>Marca: </Title>{piece && piece.brand ? piece.brand : '-'}
         </Text>
         <Text>
-          <Title>Modelo: </Title>{piece?.model}
+          <Title>Modelo: </Title>{piece && piece.model ? piece.model : '-'}
         </Text>
       </Details>
 

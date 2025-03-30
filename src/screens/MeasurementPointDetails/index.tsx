@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import ContentLoader, { Rect } from "react-content-loader/native";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -36,13 +37,14 @@ import {
   StatusHistory,
 } from "./styles";
 import { differenceInMinutes } from "date-fns";
-import { Dimensions } from "react-native";
+import { Dimensions, useWindowDimensions } from "react-native";
 import { MeasuringPointPartTimeLastReadingsStepper } from "../../components/MeasuringPointPartTimeLastReadingsStepper";
 import { enums } from "../../utils/enums";
 import { getMeasuringPointById } from "../../services/MeasuringPoints";
 import { Loading } from "../../components/Loading";
 
 export function MeasurementPointDetails({ route, nabigation }) {
+  const { height, width } = useWindowDimensions();
   const navigation = useNavigation();
   const [timeInfo, setTimeInfo] = useState({
     minutesSinceLast: 0,
@@ -125,10 +127,19 @@ export function MeasurementPointDetails({ route, nabigation }) {
     }, [])
   );
 
-  if (isLoading) return <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />;
+  // if (isLoading) return <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />;
 
   return (
     <Container>
+    {isLoading ? (
+        <ContentLoader viewBox={`0 0 ${width} ${height}`}>
+          <Rect x="1" y="10" rx="10" ry="10" width={width} height="200" />
+          <Rect x="1" y="230" rx="10" ry="10" width={width} height="100" />
+          <Rect x="1" y="350" rx="10" ry="10" width={width} height="100" />
+          <Rect x="1" y="470" rx="10" ry="10" width={width} height="100" />
+        </ContentLoader>
+      ) : (
+        <>
       <Header>
         <Image
           resizeMode="cover"
@@ -265,12 +276,14 @@ export function MeasurementPointDetails({ route, nabigation }) {
                 {item.measuringPoint.readings.map((reading, i) => (
                   <MeasuringPointPartTimeLastReadingsStepper 
                     key={reading.id}
+                    id={reading.id}
                     lastOne={i === item.measuringPoint.readings.length - 1}
                     status={reading.securityStatus || "default"} // Passa o status para mapeamento
                     date={format(new Date(reading.readingAt), "dd 'de' MMMM 'de' yyyy", {
                       locale: ptBR,
                     })}
                     doneBy={reading.responsibleCompany.name}
+                    diagnoseId={reading?.diagnoses[0]?.id}
                   />
                 ))}
               </MeasuringPointPartTimeLastReadingsViewStepper>
@@ -326,6 +339,8 @@ export function MeasurementPointDetails({ route, nabigation }) {
           </Graphics> */}
           </Content>
         )}
+      </>
+      )}
     </Container>
   );
 }
