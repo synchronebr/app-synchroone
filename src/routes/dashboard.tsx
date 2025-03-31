@@ -18,6 +18,7 @@ import { Manuals } from "../screens/Manuals";
 import { MyData } from "../screens/MyData";
 import { AlertDetails } from "../screens/AlertDetails";
 import { AlertPrescriptionDetails } from "../screens/AlertPrescriptionDetails";
+import { DiagnosesByPiece } from "../screens/DiagnosesByPiece";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -191,6 +192,13 @@ export function Dashboard() {
         name="AlertPrescriptionDetails"
         options={{
           title: "Prescrição",
+        }}
+      />
+      <Screen
+        component={DiagnosesByPiece}
+        name="DiagnosesByPiece"
+        options={{
+          title: "Diagnósticos",
         }}
       />
     </Navigator>

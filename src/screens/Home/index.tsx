@@ -99,7 +99,7 @@ export function Home() {
         <NewGatewayButton />
       </Buttons>
 
-      <WhatsAppButton />
+      {/* <WhatsAppButton /> */}
     </Container>
   );
 }
