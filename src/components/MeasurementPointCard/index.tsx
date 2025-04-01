@@ -43,7 +43,7 @@ export function MeasurementPointCard({ equipmentId, item,...rest }: IMeasurement
       <Image
         resizeMode="cover"
         source={{
-          uri: "https://synchroone.s3.amazonaws.com/white-mp-sensor.png",
+          uri: item.type === enums.MeasuringPoints.Type.PartTime ? "https://synchroone.s3.amazonaws.com/white-technician-machine.jpg" : "https://synchroone.s3.amazonaws.com/white-mp-sensor.png",
         }}
       />
       {item.readings[0]?.securityStatus === "S" && (

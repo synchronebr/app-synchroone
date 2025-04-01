@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.3</string>
+	<string>1.0.4</string>
 	<key>CFBundleVersion</key>
-	<string>18</string>
+	<string>27</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>whatsapp</string>
@@ -99,7 +99,7 @@
 			</dict>
 		</array>
 	</dict>
-<key>NSBluetoothAlwaysUsageDescription</key>
+	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>$(PRODUCT_NAME) precisa de acesso ao Bluetooth para comunicação com dispositivos próximos.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>$(PRODUCT_NAME) precisa de acesso ao Bluetooth para se conectar a dispositivos periféricos.</string>

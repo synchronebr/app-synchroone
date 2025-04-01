@@ -84,17 +84,18 @@ export const DiagnosesButton = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
 })`
   padding: 12px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.secondary_light};
   border-radius: 4px;
   display: flex;
   gap: 8px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
 `;
 
 export const DiagnosesButtonText = styled.Text`
   text-align: center;
   align-items: center;
-  color: ${({ theme }) => theme.colors.light};
+  color: ${({ theme }) => theme.colors.primary};
 `;

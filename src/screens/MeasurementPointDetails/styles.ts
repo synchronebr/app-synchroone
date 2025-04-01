@@ -71,6 +71,12 @@ export const Text = styled.Text`
   margin: 16px 0;
 `;
 
+export const CardsContent = styled.View`
+  display: flex;
+  gap: 10px;
+  /* margin-top: 10px; */
+`;
+
 export const Card = styled.View`
   background-color: rgba(2, 132, 199, 0.1);
   border-radius: 8px;

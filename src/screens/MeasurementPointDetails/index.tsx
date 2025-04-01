@@ -18,6 +18,7 @@ import {
   Title,
   Subtitle,
   Content,
+  CardsContent,
   Text,
   Card,
   Info,
@@ -42,6 +43,7 @@ import { MeasuringPointPartTimeLastReadingsStepper } from "../../components/Meas
 import { enums } from "../../utils/enums";
 import { getMeasuringPointById } from "../../services/MeasuringPoints";
 import { Loading } from "../../components/Loading";
+import { formatDateByLocale } from "../../utils/formatDateByLocale";
 
 export function MeasurementPointDetails({ route, nabigation }) {
   const { height, width } = useWindowDimensions();
@@ -78,11 +80,11 @@ export function MeasurementPointDetails({ route, nabigation }) {
   useEffect(() => {
     const calculateTime = () => {
       const now = new Date();
-      let lastExecutionDate = new Date();
       if (item.measuringPoint.readings && item.measuringPoint.readings[0]) {
-        lastExecutionDate = new Date(item.measuringPoint.readings[0].createdAt);
+        let lastExecutionDate = new Date(item.measuringPoint.readings[0].createdAt);
         const minutesSinceLast = differenceInMinutes(now, lastExecutionDate);
         let nextExecutionIn = 0;
+        console.log(now, lastExecutionDate, minutesSinceLast);
         if (item.measuringPoint.device) {
           const readingWindow = item.measuringPoint.device.readingWindow;
           nextExecutionIn = readingWindow - minutesSinceLast;
@@ -90,6 +92,8 @@ export function MeasurementPointDetails({ route, nabigation }) {
         }
 
         setTimeInfo({ minutesSinceLast, nextExecutionIn });
+      } else if (item.measuringPoint?.device?.readingWindow) {
+        setTimeInfo({ minutesSinceLast: item.measuringPoint?.device?.readingWindow, nextExecutionIn: item.measuringPoint?.device?.readingWindow });
       }
     };
 
@@ -125,7 +129,7 @@ export function MeasurementPointDetails({ route, nabigation }) {
             <Image
               resizeMode="cover"
               source={{
-                uri: "https://synchroone.s3.amazonaws.com/white-mp-sensor.png",
+                uri: item && item.measuringPoint.type === enums.MeasuringPoints.Type.PartTime ? "https://synchroone.s3.amazonaws.com/white-technician-machine.jpg" : "https://synchroone.s3.amazonaws.com/white-mp-sensor.png",
               }}
             />
 
@@ -143,23 +147,22 @@ export function MeasurementPointDetails({ route, nabigation }) {
                   }}
                 />
 
-                {item.measuringPoint.type ===
-                  enums.MeasuringPoints.Type.Online && (
+                {item && item.measuringPoint.type === enums.MeasuringPoints.Type.Online && (
                   <Asset
                     status={item.measuringPoint.readings[0]?.securityStatus}
                   >
                     <Detail>
-                      <Title>{item?.device?.battery} %</Title>
+                      <Title>{item.measuringPoint.device ? item.measuringPoint.device.battery : '-'} %</Title>
                       <Subtitle>Bateria</Subtitle>
                     </Detail>
 
                     <Detail>
-                      <Title>{item?.device?.readingWindow} min</Title>
+                      <Title>{item.measuringPoint.device ? `${item.measuringPoint.device.readingWindow} min` : '-'} </Title>
                       <Subtitle>Janela</Subtitle>
                     </Detail>
 
                     <Detail>
-                      <Title>{timeInfo?.nextExecutionIn} min</Title>
+                      <Title>{item.measuringPoint.device ? `${timeInfo?.nextExecutionIn} min` : '-'}</Title>
                       <Subtitle>Próxima</Subtitle>
                     </Detail>
                   </Asset>
@@ -201,26 +204,27 @@ export function MeasurementPointDetails({ route, nabigation }) {
 
           {item && (
             <Content>
-              {item.measuringPoint.type ===
-                enums.MeasuringPoints.Type.Online && (
+              {item.measuringPoint.type == enums.MeasuringPoints.Type.Online && item.measuringPoint.readings.length > 0 && (
                 <>
+                <Text>Última Medição Online ({formatDateByLocale(item.measuringPoint.readings[0].createdAt)})</Text>
+                <CardsContent>
                   <Card>
                     <CardTitle>Aceleração</CardTitle>
 
                     <Info>
                       <InfoData>
                         <CardText>Axial</CardText>
-                        <CardSubtitle>2.32 m/s</CardSubtitle>
+                        <CardSubtitle>{item.measuringPoint.readings[0].accelAbsoluteX.toFixed(2)} G</CardSubtitle>
                       </InfoData>
 
                       <InfoData>
                         <CardText>Vertical</CardText>
-                        <CardSubtitle>2.32 m/s</CardSubtitle>
+                        <CardSubtitle>{item.measuringPoint.readings[0].accelAbsoluteY.toFixed(2)} G</CardSubtitle>
                       </InfoData>
 
                       <InfoData>
                         <CardText>Horizontal</CardText>
-                        <CardSubtitle>2.32 m/s</CardSubtitle>
+                        <CardSubtitle>{item.measuringPoint.readings[0].accelAbsoluteZ.toFixed(2)} G</CardSubtitle>
                       </InfoData>
                     </Info>
                   </Card>
@@ -231,17 +235,17 @@ export function MeasurementPointDetails({ route, nabigation }) {
                     <Info>
                       <InfoData>
                         <CardText>Axial</CardText>
-                        <CardSubtitle>2.32 m/s</CardSubtitle>
+                        <CardSubtitle>{item.measuringPoint.readings[0].accelAbsoluteX.toFixed(2)} G</CardSubtitle>
                       </InfoData>
 
                       <InfoData>
                         <CardText>Vertical</CardText>
-                        <CardSubtitle>2.32 m/s</CardSubtitle>
+                        <CardSubtitle>{item.measuringPoint.readings[0].accelAbsoluteY.toFixed(2)} G</CardSubtitle>
                       </InfoData>
 
                       <InfoData>
                         <CardText>Horizontal</CardText>
-                        <CardSubtitle>2.32 m/s</CardSubtitle>
+                        <CardSubtitle>{item.measuringPoint.readings[0].accelAbsoluteZ.toFixed(2)} G</CardSubtitle>
                       </InfoData>
                     </Info>
                   </Card>
@@ -259,7 +263,16 @@ export function MeasurementPointDetails({ route, nabigation }) {
                       <CardTitle>43 C</CardTitle>
                     </Temperature>
                   </TemperatureCard>
+                </CardsContent>
                 </>
+              )}
+
+              {item.measuringPoint.type == enums.MeasuringPoints.Type.Online && item.measuringPoint.readings.length === 0 && (
+                <CardsContent>
+                  <Card>
+                    <CardTitle>Nennhuma leitura feita.</CardTitle>
+                  </Card>
+                </CardsContent>
               )}
 
               {item.measuringPoint.type ===

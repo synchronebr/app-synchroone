@@ -371,14 +371,14 @@ export function AssetDetails() {
             </Header>
 
             <Content>
-              <DiagnosesButton onPress={() =>navigation.navigate("DiagnosesByPiece", { id: piece.id })}>
-                <DiagnosesButtonText>Histórico de diagnósticos</DiagnosesButtonText>
-                <ArrowForwardIcon fill={THEME.colors.light} height={12} width={12} />
-              </DiagnosesButton>
-
               <Text>Detalhes do Ativo</Text>
 
               <AssetDetailsCard piece={piece} />
+
+              <DiagnosesButton onPress={() =>navigation.navigate("DiagnosesByPiece", { id: piece.id })}>
+                <DiagnosesButtonText>Histórico de diagnósticos</DiagnosesButtonText>
+                <ArrowForwardIcon fill={THEME.colors.primary} height={12} width={12} />
+              </DiagnosesButton>
 
               <Text>Pontos de medição</Text>
 
