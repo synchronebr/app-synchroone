@@ -2,7 +2,7 @@
   "expo": {
     "name": "synchroone",
     "slug": "synchroone",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "icon": "./assets/images/app-icon.png",
     "assetBundlePatterns": [
       "**/*"
