@@ -21,9 +21,11 @@ import { Loading } from "../../components/Loading";
 import { AssetDetailHeaderIcon } from "../../components/AssetDetailsHeaderIcon";
 
 import { useAuth } from "../../hooks/useAuth";
+import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
 
 import api from "../../services/api";
 import { SessionsResponse } from "../../services/Auth/types";
+
 import {
   getEquipmentById,
   updateEquipmentFavoriteStatus,
@@ -44,6 +46,8 @@ import {
   Content,
   Text,
   List,
+  DiagnosesButton,
+  DiagnosesButtonText,
 } from "./styles";
 
 export function AssetDetails() {
@@ -370,6 +374,11 @@ export function AssetDetails() {
               <Text>Detalhes do Ativo</Text>
 
               <AssetDetailsCard piece={piece} />
+
+              <DiagnosesButton onPress={() =>navigation.navigate("DiagnosesByPiece", { id: piece.id })}>
+                <DiagnosesButtonText>Histórico de diagnósticos</DiagnosesButtonText>
+                <ArrowForwardIcon fill={THEME.colors.primary} height={12} width={12} />
+              </DiagnosesButton>
 
               <Text>Pontos de medição</Text>
 
