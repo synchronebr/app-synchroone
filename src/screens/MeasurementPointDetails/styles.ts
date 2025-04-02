@@ -79,7 +79,7 @@ export const CardsContent = styled.View`
 
 export const Card = styled.View`
   background-color: rgba(2, 132, 199, 0.1);
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 8px 12px;
 `;
 
@@ -109,7 +109,11 @@ export const Info = styled.View`
   justify-content: space-evenly;
 `;
 
-export const InfoData = styled.View``;
+export const InfoData = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const TemperatureCard = styled.View`
   align-items: center;

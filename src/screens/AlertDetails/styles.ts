@@ -169,6 +169,6 @@ export const CardCauseButton = styled.TouchableOpacity`
   justify-content: space-between;
   gap: 4px;
   background-color: ${({ theme }) => theme.colors.gray_light};
-  padding: 16px;
+  padding: 8px;
   border-radius: 5px;
 `;
