@@ -5,7 +5,6 @@ import HomeSolidIcon from "../assets/icons/home-solid.svg";
 import HomeOutlineIcon from "../assets/icons/home-outline.svg";
 import WaterPumpIcon from "../assets/icons/water-pump.svg";
 import WaterPumpOutlineIcon from "../assets/icons/water-pump-outline.svg";
-import TuneIcon from "../assets/icons/tune.svg";
 import ChartPieFilledIcon from "../assets/icons/chart-pie-filled.svg";
 import ChartPieIcon from "../assets/icons/chart-pie.svg";
 import SettingsBoldIcon from "../assets/icons/settings-bold.svg";
@@ -20,7 +19,7 @@ import { Analyses } from "../screens/Analyses";
 import { AlertsHistory } from "../screens/AlertsHistory";
 import { More } from "../screens/More";
 import { useState } from "react";
-import { AlertFilterProvider, useAlertFilter } from "../hooks/useAlertFilter";
+import { AlertFilterProvider } from "../hooks/useAlertFilter";
 
 export function DashboardTab() {
   const { Navigator, Screen } = createBottomTabNavigator();
@@ -30,11 +29,7 @@ export function DashboardTab() {
   const [readingsCount, setReadingsCount] = useState(0);
 
   function AlertsWrapper() {
-    return (
-        <AlertsHistory
-          setReadingsCount={setReadingsCount}
-        />
-    );
+    return <AlertsHistory setReadingsCount={setReadingsCount} />;
   }
 
   return (
@@ -96,11 +91,13 @@ export function DashboardTab() {
           component={AlertsWrapper}
           name="AlertsHistory"
           options={{
-            headerRight: AlertFilterButton,
             headerTitle: "Histórico de Alertas",
             tabBarLabel: "",
             tabBarIcon: ({ focused }) => (
-              <TabBarCenterButton isFocused={focused} readingsCount={readingsCount} />
+              <TabBarCenterButton
+                isFocused={focused}
+                readingsCount={readingsCount}
+              />
             ),
           }}
         />
@@ -127,23 +124,4 @@ export function DashboardTab() {
       </Navigator>
     </AlertFilterProvider>
   );
-}
-
-function AlertFilterButton () {
-  const { setIsFilterOpen } = useAlertFilter();
-
-  function openFilter () {
-    setIsFilterOpen(true);
-  }
-
-  return (
-    <TuneIcon
-      style={{ marginRight: 20 }}
-      height={18}
-      width={18}
-      onPress={() => {
-        openFilter();
-      }}
-    />
-  )
 }

@@ -34,7 +34,14 @@ export function Assets() {
   const [assets, setAssets] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [dataFilters, setDataFilters] = useState({ companyId: 0, areaId: 0, sectorId: 0, machineId: 0, pieceId: 0, measuringPointId: 0 });
+  const [dataFilters, setDataFilters] = useState({
+    companyId: 0,
+    areaId: 0,
+    sectorId: 0,
+    machineId: 0,
+    pieceId: 0,
+    measuringPointId: 0,
+  });
   const [areas, setAreas] = useState([]);
   const [machines, setMachines] = useState([]);
   const [sectors, setSectors] = useState([]);
@@ -54,11 +61,11 @@ export function Assets() {
   // otherwise the filters will be outdated (old state values were being used)
   const getEquips = async (filters) => {
     setIsLoading(true);
-    console.log('filters', filters)
+    console.log("filters", filters);
 
     const getEquipResponse = await getEquipments({
       companyId: accessLevels.currentCompany.companyId,
-      ...filters
+      ...filters,
     });
     const assets = getEquipResponse.data.data;
 
@@ -118,49 +125,59 @@ export function Assets() {
 
   const getAreas = async () => {
     const companyId = accessLevels.currentCompany.companyId;
-      const items = await getAreasForSelect(Number(companyId));
-      setAreas(items);
-      setDataFilters((old) => ({ ...old, companyId: companyId }));
-  }
-  
+    const items = await getAreasForSelect(Number(companyId));
+    setAreas(items);
+    setDataFilters((old) => ({ ...old, companyId: companyId }));
+  };
+
   useEffect(() => {
     getAreas();
-  }, [])
-  
-  const handleChangeAreas = useCallback(async (value: any) => {
-    if (selectedArea === value) return; // Evita loop infinito se o valor já for o mesmo
-  
-    const id = Number(value);
-    setSelectedArea(value); // Atualiza o estado primeiro
-    
-    try {
-      const items = await getSectorsForSelect(dataFilters.companyId, id);
-      setSectors(items);
-      setDataFilters((old) => ({ ...old, areaId: id }));
-    } catch (error) {
-      console.error("Erro ao buscar setores:", error);
-    }
-  }, [selectedArea, dataFilters.companyId]);
+  }, []);
 
-  const handleChangeSector = useCallback(async (value: any) => {
-    if (selectedSector === value) return; // Evita loop infinito se o valor já for o mesmo
-  
-    const id = Number(value);
-    setSelectedSector(value);
-    
-    try {
-      const items = await getMachinesForSelect(dataFilters.companyId, dataFilters.areaId, id);
-      setMachines(items);
-      setDataFilters((old) => ({ ...old, sectorId: id }));
-    } catch (error) {
-      console.error("Erro ao buscar maquinas:", error);
-    }
-  }, [selectedSector, dataFilters.areaId]);
+  const handleChangeAreas = useCallback(
+    async (value: any) => {
+      if (selectedArea === value) return; // Evita loop infinito se o valor já for o mesmo
+
+      const id = Number(value);
+      setSelectedArea(value); // Atualiza o estado primeiro
+
+      try {
+        const items = await getSectorsForSelect(dataFilters.companyId, id);
+        setSectors(items);
+        setDataFilters((old) => ({ ...old, areaId: id }));
+      } catch (error) {
+        console.error("Erro ao buscar setores:", error);
+      }
+    },
+    [selectedArea, dataFilters.companyId]
+  );
+
+  const handleChangeSector = useCallback(
+    async (value: any) => {
+      if (selectedSector === value) return; // Evita loop infinito se o valor já for o mesmo
+
+      const id = Number(value);
+      setSelectedSector(value);
+
+      try {
+        const items = await getMachinesForSelect(
+          dataFilters.companyId,
+          dataFilters.areaId,
+          id
+        );
+        setMachines(items);
+        setDataFilters((old) => ({ ...old, sectorId: id }));
+      } catch (error) {
+        console.error("Erro ao buscar maquinas:", error);
+      }
+    },
+    [selectedSector, dataFilters.areaId]
+  );
 
   const handleChangeMachine = async (value: any) => {
     setDataFilters((old) => ({ ...old, machineId: value }));
     setSelectedMachine(value);
-  }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -179,8 +196,8 @@ export function Assets() {
           editable={!isLoading}
         />
 
-        <Filter >
-          <TuneIcon height={18} width={18} onPress={openFilter}/>
+        <Filter>
+          <TuneIcon height={18} width={18} onPress={openFilter} />
         </Filter>
 
         <Drawer isOpen={isFiltersOpen} height="55%">
@@ -231,16 +248,16 @@ export function Assets() {
             </View>
             <View>
               <TouchableOpacity
-                  style={styles.clearFilterButton}
-                  onPress={clearFilters}
-                >
-                  <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
-                </TouchableOpacity>
+                style={styles.clearFilterButton}
+                onPress={clearFilters}
+              >
+                <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
+              </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={styles.applyButton}
-                  onPress={handleFilterSubmit}
-                >
+              <TouchableOpacity
+                style={styles.applyButton}
+                onPress={handleFilterSubmit}
+              >
                 <Text style={styles.applyButtonText}>Aplicar filtro</Text>
               </TouchableOpacity>
             </View>
@@ -263,7 +280,12 @@ export function Assets() {
                 <AssetCard item={item} key={`asset-${item.id.toString()}`} />
               )}
               refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                <RefreshControl
+                  progressBackgroundColor={THEME.colors.primary}
+                  colors={["#FFF", "#FFF"]}
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
               }
             />
           ) : (
@@ -279,9 +301,9 @@ export function Assets() {
 
 const styles = StyleSheet.create({
   filterWrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
     width: "100%",
     height: "100%",
     backgroundColor: THEME.colors.light,
@@ -295,8 +317,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 16,
   },
-  filterContent: {
-  },
+  filterContent: {},
   title: {
     fontFamily: THEME.fonts.semiBold,
     fontSize: THEME.fontSize.largest,
