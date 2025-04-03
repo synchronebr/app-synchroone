@@ -12,7 +12,7 @@ export function WhatsAppButton() {
   const THEME = useTheme();
 
   async function handleOpenWhatsApp() {
-    const phoneNumber = "+554791168382";
+    const phoneNumber = "+5547991352586";
     const url = `whatsapp://send?phone=${phoneNumber}`;
 
     try {
