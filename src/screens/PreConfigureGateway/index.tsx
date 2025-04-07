@@ -33,7 +33,7 @@ export function PreConfigureGateway({ route }) {
   
     if (granted) {
       navigation.navigate("QRCodeScanner" as never, {
-        nextPage: "ConfigureParameters",
+        nextPage: "ConfigureGateway",
       });
     }
   } 
