@@ -203,7 +203,7 @@ export function AlertDetails() {
             {data?.causes.map((cause, index) => (
               <React.Fragment key={index}>
                 <CardCause>
-                  <CardCauseTitle>Nível de óleo baixo</CardCauseTitle>
+                  <CardCauseTitle>{cause.causesType.title}</CardCauseTitle>
                   <CardCauseButton
                     onPress={() =>
                       navigation.navigate("AlertPrescriptionDetails", {

@@ -235,17 +235,17 @@ export function MeasurementPointDetails({ route, nabigation }) {
                     <Info>
                       <InfoData>
                         <CardText>Axial</CardText>
-                        <CardSubtitle>{item.measuringPoint.readings[0].accelAbsoluteX.toFixed(2)} G</CardSubtitle>
+                        <CardSubtitle>{item.measuringPoint.readings[0].velAbsoluteX.toFixed(2)} m/s²</CardSubtitle>
                       </InfoData>
 
                       <InfoData>
                         <CardText>Vertical</CardText>
-                        <CardSubtitle>{item.measuringPoint.readings[0].accelAbsoluteY.toFixed(2)} G</CardSubtitle>
+                        <CardSubtitle>{item.measuringPoint.readings[0].velAbsoluteX.toFixed(2)} m/s²</CardSubtitle>
                       </InfoData>
 
                       <InfoData>
                         <CardText>Horizontal</CardText>
-                        <CardSubtitle>{item.measuringPoint.readings[0].accelAbsoluteZ.toFixed(2)} G</CardSubtitle>
+                        <CardSubtitle>{item.measuringPoint.readings[0].velAbsoluteX.toFixed(2)} m/s²</CardSubtitle>
                       </InfoData>
                     </Info>
                   </Card>
