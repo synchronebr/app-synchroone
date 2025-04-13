@@ -1,6 +1,11 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet, useWindowDimensions } from "react-native";
-import ContentLoader, { Rect, Circle } from 'react-content-loader/native'
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
+import ContentLoader, { Rect, Circle } from "react-content-loader/native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { Camera as ExpoCamera } from "expo-camera";
@@ -312,92 +317,115 @@ export function AssetDetails() {
           <Rect x="1" y="470" rx="10" ry="10" width={width} height="100" />
         </ContentLoader>
       ) : (
-      <ScrollView>
-        {piece && (
-          <>
-            <Header>
-              <Image
-                resizeMode="cover"
-                source={{
-                  uri: piece?.image
-                    ? piece.image
-                    : "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png",
-                }}
-              />
-
-              <Icon style={styles.backIcon}>
-                <Entypo
-                  color={THEME.colors.primary}
-                  name="chevron-left"
-                  onPress={() => navigation.navigate("Assets" as never)}
-                  size={32}
-                  // style={styles.backIcon}
+        <ScrollView>
+          {piece && (
+            <>
+              <Header>
+                <Image
+                  resizeMode="cover"
+                  source={{
+                    uri: piece?.image
+                      ? piece.image
+                      : "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png",
+                  }}
                 />
-              </Icon>
 
-              <View style={styles.icons}>
-                <Icon>
-                  <MaterialIcons
-                    style={styles.icon}
+                <Icon style={styles.backIcon}>
+                  <Entypo
                     color={THEME.colors.primary}
-                    name="add-a-photo"
-                    onPress={getCameraPermission}
-                    size={24}
+                    name="chevron-left"
+                    onPress={() => navigation.navigate("Assets" as never)}
+                    size={32}
+                    // style={styles.backIcon}
                   />
                 </Icon>
 
-                <Icon>
-                  <MaterialIcons
-                    style={styles.icon}
-                    color={THEME.colors.primary}
-                    name="add-photo-alternate"
-                    onPress={loadImage}
-                    size={24}
-                  />
-                </Icon>
+                <View style={styles.icons}>
+                  <Icon>
+                    <MaterialIcons
+                      style={styles.icon}
+                      color={THEME.colors.primary}
+                      name="add-a-photo"
+                      onPress={getCameraPermission}
+                      size={24}
+                    />
+                  </Icon>
 
-                {/* <View>
+                  <Icon>
+                    <MaterialIcons
+                      style={styles.icon}
+                      color={THEME.colors.primary}
+                      name="add-photo-alternate"
+                      onPress={loadImage}
+                      size={24}
+                    />
+                  </Icon>
+
+                  {/* <View>
                   <AssetDetailHeaderIcon
                     isFavorite={isFavorite}
                     toggleIsFavorite={toggleIsFavorite}
                   />
                 </View> */}
-              </View>
+                </View>
 
-              <Asset status={readings[0]?.securityStatus}>
-                <Title>{piece?.description}</Title>
-                <Subtitle>{piece?.machine.name}</Subtitle>
-              </Asset>
-            </Header>
+                <Asset status={readings[0]?.securityStatus}>
+                  <Title>{piece?.description}</Title>
+                  <Subtitle>{piece?.machine.name}</Subtitle>
+                </Asset>
+              </Header>
 
-            <Content>
-              <Text>Detalhes do Ativo</Text>
+              <Content>
+                <Text>Detalhes do Ativo</Text>
 
-              <AssetDetailsCard piece={piece} />
+                <AssetDetailsCard
+                  onPress={() =>
+                    navigation.navigate("EditAssetDetails", {
+                      id: piece?.id,
+                      description: piece?.description,
+                      machineID: piece?.machine?.id,
+                      sectorID: piece?.machine?.sector?.id,
+                      areaID: piece?.machine?.sector?.area?.id,
+                    })
+                  }
+                  piece={piece}
+                />
 
-              <DiagnosesButton onPress={() =>navigation.navigate("DiagnosesByPiece", { id: piece.id })}>
-                <DiagnosesButtonText>Histórico de diagnósticos</DiagnosesButtonText>
-                <ArrowForwardIcon fill={THEME.colors.primary} height={12} width={12} />
-              </DiagnosesButton>
+                <DiagnosesButton
+                  onPress={() =>
+                    navigation.navigate("DiagnosesByPiece", { id: piece.id })
+                  }
+                >
+                  <DiagnosesButtonText>
+                    Histórico de diagnósticos
+                  </DiagnosesButtonText>
+                  <ArrowForwardIcon
+                    fill={THEME.colors.primary}
+                    height={12}
+                    width={12}
+                  />
+                </DiagnosesButton>
 
-              <Text>Pontos de medição</Text>
+                <Text>Pontos de medição</Text>
 
-              <List
-                data={piece.measuringPoints}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <MeasurementPointCard equipmentId={piece.id} item={item} />}
-                ListEmptyComponent={
-                  isLoading ? (
-                    <Loading />
-                  ) : (
-                    <View>{/* <Text>Nenhum ponto de medição</Text> */}</View>
-                  )
-                }
-              />
-            </Content>
-          </>
-        )}
-      </ScrollView>
+                <List
+                  data={piece.measuringPoints}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={({ item }) => (
+                    <MeasurementPointCard equipmentId={piece.id} item={item} />
+                  )}
+                  ListEmptyComponent={
+                    isLoading ? (
+                      <Loading />
+                    ) : (
+                      <View>{/* <Text>Nenhum ponto de medição</Text> */}</View>
+                    )
+                  }
+                />
+              </Content>
+            </>
+          )}
+        </ScrollView>
       )}
     </Container>
   );

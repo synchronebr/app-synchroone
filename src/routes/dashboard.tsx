@@ -12,6 +12,7 @@ import { ConfigureParameters } from "../screens/ConfigureParameters";
 import { ConfigureGateway } from "../screens/ConfigureGateway";
 import { AssetDetails } from "../screens/AssetDetails";
 import { Camera } from "../screens/Camera";
+import { EditAssetDetails } from "../screens/EditAssetDetails";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
 import { Manuals } from "../screens/Manuals";
@@ -143,6 +144,13 @@ export function Dashboard() {
         name="Camera"
         options={{
           headerShown: false,
+        }}
+      />
+      <Screen
+        component={EditAssetDetails}
+        name="EditAssetDetails"
+        options={{
+          headerTitle: "Detalhes do Ativo",
         }}
       />
       <Screen

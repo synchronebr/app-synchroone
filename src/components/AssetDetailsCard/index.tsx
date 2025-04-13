@@ -1,38 +1,36 @@
 import React from "react";
-import { RFValue } from "react-native-responsive-fontsize";
+import { TouchableOpacityProps } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 
-import { TotalNotifications } from "../TotalNotifications";
-
-import BellRingingIcon from "../../assets/icons/bell-ringing.svg";
-
-import { Container, Details, Title, Text, IconContainer, Icon } from "./styles";
+import { Container, Details, Title, Text } from "./styles";
 import { IPiece } from "../../services/dtos/IPiece";
+import { useTheme } from "styled-components/native";
 
-interface IAssetDetailsCard {
+interface IAssetDetailsCard extends TouchableOpacityProps {
   piece: IPiece;
 }
 
-export function AssetDetailsCard({ piece }: IAssetDetailsCard) {
+export function AssetDetailsCard({ piece, ...rest }: IAssetDetailsCard) {
+  const THEME = useTheme();
+
   return (
-    <Container>
+    <Container {...rest}>
       <Details>
         <Text>
-          <Title>Tipo: </Title>{piece && piece.pieceType ? piece.pieceType.description : '-'} 
+          <Title>Tipo: </Title>
+          {piece && piece.pieceType ? piece.pieceType.description : "-"}
         </Text>
         <Text>
-          <Title>Marca: </Title>{piece && piece.brand ? piece.brand : '-'}
+          <Title>Marca: </Title>
+          {piece && piece.brand ? piece.brand : "-"}
         </Text>
         <Text>
-          <Title>Modelo: </Title>{piece && piece.model ? piece.model : '-'}
+          <Title>Modelo: </Title>
+          {piece && piece.model ? piece.model : "-"}
         </Text>
       </Details>
 
-      {/* <IconContainer>
-        <Icon>
-          <BellRingingIcon height={RFValue(18)} width={RFValue(18)} />
-          <TotalNotifications total={1} />
-        </Icon>
-      </IconContainer> */}
+      <FontAwesome name="edit" size={24} color={THEME.colors.primary} />
     </Container>
   );
 }

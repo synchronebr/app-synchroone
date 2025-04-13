@@ -274,7 +274,11 @@ export function Assets() {
         <>
           {assets.length > 0 ? (
             <List
-              data={assets}
+              data={assets.filter((asset) =>
+                asset?.description
+                  ?.toLowerCase()
+                  ?.includes(searchFieldValue.toLowerCase())
+              )}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <AssetCard item={item} key={`asset-${item.id.toString()}`} />

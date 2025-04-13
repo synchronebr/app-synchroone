@@ -6,7 +6,10 @@ import { DropdownProps } from "./types";
 import { Text, Container, ErrorText } from "./styles";
 
 export const Dropdown = forwardRef<Picker<string>, DropdownProps>(
-  function Dropdown({ data, editable, error, errorTextColor, label, ...rest }, ref) {
+  function Dropdown(
+    { data, editable, error, errorTextColor, label, ...rest },
+    ref
+  ) {
     const THEME = useTheme();
 
     return (
@@ -18,6 +21,7 @@ export const Dropdown = forwardRef<Picker<string>, DropdownProps>(
             dropdownIconColor={
               editable ? THEME.colors.primary : THEME.colors.gray
             }
+            enabled={editable}
             itemStyle={{
               color: error ? errorTextColor : THEME.colors.primary,
               fontFamily: THEME.fonts.medium,
@@ -47,9 +51,7 @@ export const Dropdown = forwardRef<Picker<string>, DropdownProps>(
           </Picker>
         </Container>
         {error && (
-          <ErrorText errorTextColor={errorTextColor}>
-            {error}
-          </ErrorText>
+          <ErrorText errorTextColor={errorTextColor}>{error}</ErrorText>
         )}
       </>
     );

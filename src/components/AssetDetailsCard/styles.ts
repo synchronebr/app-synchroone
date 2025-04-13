@@ -1,6 +1,8 @@
 import styled from "styled-components/native";
 
-export const Container = styled.View`
+export const Container = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.secondary_light};
   border-radius: 8px;
@@ -24,14 +26,3 @@ export const Text = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.normal}px;
 `;
-
-export const IconContainer = styled.View`
-  align-items: center;
-  background-color: ${({ theme }) => theme.colors.secondary};
-  border-radius: 128px;
-  height: 40px;
-  justify-content: center;
-  width: 40px;
-`;
-
-export const Icon = styled.View``;

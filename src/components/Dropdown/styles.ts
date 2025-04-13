@@ -14,7 +14,7 @@ export const Container = styled.View`
 `;
 
 interface IErrorText {
-  errorTextColor: string
+  errorTextColor: string;
 }
 
 export const ErrorText = styled.Text<IErrorText>`
