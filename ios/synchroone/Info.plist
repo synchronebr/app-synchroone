@@ -20,6 +20,19 @@
 	<string>1.0.4</string>
 	<key>CFBundleVersion</key>
 	<string>29</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>org.name.synchroone</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>synchroone</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>whatsapp</string>
