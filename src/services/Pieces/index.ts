@@ -10,14 +10,11 @@ export async function getPiecesTypes() {
 
 export async function updatePieceData(
   companyID: number,
-  areaID: string,
-  sectorID: number,
-  machineID: number,
   pieceID: number,
   request: UpdatePieceData
 ) {
   const response = await api.patch(
-    `companies/${companyID}/areas/${areaID}/sectors/${sectorID}/machines/${machineID}/pieces/${pieceID}/partialInfos`,
+    `companies/${companyID}/assets/${pieceID}/partialInfos`,
     request
   );
 

@@ -37,7 +37,7 @@ import {
 } from "../../services/Equipments";
 import { IReading } from "../../services/dtos/IReading";
 import { IPiece } from "../../services/dtos/IPiece";
-import { updatePieceImage } from "../../services/Companies/Areas/Sectors/Machines/Pieces/MeasuringPoints";
+import { updatePieceImage } from "../../services/Companies/Pieces/MeasuringPoints";
 
 import { AssetDetailsRouteProps } from "./types";
 import {
@@ -120,10 +120,6 @@ export function AssetDetails() {
       });
 
       const { status } = await updatePieceImage(
-        piece.machine.sector.area.company.id,
-        piece.machine.sector.area.id,
-        piece.machine.sector.id,
-        piece.machine.id,
         piece.id,
         formData
       );
@@ -371,7 +367,7 @@ export function AssetDetails() {
 
                 <Asset status={readings[0]?.securityStatus}>
                   <Title>{piece?.description}</Title>
-                  <Subtitle>{piece?.machine.name}</Subtitle>
+                  <Subtitle>{piece?.path?.title}</Subtitle>
                 </Asset>
               </Header>
 
@@ -383,9 +379,6 @@ export function AssetDetails() {
                     navigation.navigate("EditAssetDetails", {
                       id: piece?.id,
                       description: piece?.description,
-                      machineID: piece?.machine?.id,
-                      sectorID: piece?.machine?.sector?.id,
-                      areaID: piece?.machine?.sector?.area?.id,
                     })
                   }
                   piece={piece}

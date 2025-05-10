@@ -5,9 +5,6 @@ import { EquipmentsResponse } from "./types";
 
 type EquipmentsFilters = {
   companyId: number
-  areaId?: number
-  machineId?: number
-  sectorId?: number
   unitId?: number
   responsibleId?: number
   search?: string

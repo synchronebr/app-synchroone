@@ -44,7 +44,7 @@ export function EditAssetDetails() {
   const { getAccessLevelsData } = useAccessLevels();
   const accessLevels = getAccessLevelsData();
 
-  const { id, description, sectorID, machineID, areaID } =
+  const { id, description } =
     route.params as EditAssetDetailsRouteProps;
 
   const schema = yup.object().shape({
@@ -103,9 +103,6 @@ export function EditAssetDetails() {
     try {
       await updatePieceData(
         accessLevels.currentCompany.companyId,
-        areaID,
-        sectorID,
-        machineID,
         id,
         request
       );

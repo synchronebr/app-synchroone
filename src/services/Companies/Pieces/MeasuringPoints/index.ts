@@ -1,19 +1,17 @@
-import api from "../../../../../../api";
+import api from "../../../api";
 
 // import { CompaniesResponse } from "./types";
 
 export async function getMeasuringPointsForSelect(
   companyId: number,
-  areaId: number,
-  sectorId: number,
-  machineId: number,
   pieceId: number
 ): Promise<{ label: string; value: string }[] | any> {
   let response = await api.get(
-    `companies/${companyId}/areas/${areaId}/sectors/${sectorId}/machines/${machineId}/pieces/${pieceId}/measuringPoints`,
+    `assets/${pieceId}/measuringPoints`,
     {
       params: {
-        notSetUp: true,
+        companyId,
+        notSetUp: false,
       }
     }
   );
@@ -30,14 +28,11 @@ export async function getMeasuringPointsForSelect(
 
 export async function updatePieceImage(
   companyId: number,
-  areaId: number,
-  sectorId: number,
-  machineId: number,
   pieceId: number,
   formData: FormData
 ) {
   return await api.put(
-    `companies/${companyId}/areas/${areaId}/sectors/${sectorId}/machines/${machineId}/pieces/${pieceId}/image`,
+    `assets/${pieceId}/image`,
     formData,
     {
       headers: {

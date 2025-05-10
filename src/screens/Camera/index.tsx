@@ -9,7 +9,7 @@ import { Toast } from "react-native-toast-notifications";
 
 import { Loading } from "../../components/Loading";
 
-import { updatePieceImage } from "../../services/Companies/Areas/Sectors/Machines/Pieces/MeasuringPoints";
+import { updatePieceImage } from "../../services/Companies/Pieces/MeasuringPoints";
 
 import { Container, CloseIcon, FlashIcon, TakePicture } from "./styles";
 
@@ -39,10 +39,7 @@ export function Camera() {
 
     try {
       const { status } = await updatePieceImage(
-        params.piece.machine.sector.area.company.id,
-        params.piece.machine.sector.area.id,
-        params.piece.machine.sector.id,
-        params.piece.machine.id,
+        params.piece.company.id,
         params.piece.id,
         formData
       );

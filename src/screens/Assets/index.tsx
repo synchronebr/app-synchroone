@@ -22,9 +22,9 @@ import Drawer from "../../components/Drawer";
 import Select from "../../components/Select";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
 import { useFocusEffect } from "@react-navigation/native";
-import { getSectorsForSelect } from "../../services/Companies/Areas/Sectors";
-import { getMachinesForSelect } from "../../services/Companies/Areas/Sectors/Machines";
-import { getAreasForSelect } from "../../services/Companies/Areas";
+// import { getSectorsForSelect } from "../../services/Companies/Areas/Sectors";
+// import { getMachinesForSelect } from "../../services/Companies/Areas/Sectors/Machines";
+// import { getAreasForSelect } from "../../services/Companies/Areas";
 
 export function Assets() {
   const { getAccessLevelsData } = useAccessLevels();
@@ -123,61 +123,61 @@ export function Assets() {
     getEquips(appliedFilters); // Pass applied filters
   }
 
-  const getAreas = async () => {
-    const companyId = accessLevels.currentCompany.companyId;
-    const items = await getAreasForSelect(Number(companyId));
-    setAreas(items);
-    setDataFilters((old) => ({ ...old, companyId: companyId }));
-  };
+  // const getAreas = async () => {
+  //   const companyId = accessLevels.currentCompany.companyId;
+  //   const items = await getAreasForSelect(Number(companyId));
+  //   setAreas(items);
+  //   setDataFilters((old) => ({ ...old, companyId: companyId }));
+  // };
 
-  useEffect(() => {
-    getAreas();
-  }, []);
+  // useEffect(() => {
+  //   getAreas();
+  // }, []);
 
-  const handleChangeAreas = useCallback(
-    async (value: any) => {
-      if (selectedArea === value) return; // Evita loop infinito se o valor já for o mesmo
+  // const handleChangeAreas = useCallback(
+  //   async (value: any) => {
+  //     if (selectedArea === value) return; // Evita loop infinito se o valor já for o mesmo
 
-      const id = Number(value);
-      setSelectedArea(value); // Atualiza o estado primeiro
+  //     const id = Number(value);
+  //     setSelectedArea(value); // Atualiza o estado primeiro
 
-      try {
-        const items = await getSectorsForSelect(dataFilters.companyId, id);
-        setSectors(items);
-        setDataFilters((old) => ({ ...old, areaId: id }));
-      } catch (error) {
-        console.error("Erro ao buscar setores:", error);
-      }
-    },
-    [selectedArea, dataFilters.companyId]
-  );
+  //     try {
+  //       const items = await getSectorsForSelect(dataFilters.companyId, id);
+  //       setSectors(items);
+  //       setDataFilters((old) => ({ ...old, areaId: id }));
+  //     } catch (error) {
+  //       console.error("Erro ao buscar setores:", error);
+  //     }
+  //   },
+  //   [selectedArea, dataFilters.companyId]
+  // );
 
-  const handleChangeSector = useCallback(
-    async (value: any) => {
-      if (selectedSector === value) return; // Evita loop infinito se o valor já for o mesmo
+  // const handleChangeSector = useCallback(
+  //   async (value: any) => {
+  //     if (selectedSector === value) return; // Evita loop infinito se o valor já for o mesmo
 
-      const id = Number(value);
-      setSelectedSector(value);
+  //     const id = Number(value);
+  //     setSelectedSector(value);
 
-      try {
-        const items = await getMachinesForSelect(
-          dataFilters.companyId,
-          dataFilters.areaId,
-          id
-        );
-        setMachines(items);
-        setDataFilters((old) => ({ ...old, sectorId: id }));
-      } catch (error) {
-        console.error("Erro ao buscar maquinas:", error);
-      }
-    },
-    [selectedSector, dataFilters.areaId]
-  );
+  //     try {
+  //       const items = await getMachinesForSelect(
+  //         dataFilters.companyId,
+  //         dataFilters.areaId,
+  //         id
+  //       );
+  //       setMachines(items);
+  //       setDataFilters((old) => ({ ...old, sectorId: id }));
+  //     } catch (error) {
+  //       console.error("Erro ao buscar maquinas:", error);
+  //     }
+  //   },
+  //   [selectedSector, dataFilters.areaId]
+  // );
 
-  const handleChangeMachine = async (value: any) => {
-    setDataFilters((old) => ({ ...old, machineId: value }));
-    setSelectedMachine(value);
-  };
+  // const handleChangeMachine = async (value: any) => {
+  //   setDataFilters((old) => ({ ...old, machineId: value }));
+  //   setSelectedMachine(value);
+  // };
 
   useFocusEffect(
     useCallback(() => {
@@ -207,7 +207,7 @@ export function Assets() {
               <CrossIcon onPress={closeFilter} />
             </View>
             <View style={styles.filterContent}>
-              <Select
+              {/* <Select
                 editable
                 label="Área"
                 placeholder="Selecione a área"
@@ -232,7 +232,7 @@ export function Assets() {
                 selected={selectedMachine}
                 values={machines}
                 onSelect={handleChangeMachine}
-              />
+              /> */}
 
               {/* <Select
                 editable

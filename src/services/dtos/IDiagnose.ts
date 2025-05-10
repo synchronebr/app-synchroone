@@ -14,21 +14,13 @@ export interface IDiagnose {
             piece: {
                 id: string;
                 description: string;
-                machine: {
+                company: {
                     id: string;
                     name: string;
-                    sector: {
-                        id: string;
-                        name: string;
-                        area: {
-                            id: string;
-                            name: string;
-                            company: {
-                                id: string;
-                                name: string;
-                            }
-                        }
-                    }
+                },
+                path?: {
+                    id: number;
+                    title: string;
                 }
             }
         }

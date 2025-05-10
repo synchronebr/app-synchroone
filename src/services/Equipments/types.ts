@@ -1,8 +1,8 @@
-import { IMachine } from "../dtos/IMachine";
+import { IPiece } from "../dtos/IPiece";
 
 export type EquipmentsResponse = {
   data: {
-    items: IMachine[]
+    items: IPiece[]
     filters: Record<string, { id: number, name: string }[]>
   }
   total: number;

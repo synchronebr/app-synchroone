@@ -165,7 +165,7 @@ export function AlertDetails() {
               {data.reading.measuringPoint.piece.description}
             </PieceText>
             <PiecePath>
-              {`${data.reading.measuringPoint.piece.machine.sector.area.company.name} > ${data.reading.measuringPoint.piece.machine.sector.area.name} > ${data.reading.measuringPoint.piece.machine.sector.name} > ${data.reading.measuringPoint.piece.machine.name}`}
+              {/* {`${data.reading.measuringPoint.piece.machine.sector.area.company.name} > ${data.reading.measuringPoint.piece.machine.sector.area.name} > ${data.reading.measuringPoint.piece.machine.sector.name} > ${data.reading.measuringPoint.piece.machine.name}`} */}
             </PiecePath>
           </PieceDiv>
 

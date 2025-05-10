@@ -1,10 +1,10 @@
-import { IMachine } from "./IMachine";
-import { IMeasuringpoint } from "./IMeasuringPoint";
+import { IPath } from "./IPath";
+import { IMeasuringPoint } from "./IMeasuringPoint";
 
 export interface IEquipment {
   id: number;
   description: string;
-  machine: IMachine;
-  measuringPoints: IMeasuringpoint[]
+  path: IPath;
+  measuringPoints: IMeasuringPoint[]
   image?: string;
 }

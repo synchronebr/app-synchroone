@@ -1,4 +1,4 @@
-import { IMachine } from "./IMachine";
+import { IPath } from "./IPath";
 import { IMeasuringPoint } from "./IMeasuringPoint";
 import { IResponsible } from "./IResponsible";
 
@@ -22,6 +22,6 @@ export interface IPiece {
         responsible: IResponsible;
     }[];
     transmission: number;
-    machine: IMachine,
+    path?: IPath,
     measuringPoints: IMeasuringPoint[]
 }

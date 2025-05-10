@@ -61,7 +61,7 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
       <Content>
         <Title>{item.description}</Title>
 
-        <Subtitle>{item.machine.name}</Subtitle>
+        <Subtitle>{item.path?.title}</Subtitle>
 
         {/* <Text>5 sensores</Text> */}
 
