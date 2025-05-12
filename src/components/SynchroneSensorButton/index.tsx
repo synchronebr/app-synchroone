@@ -15,8 +15,8 @@ export function SynchroneSensorButton() {
   const iconSize = 28;
 
   async function getCameraPermission() {
-    // navigation.navigate("PreConfigureSensor" as never, { type: 'S' });
-    navigation.navigate("ConfigureParameters" as never, { type: 'S' });
+    navigation.navigate("PreConfigureSensor" as never, { type: 'S' });
+    // navigation.navigate("ConfigureParameters" as never, { type: 'S' }); // testes
   }
 
   return (
