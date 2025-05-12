@@ -246,7 +246,7 @@ export function ConfigureParameters( { route } ) {
                   selected={value}
                   onSelect={(value) => {onChange(value);handleChangePiece(value)}}
                   label="Ativo" 
-                  error={errors?.companyId?.message}
+                  error={errors?.pieceId?.message}
                   errorTextColor={THEME.colors.danger}
                   placeholder="Selecione uma ativo"
                 />
@@ -266,7 +266,7 @@ export function ConfigureParameters( { route } ) {
                     selected={value}
                     onSelect={(value) => {onChange(value);handleChangeMeasuringPoint(value)}}
                     label="Ponto de Medição" 
-                    error={errors?.companyId?.message}
+                    error={errors?.measuringPointId?.message}
                     errorTextColor={THEME.colors.danger}
                     placeholder="Selecione uma ponto de medição"
                   />
