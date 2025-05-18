@@ -50,15 +50,21 @@ export function ConfigureParameters( { route } ) {
   const [measuringPoints, setMeasuringPoints] = useState([]);
   const [isLoadingPost, setIsLoadingPost] = useState(false);
 
-  const getCompanies = async () => {
+  const getLocation = async () => {
+    console.log('entryyyyy')
     const items = await getPathsForSelect(currentCompany?.companyId);
     setPathLevels([items]); 
     setSelectedPaths([""]);
     setData((old) => ({ ...old, companyId: currentCompany?.companyId }));
+
+    const pieces = await getPiecesForSelect(currentCompany?.companyId);
+    console.log(pieces)
+    console.log('currentCompany?.companyId', currentCompany?.companyId)
+    setPieces(pieces);
   }
 
   useEffect(() => {
-    getCompanies();
+    getLocation();
     verifyConnecton()
   }, [])
 
@@ -77,7 +83,7 @@ export function ConfigureParameters( { route } ) {
   
     const items = await getPathsForSelect(currentCompany?.companyId, Number(value));
   
-    const pieces = await getPiecesForSelect(data.companyId, Number(value));
+    const pieces = await getPiecesForSelect(currentCompany?.companyId, Number(value));
     setPieces(pieces);
 
     if (!items || items.length === 0) {
@@ -95,17 +101,9 @@ export function ConfigureParameters( { route } ) {
     setPathFinished(false);
   };
 
-  // const handleChangeMachine = async (value: any) => {
-  //   const id = Number(value);
-  //   const items = await getPiecesForSelect(data.companyId, data.areaId, data.sectorId, id);
-  //   setPieces(items);
-  //   console.log(items)
-  //   setData((old) => ({ ...old, machineId: id }));
-  // }
-
   const handleChangePiece = async (value: any) => {
     const id = Number(value);
-    const items = await getMeasuringPointsForSelect(data.companyId, id);
+    const items = await getMeasuringPointsForSelect(currentCompany?.companyId, id);
     setMeasuringPoints(items);
     setData((old) => ({ ...old, pieceId: id }));
   }
@@ -165,7 +163,7 @@ export function ConfigureParameters( { route } ) {
     try {
       await sendCommands()
 
-      const url = `companies/${formData.companyId}/devices/${route.params.bluetoothDeviceName}/set-up`;
+      const url = `companies/${currentCompany?.companyId}/devices/${route.params.bluetoothDeviceName}/set-up`;
       // const url = `companies/${formData.companyId}/devices/SSYNC-AAA1/set-up`;
       const request = await api.post(url, {
         measuringPointId: Number(formData.measuringPointId),
@@ -204,7 +202,7 @@ export function ConfigureParameters( { route } ) {
       {isLoading && (
         <Loading bgColor={'transparent'} color={THEME.colors.primary} />
       )}
-{/* 
+
       {!isLoading && !connectedDevice && (
         <Content>
           <Text>Não foi possível conectar com o sensor {route.params.bluetoothDeviceName}</Text>
@@ -217,9 +215,9 @@ export function ConfigureParameters( { route } ) {
             />
           </ButtonTryAgain>
         </Content>
-      )} */}
+      )}
 
-      {/* {!isLoading && connectedDevice && ( */}
+      {!isLoading && connectedDevice && (
         <Scroll>
           {pathLevels?.map((path, i) => (
             <DropdownWrapper key={i}>
@@ -254,7 +252,7 @@ export function ConfigureParameters( { route } ) {
             />
           </DropdownWrapper>
           
-          {pieces && pieces.length > 0 && (
+          {measuringPoints && measuringPoints.length > 0 && (
             <DropdownWrapper>
               <Controller
                 name="measuringPointId"
@@ -280,7 +278,7 @@ export function ConfigureParameters( { route } ) {
             <Text>Intervalo de Medição (minutos)</Text>
 
             <MinutesInterval>
-              <MinutesIntervalButton title="5" selected={interval===5} onPress={() => setInterval(2)}/>
+              <MinutesIntervalButton title="5" selected={interval===5} onPress={() => setInterval(5)}/>
               <MinutesIntervalButton title="10" selected={interval===10} onPress={() => setInterval(10)}/>
               <MinutesIntervalButton title="20" selected={interval===20} onPress={() => setInterval(20)}/>
               <MinutesIntervalButton title="30" selected={interval===30} onPress={() => setInterval(30)}/>
@@ -300,7 +298,7 @@ export function ConfigureParameters( { route } ) {
             />
           </ButtonWrapper>
       </Scroll>
-      {/* )} */}
+      )} 
     </Container>
   );
 }
