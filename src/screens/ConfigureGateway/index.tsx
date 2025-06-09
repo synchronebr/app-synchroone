@@ -52,13 +52,19 @@ export function ConfigureGateway( { route } ) {
       await connectedDevice.connect()
     } 
     
-    const device = await getDevicesById(currentCompany?.companyId, route.params.bluetoothDeviceName);
-
+    let device
+    try {
+      device = await getDevicesById(currentCompany?.companyId, route.params.bluetoothDeviceName);
+    } catch (error) {
+      console.log('error get device', error)
+    }
+    
     if (!device) {
       Toast.show(
         "Ocorreu um erro ao buscar a configuração do gateway no servidor. Por favor, tente novamente.",
         { type: "danger" }
       );
+      return false;
     }
   
     await connectedDevice.discoverAllServicesAndCharacteristics();
@@ -74,7 +80,7 @@ export function ConfigureGateway( { route } ) {
     sendCommand(connectedDevice, "URL2:https://sensors.synchroone.com/sensors/gateways#end");
     sendCommand(connectedDevice, "API-KEY:d554752e-4e64-4efw-ac2d-d1vv996f627a#end");
     sendCommand(connectedDevice, "PORT:3334#end");
-    sendCommand(connectedDevice, `PN:${device}#end`);
+    sendCommand(connectedDevice, `PN:${device.apn}#end`);
     sendCommand(connectedDevice, "SYNC-TPB:10#end");
     sendCommand(connectedDevice, "SYNC-TBLE:30#end");
     sendCommand(connectedDevice, "SYNC-FINISH#end");
