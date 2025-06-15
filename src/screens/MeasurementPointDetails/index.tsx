@@ -260,7 +260,7 @@ export function MeasurementPointDetails({ route, nabigation }) {
                         color={THEME.colors.primary}
                       />
 
-                      <CardTitle>43 C</CardTitle>
+                      <CardTitle>{item.measuringPoint.readings[0].temperature} C</CardTitle>
                     </Temperature>
                   </TemperatureCard>
                 </CardsContent>
