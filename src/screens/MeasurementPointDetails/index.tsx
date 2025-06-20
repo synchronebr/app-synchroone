@@ -7,7 +7,8 @@ import { Toast } from "react-native-toast-notifications";
 import { format, differenceInDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-// import { PieChart } from "react-native-svg-charts";
+import { PieChart } from "react-native-svg-charts";
+import { LargeAreaChart } from '../../components/Charts/LargeAreaChart'
 
 import {
   Container,
@@ -312,48 +313,81 @@ export function MeasurementPointDetails({ route, nabigation }) {
                 </>
               )}
 
-              {/* <Text>Gráficos</Text> */}
+              <Text>Gráficos</Text>
 
-              {/* <Graphics>
-            <GraphicsButtons>
-              <GraphicButton>
-                <GraphicButtonText>Aceleração RMS</GraphicButtonText>
-              </GraphicButton>
+              <Graphics>
+                <GraphicsButtons>
+                  <GraphicButton>
+                    <GraphicButtonText>Aceleração RMS</GraphicButtonText>
+                  </GraphicButton>
 
-              <GraphicButton>
-                <GraphicButtonText>Velocidade RMS</GraphicButtonText>
-              </GraphicButton>
+                  <GraphicButton>
+                    <GraphicButtonText>Velocidade RMS</GraphicButtonText>
+                  </GraphicButton>
 
-              <GraphicButton>
-                <GraphicButtonText>Temperatura Média</GraphicButtonText>
-              </GraphicButton>
-            </GraphicsButtons>
+                  <GraphicButton>
+                    <GraphicButtonText>Temperatura Média</GraphicButtonText>
+                  </GraphicButton>
+                </GraphicsButtons>
 
-            <GraphicImage
-              resizeMode="container"
-              source={require("../../assets/images/graphic-1.png")}
-            />
+                {/* <StatusHistoryContainer>
+                  <StatusHistory>Histórico de Status</StatusHistory>
+                </StatusHistoryContainer> */}
 
-            <StatusHistoryContainer>
-              <StatusHistory>Histórico de Status</StatusHistory>
-            </StatusHistoryContainer>
+                {/* <PieChart
+                  style={{ height: 200 }}
+                  data={pieData}
+                  innerRadius={50} // Define a aparência de "rosca"
+                  outerRadius={"95%"}
+                /> */}
 
-            <PieChart
-              style={{ height: 200 }}
-              data={pieData}
-              innerRadius={50} // Define a aparência de "rosca"
-              outerRadius={"95%"}
-            />
+                <LargeAreaChart 
+                  data={{
+                    xAxis: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    x: [
+                      { value: 0.53 },
+                      { value: 2.14 },
+                      { value: 1.89 },
+                      { value: 3.67 },
+                      { value: 4.23 },
+                      { value: 0.97 },
+                      { value: 2.75 },
+                      { value: 1.35 },
+                      { value: 4.92 },
+                      { value: 3.10 }
+                    ],
+                    y: [
+                      { value: 1.27 },
+                      { value: 5.43 },
+                      { value: 3.68 },
+                      { value: 9.12 },
+                      { value: 7.84 },
+                      { value: 2.61 },
+                      { value: 8.97 },
+                      { value: 6.30 },
+                      { value: 4.05 },
+                      { value: 5.51 }
+                    ],
+                    z: [
+                      { value: 2.31 },
+                      { value: 10.14 },
+                      { value: 7.42 },
+                      { value: 14.26 },
+                      { value: 11.73 },
+                      { value: 3.52 },
+                      { value: 13.89 },
+                      { value: 9.78 },
+                      { value: 6.08 },
+                      { value: 12.44 }
+                    ]
+                  }}
+                  actionType='A'
+                />
 
-            <StatusHistoryContainer>
-              <StatusHistory>Raio-X de Monitoramento</StatusHistory>
-            </StatusHistoryContainer>
-
-            <GraphicImage
-              resizeMode="container"
-              source={require("../../assets/images/graphic-3.png")}
-            />
-          </Graphics> */}
+                {/* <StatusHistoryContainer>
+                  <StatusHistory>Raio-X de Monitoramento</StatusHistory>
+                </StatusHistoryContainer> */}
+              </Graphics>
             </Content>
           )}
         </>
