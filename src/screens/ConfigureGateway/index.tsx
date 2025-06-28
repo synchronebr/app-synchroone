@@ -71,7 +71,7 @@ export function ConfigureGateway( { route } ) {
     sendCommand(connectedDevice, "GSYNC-OK#end");
     sendCommand(connectedDevice, `SN:${route.params.bluetoothDeviceName}#end`);
     sendCommand(connectedDevice, "PASS:5enh@SYNC24#end");
-    sendCommand(connectedDevice, `SYNC-TD:10#end`);
+    sendCommand(connectedDevice, `SYNC-TD:1#end`);
     sendCommand(connectedDevice, "SYNC-MODE:1#end");
     if (ssid) sendCommand(connectedDevice, `SSID:${ssid}#end`);
     if (password) sendCommand(connectedDevice, `PS:${password}#end`);
