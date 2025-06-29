@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { View, Dimensions, StyleSheet, GestureResponderEvent } from "react-native";
+import { View, Dimensions, StyleSheet } from "react-native";
 import {
   VictoryChart,
   VictoryLine,
@@ -9,11 +9,12 @@ import {
   VictoryTheme,
   VictoryLabel,
   createContainer,
+  VictoryClipContainer,
 } from "victory-native";
 
 interface LargeAreaChartProps {
   data: {
-    xAxis: number[];
+    xAxis: string[]; // ISO date strings
     x: { value: number }[];
     y: { value: number }[];
     z: { value: number }[];
@@ -30,16 +31,18 @@ export function LargeAreaChart({
   safeLines = {},
 }: LargeAreaChartProps) {
   const [xDomain, setXDomain] = useState<[number, number]>();
-  const [visible, setVisible] = useState({ X: true, Y: true, Z: true });
-  const [hovered, setHovered] = useState<string | null>(null);
+  const [focusedAxis, setFocusedAxis] = useState<"X" | "Y" | "Z" | null>(null);
   const { width } = Dimensions.get("window");
 
-  // Limpar zoom sempre que a série de dados mudar
+  const xAxisTimestamps = useMemo(
+    () => data.xAxis.map((d) => new Date(d).getTime()),
+    [data.xAxis]
+  );
+
   useEffect(() => {
     setXDomain(undefined);
   }, [data.xAxis]);
 
-  // Label do eixo Y
   const yLabel = useMemo(() => {
     switch (actionType) {
       case "A":
@@ -53,144 +56,147 @@ export function LargeAreaChart({
     }
   }, [actionType]);
 
-  // Gera séries de linha + ponto
   const makeSeries = useCallback(
-    (axis: "X" | "Y" | "Z", color: string, values: { value: number }[]) => {
-      const pts = data.xAxis.map((x, i) => ({ x, y: values[i].value }));
-      const opacity = hovered === axis ? 1 : 0.2;
-      if (!visible[axis]) return null;
+    (
+      axis: "X" | "Y" | "Z",
+      color: string,
+      values: { value: number }[] = []
+    ) => {
+      if (
+        !xAxisTimestamps ||
+        !values ||
+        xAxisTimestamps.length !== values.length
+      ) {
+        return null;
+      }
+
+      const pts = xAxisTimestamps
+        .map((x, i) => {
+          const yVal = values[i]?.value;
+          if (yVal === undefined || yVal === null) return null;
+          return { x, y: yVal };
+        })
+        .filter((pt): pt is { x: number; y: number } => pt !== null);
+
+      const isFocused = focusedAxis === null || focusedAxis === axis;
+
       return (
         <React.Fragment key={axis}>
           <VictoryLine
-            name={axis}
+            name={`line-${axis}`}
             data={pts}
-            style={{ data: { stroke: color, strokeWidth: 2, opacity } }}
+            style={{
+              data: {
+                stroke: color,
+                strokeWidth: 2,
+                opacity: isFocused ? 1 : 0.2,
+              },
+            }}
+            groupComponent={
+              <VictoryClipContainer clipPadding={{ top: 5, right: 0 }} />
+            }
           />
           <VictoryScatter
+            name={`scatter-${axis}`}
             data={pts}
             size={3}
-            style={{ data: { fill: color, opacity } }}
+            style={{
+              data: {
+                fill: color,
+                opacity: isFocused ? 1 : 0.2,
+              },
+            }}
+            groupComponent={
+              <VictoryClipContainer clipPadding={{ top: 5, right: 0 }} />
+            }
           />
         </React.Fragment>
       );
     },
-    [data, visible, hovered]
+    [xAxisTimestamps, focusedAxis]
   );
 
-  // Safe lines (warn/danger)
-  const safeShapes = useMemo(() => {
-    const lines: React.ReactNode[] = [];
-    let red = 0;
-    let yellow = 0;
-
-    if (
-      actionType === "T" &&
-      safeLines.temperatureDangerLimit &&
-      safeLines.temperatureWarnLimit
-    ) {
-      red = safeLines.temperatureDangerLimit;
-      yellow = safeLines.temperatureWarnLimit;
-    } else {
-      (["X", "Y", "Z"] as const).forEach((axis) => {
-        if (!visible[axis]) return;
-        const keyR =
-          axis === "X"
-            ? actionType === "A"
-              ? "accelDangerLimitX"
-              : "velocityDangerLimitX"
-            : axis === "Y"
-            ? actionType === "A"
-              ? "accelDangerLimitY"
-              : "velocityDangerLimitY"
-            : actionType === "A"
-            ? "accelDangerLimitZ"
-            : actionType === "V"
-            ? "velocityDangerLimitZ"
-            : "temperatureDangerLimit";
-        const keyY = keyR.replace("Danger", "Warn");
-        red = safeLines[keyR] ?? red;
-        yellow = safeLines[keyY] ?? yellow;
-      });
-    }
-
-    if (red && yellow) {
-      ;[
-        { y: red, color: "red" },
-        { y: yellow, color: "gold" },
-      ].forEach(({ y, color }) =>
-        lines.push(
-          <VictoryLine
-            key={color}
-            data={[
-              { x: data.xAxis[0], y },
-              { x: data.xAxis[data.xAxis.length - 1], y },
-            ]}
-            style={{ data: { stroke: color, strokeDasharray: "5,5", strokeWidth: 1.5 } }}
-          />
-        )
-      );
-    }
-    return lines;
-  }, [actionType, safeLines, visible, data.xAxis]);
-
-  // Calcular yDomain a partir de todos os pontos
   const yDomain = useMemo<[number, number]>(() => {
-    const all = [
-      ...data.x.map((p) => p.value),
-      ...data.y.map((p) => p.value),
-      ...data.z.map((p) => p.value),
-    ];
-    const min = Math.min(...all);
-    const max = Math.max(...all);
-    const pad = (max - min) * 0.1;
+    const allValues: number[] = [];
+    if (data.x) allValues.push(...data.x.map((p) => p.value));
+    if (data.y) allValues.push(...data.y.map((p) => p.value));
+    if (data.z) allValues.push(...data.z.map((p) => p.value));
+    if (allValues.length === 0) return [0, 1];
+
+    const min = Math.min(...allValues);
+    const max = Math.max(...allValues);
+    const pad = (max - min) * 0.05 || 1;
     return [min - pad, max + pad];
   }, [data]);
 
-  // Dados da legenda e toggle
+  const xDomainSafe = useMemo<[number, number]>(() => {
+    if (!xDomain) {
+      return [xAxisTimestamps[0], xAxisTimestamps[xAxisTimestamps.length - 1]];
+    }
+    const minX = Math.max(xDomain[0], xAxisTimestamps[0]);
+    const maxX = Math.min(
+      xDomain[1],
+      xAxisTimestamps[xAxisTimestamps.length - 1]
+    );
+    return [minX, maxX];
+  }, [xDomain, xAxisTimestamps]);
+
   const legendData = [
     { name: "Horizontal", symbol: { fill: "purple" } },
     { name: "Vertical", symbol: { fill: "blue" } },
     { name: "Axial", symbol: { fill: "orange" } },
   ];
-  const onLegendPress = (i: number) => {
-    const axis = i === 0 ? "X" : i === 1 ? "Y" : "Z";
-    setVisible((v) => ({ ...v, [axis]: !v[axis] }));
+
+  const onLegendPress = (index: number) => {
+    const axis = index === 0 ? "X" : index === 1 ? "Y" : "Z";
+    setFocusedAxis((prev) => (prev === axis ? null : axis));
   };
 
   return (
     <View style={styles.wrapper}>
       <VictoryChart
         theme={VictoryTheme.material}
-        width={width}
+        width={width - 40}
         height={300}
         domain={{
-          x: xDomain ?? [data.xAxis[0], data.xAxis[data.xAxis.length - 1]],
+          x: xDomainSafe,
           y: yDomain,
         }}
-        domainPadding={{ y: 10 }}
-        padding={{ top: 20, bottom: 50, left: 60, right: 30 }}
+        domainPadding={{ x: 20 }}
+        padding={{ top: 30, bottom: 50, left: 60, right: 30 }}
+        scale={{ x: "time" }}
         containerComponent={
           <ZoomVoronoi
             voronoiDimension="x"
             zoomDimension="x"
             labels={() => null}
-            onActivated={(pts) => setHovered(pts[0]?.childName || null)}
             onZoomDomainChange={(d) => d.x && setXDomain(d.x)}
             responsive={false}
           />
         }
       >
-        <VictoryAxis tickValues={data.xAxis} />
+        <VictoryAxis
+          tickValues={xAxisTimestamps}
+          tickFormat={(t) => {
+            const date = new Date(t);
+            return `${date.getDate()}/${
+              date.getMonth() + 1
+            } ${date.getHours()}:${date
+              .getMinutes()
+              .toString()
+              .padStart(2, "0")}`;
+          }}
+          fixLabelOverlap
+        />
         <VictoryAxis
           dependentAxis
           label={yLabel}
           axisLabelComponent={<VictoryLabel dy={-40} />}
         />
 
-        {makeSeries("X", "purple", data.x)}
         {makeSeries("Y", "blue", data.y)}
+        {makeSeries("X", "purple", data.x)}
         {makeSeries("Z", "orange", data.z)}
-        {safeShapes}
       </VictoryChart>
 
       <VictoryLegend
@@ -206,7 +212,16 @@ export function LargeAreaChart({
           {
             target: "data",
             eventHandlers: {
-              onPress: (_e, props) => {
+              onPressIn: (_e, props) => {
+                onLegendPress(props.index);
+                return [];
+              },
+            },
+          },
+          {
+            target: "labels",
+            eventHandlers: {
+              onPressIn: (_e, props) => {
                 onLegendPress(props.index);
                 return [];
               },
@@ -221,7 +236,5 @@ export function LargeAreaChart({
 const styles = StyleSheet.create({
   wrapper: {
     alignItems: "center",
-    justifyContent: "flex-start",
-    marginVertical: 10,
   },
 });
