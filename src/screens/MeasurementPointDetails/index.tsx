@@ -92,6 +92,10 @@ export function MeasurementPointDetails({
     }
   }
 
+  function formatNumber(value: number | null | undefined, decimals = 2) {
+    return typeof value === "number" ? value.toFixed(decimals) : "-";
+  }
+
   async function loadChartData(selectedActionType: "A" | "V" | "T") {
     setIsChartLoading(true);
     try {
@@ -282,8 +286,8 @@ export function MeasurementPointDetails({
                     <InfoData>
                       <CardText>Axial</CardText>
                       <CardSubtitle>
-                        {item.measuringPoint.readings[0].accelAbsoluteX.toFixed(
-                          2
+                        {formatNumber(
+                          item.measuringPoint.readings[0].accelAbsoluteX
                         )}{" "}
                         G
                       </CardSubtitle>
@@ -292,8 +296,8 @@ export function MeasurementPointDetails({
                     <InfoData>
                       <CardText>Vertical</CardText>
                       <CardSubtitle>
-                        {item.measuringPoint.readings[0].accelAbsoluteY.toFixed(
-                          2
+                        {formatNumber(
+                          item.measuringPoint.readings[0].accelAbsoluteY
                         )}{" "}
                         G
                       </CardSubtitle>
@@ -302,8 +306,8 @@ export function MeasurementPointDetails({
                     <InfoData>
                       <CardText>Horizontal</CardText>
                       <CardSubtitle>
-                        {item.measuringPoint.readings[0].accelAbsoluteZ.toFixed(
-                          2
+                        {formatNumber(
+                          item.measuringPoint.readings[0].accelAbsoluteZ
                         )}{" "}
                         G
                       </CardSubtitle>
@@ -318,8 +322,8 @@ export function MeasurementPointDetails({
                     <InfoData>
                       <CardText>Axial</CardText>
                       <CardSubtitle>
-                        {item.measuringPoint.readings[0].velAbsoluteX.toFixed(
-                          2
+                        {formatNumber(
+                          item.measuringPoint.readings[0].velAbsoluteX
                         )}{" "}
                         m/s²
                       </CardSubtitle>
@@ -328,8 +332,8 @@ export function MeasurementPointDetails({
                     <InfoData>
                       <CardText>Vertical</CardText>
                       <CardSubtitle>
-                        {item.measuringPoint.readings[0].velAbsoluteY.toFixed(
-                          2
+                        {formatNumber(
+                          item.measuringPoint.readings[0].velAbsoluteY
                         )}{" "}
                         m/s²
                       </CardSubtitle>
@@ -338,8 +342,8 @@ export function MeasurementPointDetails({
                     <InfoData>
                       <CardText>Horizontal</CardText>
                       <CardSubtitle>
-                        {item.measuringPoint.readings[0].velAbsoluteZ.toFixed(
-                          2
+                        {formatNumber(
+                          item.measuringPoint.readings[0].velAbsoluteZ
                         )}{" "}
                         m/s²
                       </CardSubtitle>
@@ -411,7 +415,7 @@ export function MeasurementPointDetails({
           <Text>Gráficos</Text>
 
           <Graphics>
-            <GraphicsButtons>
+            <GraphicsButtons style={{ marginBottom: 25 }}>
               <GraphicButton
                 onPress={() => handleGraphicButtonClick("A")}
                 style={{
