@@ -467,7 +467,7 @@ export function MeasurementPointDetails({
 
             {isChartLoading ? (
               <Loading bgColor="transparent" color={THEME.colors.primary} />
-            ) : chartData ? (
+            ) : chartData && chartData.xAxis.length > 0 ? (
               <LargeAreaChart
                 data={chartData}
                 actionType={actionType}
