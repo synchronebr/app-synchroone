@@ -122,10 +122,8 @@ export function ConfigureParameters( { route } ) {
     await connectedDevice.discoverAllServicesAndCharacteristics();
     sendCommand(connectedDevice, "SSYNC-OK");
     sendCommand(connectedDevice, `SN:${route.params.bluetoothDeviceName}`);
-    // sendCommand(connectedDevice, "SN:A55EAC");
     sendCommand(connectedDevice, "PASS:5enh@SYNC24");
     sendCommand(connectedDevice, `SYNC-TD:${interval}`);
-    // sendCommand(connectedDevice, `SYNC-TD:1`);
     sendCommand(connectedDevice, "SYNC-STH:100");
     sendCommand(connectedDevice, "SYNC-SM:10");
     sendCommand(connectedDevice, "SYNC-SI:300");
