@@ -411,7 +411,10 @@ export function MeasurementPointDetails({
               )}
             </>
           ) : null}
-
+          
+          {item.measuringPoint.type === enums.MeasuringPoints.Type.Online &&
+          item.measuringPoint.readings.length > 0 && (
+          <>
           <Text>Gráficos</Text>
 
           <Graphics>
@@ -460,13 +463,21 @@ export function MeasurementPointDetails({
                     color: actionType === "T" ? "white" : THEME.colors.text,
                   }}
                 >
-                  Temperatura Média
+                  Temperatura
                 </GraphicButtonText>
               </GraphicButton>
             </GraphicsButtons>
 
             {isChartLoading ? (
-              <Loading bgColor="transparent" color={THEME.colors.primary} />
+              <ContentLoader
+                width={width}
+                height={300}
+                viewBox={`0 0 ${width} 300`}
+                preserveAspectRatio="none"
+                style={{ marginVertical: 16 }}
+              >
+                <Rect x="0" y="0" rx="0" ry="0" width={width} height={300} />
+              </ContentLoader>
             ) : chartData && chartData.xAxis.length > 0 ? (
               <LargeAreaChart
                 data={chartData}
@@ -477,6 +488,7 @@ export function MeasurementPointDetails({
               <Text>Sem dados para exibir no gráfico.</Text>
             )}
           </Graphics>
+          </>)}
         </Content>
       )}
     </Container>

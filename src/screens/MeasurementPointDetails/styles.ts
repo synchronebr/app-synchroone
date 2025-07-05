@@ -150,7 +150,7 @@ export const GraphicButton = styled.TouchableOpacity`
   background-color: rgba(241, 245, 249, 1);
   border-radius: 8px;
   flex: 1;
-  padding: 8px 18px;
+  padding: 8px 10px;
 `;
 
 export const GraphicButtonText = styled.Text`
