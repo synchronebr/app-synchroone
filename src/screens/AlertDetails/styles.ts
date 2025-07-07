@@ -115,7 +115,7 @@ export const CardsInfo = styled.View`
 `;
 
 interface CardInfoProps {
-  hazardousness: 'S' | 'W' | 'D';
+  hazardousness: 'S' | 'W' | 'D' | 'IN';
 }
 export const CardInfo = styled.View<CardInfoProps>`
   background-color: ${({ theme, hazardousness }) =>

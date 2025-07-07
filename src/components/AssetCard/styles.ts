@@ -2,10 +2,10 @@ import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 interface IContainer {
-  status: 'S' | 'W' | 'D';
+  status: 'S' | 'W' | 'D' | 'IN';
 }
 
-export const Container = styled.TouchableOpacity.attrs({
+export const Container = styled.TouchableOpacity.attrs<IContainer>({
   activeOpacity: 0.7,
 })`
   align-items: center;
@@ -74,7 +74,7 @@ export const LastMeasurementText = styled.Text`
 `;
 
 interface ICardStatusSafe {
-  status: 'S' | 'W' | 'D';
+  status: 'S' | 'W' | 'D' | 'IN';
 }
 
 export const CardStatusSafe = styled.View<ICardStatusSafe>`
@@ -112,6 +112,13 @@ export const Elipses = styled.View`
 
 export const DangerElipse = styled.View`
   background-color: ${({ theme }) => theme.colors.danger};
+  border-radius: 64px;
+  height: ${RFValue(12)}px;
+  width: ${RFValue(12)}px;
+`;
+
+export const InvalidElipse = styled.View`
+  background-color: ${({ theme }) => theme.colors.gray_dark};
   border-radius: 64px;
   height: ${RFValue(12)}px;
   width: ${RFValue(12)}px;

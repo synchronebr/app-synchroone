@@ -2,7 +2,7 @@ export interface IDiagnose {
     id: number;
     title: string; 
     description: string; 
-    type: 'S' | 'W' | 'D';
+    type: 'S' | 'W' | 'D' | 'IN';
     hazardousness: string;
     createdAt: Date; 
     percent: number;

@@ -77,7 +77,7 @@ export const LastMeasurementTextInfo = styled.Text<ILastMeasurementTextInfo>`
 `;
 
 interface ICardStatusSafe {
-  status: 'S' | 'W' | 'D';
+  status: 'S' | 'W' | 'D' | 'IN';
 }
 
 export const CardStatusSafe = styled.View<ICardStatusSafe>`
