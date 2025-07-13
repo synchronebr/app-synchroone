@@ -5,7 +5,7 @@ import {
   StyleSheet,
   RefreshControl,
 } from "react-native";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
   subDays,
 } from "date-fns";
@@ -30,6 +30,8 @@ type IDiagnosesByPieceProps = {
   id: number;
 };
 
+const PAGE_SIZE = 10;
+
 export function DiagnosesByPiece() {
   const THEME = useTheme();
     const route = useRoute();
@@ -39,27 +41,41 @@ export function DiagnosesByPiece() {
   const { getAccessLevelsData } = useAccessLevels();
   const { currentCompany } = getAccessLevelsData();
 
-  const diagnoses = useQuery<IDiagnose[]>({
-    queryKey: [
-      "diagnoses",
-    ],
-    queryFn: async () => {
-      const response = await api.get("/diagnoses", {
+  const diagnoses = useInfiniteQuery<
+    { items: IDiagnose[]; nextPage?: number },
+    Error
+  >({
+    queryKey: ["diagnoses", currentCompany?.companyId],
+    enabled: !!currentCompany?.companyId,
+    initialPageParam: 1,
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await api.get<{
+        data: {
+          data: IDiagnose[];
+          total: number;
+          totalRead: number;
+          totalUnread: number;
+        }
+      }>("/diagnoses", {
         params: {
-          read: false,
-          startDate: subDays(new Date(), 30).toISOString().split("T")[0],
-          endDate: new Date().toISOString().split("T")[0],
           companyId: currentCompany.companyId,
           pieceId: id,
+          page: pageParam - 1,
+          pageSize: PAGE_SIZE,
         },
       });
 
-      const { count } = response.data?.data ?? {
-        count: 0,
-        diagnoses: [],
+      const result = response.data.data; 
+      const items = result.data;         
+      const total = result.totalUnread;
+      const totalPages = Math.ceil(total / PAGE_SIZE);
+
+      return {
+        items,
+        nextPage: pageParam < totalPages ? pageParam + 1 : undefined,
       };
-      return response?.data?.data?.data;
     },
+    getNextPageParam: (lastPage) => lastPage.nextPage,
   });
 
   const onRefresh = async () => {
@@ -72,6 +88,7 @@ export function DiagnosesByPiece() {
     }, [])
   );
 
+  const allItems = diagnoses.data?.pages.flatMap((p) => p.items) ?? [];
   return (
     <Container>
       <View style={styles.rangeFilterContainer}>
@@ -82,7 +99,7 @@ export function DiagnosesByPiece() {
 
       <Content>
           <List
-            data={diagnoses.data}
+            data={allItems}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => <HistoryCard item={item} />}
             ListEmptyComponent={

@@ -46,18 +46,18 @@ export function MeasurementPointCard({ equipmentId, item,...rest }: IMeasurement
           uri: item.type === enums.MeasuringPoints.Type.PartTime ? "https://synchroone.s3.amazonaws.com/white-technician-machine.jpg" : "https://synchroone.s3.amazonaws.com/white-mp-sensor.png",
         }}
       />
-      {item.readings[0]?.securityStatus === "S" && (
-        <CardStatusSafe status={item.readings[0]?.securityStatus}>
+      {item.securityStatus === "S" && (
+        <CardStatusSafe status={item.securityStatus}>
           <CardStatusSafeText>Seguro</CardStatusSafeText>
         </CardStatusSafe>
       )}
-      {item.readings[0]?.securityStatus === "W" && (
-        <CardStatusSafe status={item.readings[0]?.securityStatus}>
+      {item.securityStatus === "W" && (
+        <CardStatusSafe status={item.securityStatus}>
           <CardStatusSafeText>Alerta</CardStatusSafeText>
         </CardStatusSafe>
       )}
-      {item.readings[0]?.securityStatus === "D" && (
-        <CardStatusSafe status={item.readings[0]?.securityStatus}>
+      {item.securityStatus === "D" && (
+        <CardStatusSafe status={item.securityStatus}>
           <CardStatusSafeText>Perigo</CardStatusSafeText>
         </CardStatusSafe>
       )}

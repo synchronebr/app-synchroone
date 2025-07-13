@@ -57,7 +57,7 @@ export const Subtitle = styled.Text`
 export const Text = styled.Text`
   color: ${({ theme }) => theme.colors.dark};
   font-family: ${({ theme }) => theme.fonts.medium};
-  font-size: ${({ theme }) => theme.fontSize.medium}px;
+  font-size: ${({ theme }) => theme.fontSize.normal}px;
   line-height: 18px;
 `;
 

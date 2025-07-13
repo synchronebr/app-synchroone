@@ -51,7 +51,6 @@ export function ConfigureParameters( { route } ) {
   const [isLoadingPost, setIsLoadingPost] = useState(false);
 
   const getLocation = async () => {
-    console.log('entryyyyy')
     const items = await getPathsForSelect(currentCompany?.companyId);
     setPathLevels([items]); 
     setSelectedPaths([""]);
@@ -224,8 +223,8 @@ export function ConfigureParameters( { route } ) {
                 values={path}
                 selected={selectedPaths[i]}
                 onSelect={(value) => handleChangePathLevel(i, value)}
-                label={`Localização ${i + 1}`}
-                placeholder="Selecione uma opção"
+                label={`Nível ${i + 1}`}
+                placeholder="Selecione um nível"
               />
             </DropdownWrapper>
           ))}

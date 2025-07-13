@@ -15,13 +15,14 @@ import THEME from "../../global/styles/theme";
 import { Input } from "../../components/Input";
 import { AssetCard } from "../../components/AssetCard";
 
-import { Container, Header, List, Content, Filter } from "./styles";
+import { Container, Header, List, Content, Filter, DropdownWrapper } from "./styles";
 import { getEquipments } from "../../services/Equipments";
 import { Loading } from "../../components/Loading";
 import Drawer from "../../components/Drawer";
 import Select from "../../components/Select";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
 import { useFocusEffect } from "@react-navigation/native";
+import { getPathsForSelect } from "../../services/Companies/Paths";
 // import { getSectorsForSelect } from "../../services/Companies/Areas/Sectors";
 // import { getMachinesForSelect } from "../../services/Companies/Areas/Sectors/Machines";
 // import { getAreasForSelect } from "../../services/Companies/Areas";
@@ -42,10 +43,6 @@ export function Assets() {
     pieceId: 0,
     measuringPointId: 0,
   });
-  const [areas, setAreas] = useState([]);
-  const [machines, setMachines] = useState([]);
-  const [sectors, setSectors] = useState([]);
-  const [responsibles, setResponsibles] = useState([]);
 
   const [selectedArea, setSelectedArea] = useState(null);
   const [selectedMachine, setSelectedMachine] = useState(null);
@@ -53,9 +50,17 @@ export function Assets() {
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedResponsible, setSelectedResponsible] = useState(null);
 
+  const [pathLevels, setPathLevels] = useState<any[][]>([]);
+  const [selectedPaths, setSelectedPaths] = useState<string[]>([]);
+  const [pathFinished, setPathFinished] = useState(false);
+
   const accessLevels = getAccessLevelsData();
   const { currentCompany } = accessLevels;
 
+  const getFirstFilters = async () => {
+    const items = await getPathsForSelect(currentCompany?.companyId);
+    setPathLevels([items]); 
+  }
   // filters as params here because the way React updates states
   // is asynchronous, so we need to pass the filters as params,
   // otherwise the filters will be outdated (old state values were being used)
@@ -110,78 +115,45 @@ export function Assets() {
   }
 
   function handleFilterSubmit() {
-    const appliedFilters = {
-      areaId: selectedArea,
-      machineId: selectedMachine,
-      sectorId: selectedSector,
-      unitId: selectedUnit,
-      responsibleId: selectedResponsible,
-      search: searchFieldValue,
-    };
-
     closeFilter();
-    getEquips(appliedFilters); // Pass applied filters
+    console.log('selectedPaths', selectedPaths)
+    console.log('assets', assets)
+    // setAssets
   }
 
-  // const getAreas = async () => {
-  //   const companyId = accessLevels.currentCompany.companyId;
-  //   const items = await getAreasForSelect(Number(companyId));
-  //   setAreas(items);
-  //   setDataFilters((old) => ({ ...old, companyId: companyId }));
-  // };
+  const handleChangePathLevel = async (levelIndex: number, value: any) => {
+    if (!value || value == '') return;
+    if (selectedPaths[levelIndex] === value) return;
+  
+    const newSelectedPaths = [...selectedPaths];
+    newSelectedPaths[levelIndex] = value;
+    newSelectedPaths.splice(levelIndex + 1);
+    setSelectedPaths(newSelectedPaths); 
+  
+    const newPathLevels = [...pathLevels];
+    newPathLevels.splice(levelIndex + 1); 
+    setPathLevels(newPathLevels);       
+  
+    const items = await getPathsForSelect(currentCompany?.companyId, Number(value));
 
-  // useEffect(() => {
-  //   getAreas();
-  // }, []);
+    if (!items || items.length === 0) {
+      console.log('buscar pieces...')
+      setPathFinished(true);
+      return;
+    }
+  
+    setPathLevels((prev) => {
+      const updated = [...prev];
+      updated[levelIndex + 1] = items;
+      return updated;
+    });
 
-  // const handleChangeAreas = useCallback(
-  //   async (value: any) => {
-  //     if (selectedArea === value) return; // Evita loop infinito se o valor já for o mesmo
-
-  //     const id = Number(value);
-  //     setSelectedArea(value); // Atualiza o estado primeiro
-
-  //     try {
-  //       const items = await getSectorsForSelect(dataFilters.companyId, id);
-  //       setSectors(items);
-  //       setDataFilters((old) => ({ ...old, areaId: id }));
-  //     } catch (error) {
-  //       console.error("Erro ao buscar setores:", error);
-  //     }
-  //   },
-  //   [selectedArea, dataFilters.companyId]
-  // );
-
-  // const handleChangeSector = useCallback(
-  //   async (value: any) => {
-  //     if (selectedSector === value) return; // Evita loop infinito se o valor já for o mesmo
-
-  //     const id = Number(value);
-  //     setSelectedSector(value);
-
-  //     try {
-  //       const items = await getMachinesForSelect(
-  //         dataFilters.companyId,
-  //         dataFilters.areaId,
-  //         id
-  //       );
-  //       setMachines(items);
-  //       setDataFilters((old) => ({ ...old, sectorId: id }));
-  //     } catch (error) {
-  //       console.error("Erro ao buscar maquinas:", error);
-  //     }
-  //   },
-  //   [selectedSector, dataFilters.areaId]
-  // );
-
-  // const handleChangeMachine = async (value: any) => {
-  //   setDataFilters((old) => ({ ...old, machineId: value }));
-  //   setSelectedMachine(value);
-  // };
-
+    setPathFinished(false);
+  };
   useFocusEffect(
     useCallback(() => {
       getEquips({});
+      getFirstFilters();
     }, [currentCompany])
   );
 
@@ -207,44 +179,18 @@ export function Assets() {
               <CrossIcon onPress={closeFilter} />
             </View>
             <View style={styles.filterContent}>
-              {/* <Select
-                editable
-                label="Área"
-                placeholder="Selecione a área"
-                selected={selectedArea}
-                values={areas}
-                onSelect={handleChangeAreas}
-              />
-
-              <Select
-                editable
-                label="Setor"
-                placeholder="Selecione o setor"
-                selected={selectedSector}
-                values={sectors}
-                onSelect={handleChangeSector}
-              />
-
-              <Select
-                editable
-                label="Máquina"
-                placeholder="Selecione a máquina"
-                selected={selectedMachine}
-                values={machines}
-                onSelect={handleChangeMachine}
-              /> */}
-
-              {/* <Select
-                editable
-                label="Responsável"
-                placeholder="Selecione o responsável"
-                selected={selectedResponsible}
-                values={responsibles.map((r) => ({
-                  label: r.name,
-                  value: r.id,
-                }))}
-                onSelect={(value) => handleValueChange("responsibles", value)}
-              /> */}
+              {pathLevels?.map((path, i) => (
+                <DropdownWrapper key={i}>
+                  <Select
+                    editable
+                    values={path}
+                    selected={selectedPaths[i]}
+                    onSelect={(value) => handleChangePathLevel(i, value)}
+                    label={`Nível ${i + 1}`}
+                    placeholder="Selecione um nível"
+                  />
+                </DropdownWrapper>
+              ))}
             </View>
             <View>
               <TouchableOpacity
