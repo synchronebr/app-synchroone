@@ -20,44 +20,22 @@ import {
   DangerElipse,
   WarningElipse,
   SuccessElipse,
+  InvalidElipse,
 } from "./styles";
-import { IReading } from "../../services/dtos/IReading";
 
 export function AssetCard({ item, ...rest }: AssetCardProps) {
   const navigation = useNavigation<AssetCardNavigationProps>();
-  const [isLoadingReadings, setIsLoadingReadings] = useState(false)
-  const [readings, setReadings] = useState([])
-
   const THEME = useTheme();
 
-  const buildReadings = async () => {
-    setIsLoadingReadings(true);
-    const items = [] as IReading[];
-    if (item.measuringPoints) {
-      const mapMP = item.measuringPoints.map(mp => {
-        mp.readings?.map(reading => {
-          items.push(reading);
-        });
-      })
-      await Promise.all(mapMP);
-
-      items.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
-      setReadings(items);
-    }
-  }
-
-  useEffect(() => {
-    buildReadings()
-  }, [])
-
   return (
-    <Container onPress={() => navigation.navigate("AssetDetails", { id: item.id })} {...rest} status={readings[0]?.securityStatus}>
+    <Container onPress={() => navigation.navigate("AssetDetails", { id: item.id })} {...rest} status={item.securityStatus}>
       <Image
         source={{ uri: item.image ? item.image : "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png"}}
       />
-      {readings[0]?.securityStatus === 'S' && (<CardStatusSafe status={readings[0]?.securityStatus}><CardStatusSafeText>Seguro</CardStatusSafeText></CardStatusSafe>)}
-      {readings[0]?.securityStatus === 'W' && (<CardStatusSafe status={readings[0]?.securityStatus}><CardStatusSafeText>Alerta</CardStatusSafeText></CardStatusSafe>)}
-      {readings[0]?.securityStatus === 'D' && (<CardStatusSafe status={readings[0]?.securityStatus}><CardStatusSafeText>Perigo</CardStatusSafeText></CardStatusSafe>)}
+      {item.securityStatus === 'S' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Seguro</CardStatusSafeText></CardStatusSafe>)}
+      {item.securityStatus === 'W' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Alerta</CardStatusSafeText></CardStatusSafe>)}
+      {item.securityStatus === 'D' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Perigo</CardStatusSafeText></CardStatusSafe>)}
+      {item.securityStatus === 'IN' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Não Monitorado</CardStatusSafeText></CardStatusSafe>)}
       <Content>
         <Title>{item.description}</Title>
 
@@ -70,11 +48,12 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
         </LastMeasurementInfo>
 
         <Elipses>
-          {readings?.slice(0, 8).sort((a, b) => a.id - b.id).map(reading => (
+          {item.readings?.slice(0, 8).sort((a, b) => a.id - b.id).map(reading => (
             <>
             {reading.securityStatus === 'S' && (<SuccessElipse />)}
             {reading.securityStatus === 'W' && (<WarningElipse />)}
             {reading.securityStatus === 'D' && (<DangerElipse />)}
+            {reading.securityStatus === 'IN' && (<InvalidElipse />)}
             </>
           ))}
         </Elipses>

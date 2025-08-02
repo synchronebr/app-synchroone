@@ -298,7 +298,6 @@ export function AssetDetails() {
 
   useEffect(() => {
     if (piece) buildReadings();
-    console.log(piece);
   }, [piece]);
 
   // if (isLoading) return <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />;
@@ -365,7 +364,7 @@ export function AssetDetails() {
                 </View> */}
                 </View>
 
-                <Asset status={readings[0]?.securityStatus}>
+                <Asset status={piece?.securityStatus}>
                   <Title>{piece?.description}</Title>
                   <Subtitle>{piece?.path?.title}</Subtitle>
                 </Asset>
@@ -379,6 +378,9 @@ export function AssetDetails() {
                     navigation.navigate("EditAssetDetails", {
                       id: piece?.id,
                       description: piece?.description,
+                      type: piece?.type,
+                      brand: piece?.brand,
+                      model: piece?.model,
                     })
                   }
                   piece={piece}

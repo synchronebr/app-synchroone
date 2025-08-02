@@ -38,3 +38,5 @@ export const Filter = styled.View`
   align-items: center;
   justify-content: center;
 `;
+
+export const DropdownWrapper = styled.View``;

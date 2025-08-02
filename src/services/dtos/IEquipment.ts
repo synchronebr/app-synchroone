@@ -7,4 +7,13 @@ export interface IEquipment {
   path: IPath;
   measuringPoints: IMeasuringPoint[]
   image?: string;
+  securityStatus: 'S' | 'W' | 'D' | 'IN';
+  readings: {
+    id: number;
+    securityStatus: string;
+    securityStatusDate: Date;
+    type: string;
+    createdAt: Date;
+    readingAt: string;
+  }[],
 }

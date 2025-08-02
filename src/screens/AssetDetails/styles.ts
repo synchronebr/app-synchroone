@@ -23,7 +23,7 @@ export const Icon = styled.View`
 `;
 
 interface IAsset {
-  status: "S" | "W" | "D";
+  status: "S" | "W" | "D" | "IN";
 }
 export const Asset = styled.View<IAsset>`
   background-color: ${({ theme, status }) => {

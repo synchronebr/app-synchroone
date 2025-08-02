@@ -57,7 +57,7 @@ export const Subtitle = styled.Text`
 export const Text = styled.Text`
   color: ${({ theme }) => theme.colors.dark};
   font-family: ${({ theme }) => theme.fonts.medium};
-  font-size: ${({ theme }) => theme.fontSize.medium}px;
+  font-size: ${({ theme }) => theme.fontSize.normal}px;
   line-height: 18px;
 `;
 
@@ -115,7 +115,7 @@ export const CardsInfo = styled.View`
 `;
 
 interface CardInfoProps {
-  hazardousness: 'S' | 'W' | 'D';
+  hazardousness: 'S' | 'W' | 'D' | 'IN';
 }
 export const CardInfo = styled.View<CardInfoProps>`
   background-color: ${({ theme, hazardousness }) =>

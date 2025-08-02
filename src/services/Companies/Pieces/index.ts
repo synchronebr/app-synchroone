@@ -2,7 +2,7 @@ import api from "../../api";
 
 // import { CompaniesResponse } from "./types";
 
-export async function getPiecesForSelect(companyId: number, pathId: number): Promise<{ label: string, value: string }[] | any> {
+export async function getPiecesForSelect(companyId: number, pathId?: number): Promise<{ label: string, value: string }[] | any> {
   let params = {} as any;
   if (companyId) params.companyId = companyId;
   if (pathId) params.pathId = pathId;

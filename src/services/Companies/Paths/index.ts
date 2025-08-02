@@ -18,7 +18,7 @@ export async function getPathsForSelect(
   let items = [];
   if (response.data) {
     response.data.map((item) =>
-      items.push({ label: item.title, value: item.id })
+      items.push({ label: `[${item.type}] ${item.title}`, value: item.id })
     );
   }
 

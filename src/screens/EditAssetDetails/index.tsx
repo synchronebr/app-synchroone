@@ -8,7 +8,6 @@ import * as yup from "yup";
 
 import { Loading } from "../../components/Loading";
 import { Dropdown } from "../../components/Dropdown";
-import { PickerData } from "../../components/Dropdown/types";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 
@@ -25,12 +24,10 @@ import { EditAssetDetailsRouteProps, FormData } from "./types";
 import { Container, Scroll, Form, Wrapper } from "./styles";
 import { Toast } from "react-native-toast-notifications";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
+import Select from "../../components/Select";
 
 export function EditAssetDetails() {
   const [isLoading, setIsLoading] = useState(true);
-  const [piecesTypesSelectData, setPiecesTypesSelectData] = useState<
-    PickerData[]
-  >([]);
   const [selectedPieceType, setSelectedPieceType] = useState<number | null>(
     null
   );
@@ -44,8 +41,10 @@ export function EditAssetDetails() {
   const { getAccessLevelsData } = useAccessLevels();
   const accessLevels = getAccessLevelsData();
 
-  const { id, description } =
-    route.params as EditAssetDetailsRouteProps;
+  const { id, description, type, brand, model } = route.params as EditAssetDetailsRouteProps;
+  const [piecesTypesSelectData, setPiecesTypesSelectData] = useState(type);
+
+  console.log(id, description,type, brand, model)
 
   const schema = yup.object().shape({
     brand: yup.string().trim().required("Marca obrigatória."),
@@ -58,6 +57,10 @@ export function EditAssetDetails() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      brand: brand,  
+      model: model,  
+    }
   });
 
   async function getPiecesTypes() {
@@ -69,7 +72,7 @@ export function EditAssetDetails() {
         const piecesTypesData = data as GetPiecesTypesResponse;
 
         if (piecesTypesData.length > 0) {
-          const pickerData: PickerData[] = [];
+          const pickerData = [];
 
           piecesTypesData.map(({ id, description }) =>
             pickerData.push({
@@ -140,12 +143,14 @@ export function EditAssetDetails() {
       <Scroll>
         <Form>
           <Wrapper>
-            <Dropdown
-              data={piecesTypesSelectData}
-              editable={!isUpdating}
-              onValueChange={(value) => setSelectedPieceType(Number(value))}
-              label="Tipo do Ativo"
-            />
+            <Select
+                editable
+                label="Tipo do Ativo"
+                placeholder="Tipo do Ativo"
+                selected={selectedPieceType}
+                values={piecesTypesSelectData}
+                onSelect={(value) => setSelectedPieceType(Number(value))}
+              />
           </Wrapper>
 
           <Wrapper>
