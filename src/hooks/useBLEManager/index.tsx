@@ -11,7 +11,7 @@ import {
 
 const BLEManagerContext = createContext({} as IBLEManagerContextData);
 
-const manager = new BleManager();
+let manager = new BleManager();
 
 const serviceUUID = "ab0828b1-198e-4351-b779-901fa0e0371e";
 const characteristicUUID = "4ac8a682-9736-4e5d-932b-e9b31405049c";
@@ -165,19 +165,45 @@ export function BLEManagerProvider({ children }: BLEManagerProviderProps) {
   }
 
   async function disconnectDevice() {
-    if (connectedDevice) {
-      try {
-        await connectedDevice.cancelConnection();
-        setConnectedDevice(null);
-        console.log("Dispositivo desconectado com sucesso.");
-        // Toast.show("Dispositivo desconectado com sucesso.");
-      } catch (error) {
-        console.error("Erro ao desconectar do dispositivo:", error);
-        // Toast.show("Erro ao desconectar do dispositivo. Tente novamente.");
+    try {
+      if (!connectedDevice) {
+        console.log("Nenhum dispositivo conectado.");
+        return;
       }
-    } else {
-      console.log("Nenhum dispositivo conectado.");
-      // Toast.show("Nenhum dispositivo conectado.");
+
+      const isConnected = await connectedDevice.isConnected();
+      console.log("Tentando desconectar do dispositivo:", connectedDevice.id);
+      console.log("Está conectado:", isConnected);
+
+      if (isConnected) {
+        await connectedDevice.cancelConnection();
+        console.log("cancelConnection() chamado com sucesso.");
+      }
+
+      // Listener para garantir que seja removido do estado caso o sistema desconecte depois
+      manager.onDeviceDisconnected(connectedDevice.id, (error, device) => {
+        if (error) {
+          console.log("Erro ao monitorar desconexão:", error);
+          return;
+        }
+
+        console.log("Dispositivo foi desconectado automaticamente:", device?.id);
+      });
+
+      // Aguarde um tempo para garantir estabilidade no estado de desconexão
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setConnectedDevice(null);
+
+      // Destroi e reinicia o BLE Manager para garantir estado limpo
+      await manager.destroy();
+      manager = new BleManager();
+
+      console.log("Dispositivo desconectado com sucesso.");
+      // Toast.show("Dispositivo desconectado com sucesso.");
+    } catch (error) {
+      console.error("Erro ao desconectar do dispositivo:", error);
+      // Toast.show("Erro ao desconectar do dispositivo. Tente novamente.");
     }
   }
 

@@ -32,8 +32,10 @@ import { Toast } from "react-native-toast-notifications";
 import { getPathsForSelect } from "../../services/Companies/Paths";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
 import { getPiecesForSelect } from "../../services/Companies/Pieces";
+import { useAuth } from "../../hooks/useAuth";
 
 export function ConfigureParameters( { route } ) {
+  const { user } = useAuth();
   const THEME = useTheme();
   const navigation = useNavigation();
   const { getAccessLevelsData } = useAccessLevels();
@@ -216,6 +218,7 @@ export function ConfigureParameters( { route } ) {
 
       {!isLoading && connectedDevice && (
         <Scroll>
+          <Text>{route.params.bluetoothDeviceName}</Text>
           {pathLevels?.map((path, i) => (
             <DropdownWrapper key={i}>
               <Select
@@ -275,12 +278,17 @@ export function ConfigureParameters( { route } ) {
             <Text>Intervalo de Medição (minutos)</Text>
 
             <MinutesInterval>
-              <MinutesIntervalButton title="5" selected={interval===5} onPress={() => setInterval(5)}/>
+              { user && user.isAdmin && (
+                <>
+                <MinutesIntervalButton title="2" selected={interval===2} onPress={() => setInterval(2)}/>
+                <MinutesIntervalButton title="5" selected={interval===5} onPress={() => setInterval(5)}/>
+                </>
+              ) }
               <MinutesIntervalButton title="10" selected={interval===10} onPress={() => setInterval(10)}/>
               <MinutesIntervalButton title="20" selected={interval===20} onPress={() => setInterval(20)}/>
               <MinutesIntervalButton title="30" selected={interval===30} onPress={() => setInterval(30)}/>
               <MinutesIntervalButton title="60" selected={interval===60} onPress={() => setInterval(60)}/>
-              {/* <MinutesIntervalButton title="120" selected={interval===120} onPress={() => setInterval(120)}/> */}
+              <MinutesIntervalButton title="120" selected={interval===120} onPress={() => setInterval(120)}/>
             </MinutesInterval>
             </>
           )}

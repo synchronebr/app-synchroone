@@ -9,6 +9,7 @@ import {
   differenceInDays,
   differenceInMinutes,
   subDays,
+  addDays,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -20,6 +21,7 @@ import {
   Image,
   Asset,
   Detail,
+  DetailIcon,
   Title,
   Subtitle,
   Content,
@@ -40,7 +42,7 @@ import {
   GraphicButtonText,
 } from "./styles";
 
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, View } from "react-native";
 import { MeasuringPointPartTimeLastReadingsStepper } from "../../components/MeasuringPointPartTimeLastReadingsStepper";
 import { enums } from "../../utils/enums";
 import {
@@ -100,13 +102,14 @@ export function MeasurementPointDetails({
     setIsChartLoading(true);
     try {
       const today = new Date();
+      const tomorow = addDays(today, 1);
       const startDate = subDays(today, 30);
 
       const readingsResponse = await getReadingsByMeasuringPoint(
         Number(route.params.mesuringPointId),
         {
           startDate: format(startDate, "yyyy-MM-dd"),
-          endDate: format(today, "yyyy-MM-dd"),
+          endDate: format(tomorow, "yyyy-MM-dd"),
           type: selectedActionType,
           withoutInvalids: false,
         }
@@ -210,12 +213,62 @@ export function MeasurementPointDetails({
             {item.measuringPoint.type === enums.MeasuringPoints.Type.Online && (
               <Asset status={item.measuringPoint.readings[0]?.securityStatus}>
                 <Detail>
-                  <Title>
+                  {/* <Title>
                     {item.measuringPoint.device
                       ? item.measuringPoint.device.battery
                       : "-"}{" "}
                     %
-                  </Title>
+                  </Title> */}
+                  <DetailIcon>
+                    {item.measuringPoint.device?.battery == 5 && (
+                      <FontAwesome
+                        name="battery-full"
+                        size={20}
+                        style={{ justifyContent: "center" }}
+                        color={THEME.colors.light}
+                      />
+                    )}
+                    {item.measuringPoint.device?.battery == 4 && (
+                      <FontAwesome
+                        name="battery-full"
+                        size={20}
+                        style={{ justifyContent: "center" }}
+                        color={THEME.colors.light}
+                      />
+                    )}
+                    {item.measuringPoint.device?.battery == 3 && (
+                      <FontAwesome
+                        name="battery-3"
+                        size={20}
+                        style={{ justifyContent: "center" }}
+                        color={THEME.colors.light}
+                      />
+                    )}
+                    {item.measuringPoint.device?.battery == 2 && (
+                      <FontAwesome
+                        name="battery-2"
+                        size={20}
+                        style={{ justifyContent: "center" }}
+                        color={THEME.colors.light}
+                      />
+                    )}
+                    {item.measuringPoint.device?.battery == 1 && (
+                      <FontAwesome
+                        name="battery-1"
+                        size={20}
+                        style={{ justifyContent: "center" }}
+                        color={THEME.colors.danger}
+                      />
+                    )}
+                    {item.measuringPoint.device?.battery == 0 && (
+                      <FontAwesome
+                        name="battery-0"
+                        size={20}
+                        style={{ justifyContent: "center" }}
+                        color={THEME.colors.danger}
+                      />
+                    )}
+                  </DetailIcon>
                   <Subtitle>Bateria</Subtitle>
                 </Detail>
 

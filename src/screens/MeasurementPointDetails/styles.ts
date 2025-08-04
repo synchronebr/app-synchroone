@@ -39,7 +39,15 @@ export const Asset = styled.View<IAsset>`
   width: 100%;
 `;
 
-export const Detail = styled.View``;
+export const Detail = styled.View`
+  /* flex: 1;
+  flex-direction: column;
+  justify-content: center; */
+`;
+
+export const DetailIcon = styled.View`
+  margin-left: 8;
+`;
 
 export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.light};

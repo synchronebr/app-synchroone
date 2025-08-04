@@ -25,7 +25,7 @@ export function LargeAreaChart({
       case "A":
         return "Aceleração RMS [G]";
       case "V":
-        return "Velocidade RMS [m/s²]";
+        return "Velocidade RMS [mm/s²]";
       case "T":
         return "Temperatura [°C]";
       default:
@@ -59,7 +59,6 @@ export function LargeAreaChart({
     <div id="main" style="height: 100%; width: 100%;"></div>
     <script>
       const chart = echarts.init(document.getElementById('main'));
-
       const option = {
         tooltip: { trigger: 'axis' },
         legend: {
@@ -88,27 +87,27 @@ export function LargeAreaChart({
             name: 'Horizontal',
             type: 'line',
             data: ${JSON.stringify(data.x.map((d) => d.value))},
-            smooth: true,
-            lineStyle: { color: 'purple', width: 6 },
-            itemStyle: { color: 'purple' },
+            smooth: false,
+            lineStyle: { color: 'rgba(31, 96, 194)', width: 6 },
+            itemStyle: { color: 'rgba(31, 96, 194)' },
             symbolSize: 8
           },
           {
             name: 'Vertical',
             type: 'line',
             data: ${JSON.stringify(data.y.map((d) => d.value))},
-            smooth: true,
-            lineStyle: { color: 'blue', width: 6 },
-            itemStyle: { color: 'blue' },
+            smooth: false,
+            lineStyle: { color: 'rgba(255, 127, 13)', width: 6 },
+            itemStyle: { color: 'rgba(255, 127, 13)' },
             symbolSize: 8
           },
           {
             name: 'Axial',
             type: 'line',
             data: ${JSON.stringify(data.z.map((d) => d.value))},
-            smooth: true,
-            lineStyle: { color: 'orange', width: 6 },
-            itemStyle: { color: 'orange' },
+            smooth: false,
+            lineStyle: { color: 'green', width: 6 },
+            itemStyle: { color: 'green' },
             symbolSize: 8
           }
         ]

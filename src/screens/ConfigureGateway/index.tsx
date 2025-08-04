@@ -128,7 +128,6 @@ export function ConfigureGateway( { route } ) {
 
   async function handleFormSubmit(formData: FormData) {
     setIsLoadingPost(true);
-    console.log(formData)
     console.log(isActive)
 
     try {
@@ -187,7 +186,7 @@ export function ConfigureGateway( { route } ) {
       {!isLoading && connectedDevice && (
       <Container>
         <KeyboardAvoidingView behavior="position">
-
+        <Text>{connectedDevice.name}</Text>
         <Controller
                 name="isActive"
                 control={control}
