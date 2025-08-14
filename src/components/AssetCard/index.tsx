@@ -37,7 +37,10 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
       {item.securityStatus === 'D' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Perigo</CardStatusSafeText></CardStatusSafe>)}
       {item.securityStatus === 'IN' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Não Monitorado</CardStatusSafeText></CardStatusSafe>)}
       <Content>
-        <Title>{item.description}</Title>
+        <Title>{item.pathNames?.length
+          ? `${item.description} - ${item.pathNames.join(" - ")}`
+          : item.description}
+        </Title>
 
         <Subtitle>{item.path?.title}</Subtitle>
 

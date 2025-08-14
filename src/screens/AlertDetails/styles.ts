@@ -152,21 +152,26 @@ export const CardInfoSubtitle = styled.Text`
 
 
 export const CardCauses = styled.View`
-  margin-top: 25px;
+margin-top: 25px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 `;
 
 export const CardCause = styled.View`
-  align-items: center;
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 16px;
 `;
 
 export const CardCauseTitle = styled.Text``;
 
 export const CardCauseButton = styled.TouchableOpacity`
-  align-items: center;
   flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
   gap: 4px;
   background-color: ${({ theme }) => theme.colors.gray_light};
   padding: 8px;
