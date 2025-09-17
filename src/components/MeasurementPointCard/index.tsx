@@ -28,7 +28,7 @@ interface IMeasurementPointCard extends MeasurementPointCardProps {
   item: IMeasuringPoint;
 }
 
-export function MeasurementPointCard({ equipmentId, item,...rest }: IMeasurementPointCard) {
+export function MeasurementPointCard({ equipmentId, item, ...rest }: IMeasurementPointCard) {
   const navigation = useNavigation<MeasurementPointCardNavigationProps>();
 
   const THEME = useTheme();
@@ -42,9 +42,11 @@ export function MeasurementPointCard({ equipmentId, item,...rest }: IMeasurement
     >
       <Image
         resizeMode="cover"
-        source={{
-          uri: item.type === enums.MeasuringPoints.Type.PartTime ? "https://synchroone.s3.amazonaws.com/white-technician-machine.jpg" : "https://synchroone.s3.amazonaws.com/white-mp-sensor.png",
-        }}
+        source={
+          item.type === enums.MeasuringPoints.Type.PartTime
+            ? require('../../assets/images/white-technician-machine.jpg')
+            : require('../../assets/images/white-mp-sensor.png')
+        }
       />
       {item.securityStatus === "S" && (
         <CardStatusSafe status={item.securityStatus}>
@@ -65,23 +67,23 @@ export function MeasurementPointCard({ equipmentId, item,...rest }: IMeasurement
       <Content>
         <Title>{item.name}</Title>
 
-        
+
         {item.type === enums.MeasuringPoints.Type.PartTime ? (
           <Subtitle>Leituras feitas por um técnico</Subtitle>
         ) : (
           <>
-          {item.device ? (
-            <Subtitle>{item.device.code}</Subtitle>
-          ) : (
-            <Subtitle>Nenhum sensor vinculado</Subtitle>
-          )}
+            {item.device ? (
+              <Subtitle>{item.device.code}</Subtitle>
+            ) : (
+              <Subtitle>Nenhum sensor vinculado</Subtitle>
+            )}
           </>
         )}
 
         {item && item.device && item.device.readingWindow && (
-        <LastMeasurementInfo>
-          <Text>{item.device.readingWindow} min</Text>
-        </LastMeasurementInfo>
+          <LastMeasurementInfo>
+            <Text>{item.device.readingWindow} min</Text>
+          </LastMeasurementInfo>
         )}
       </Content>
 

@@ -59,7 +59,7 @@ export function Assets() {
 
   const getFirstFilters = async () => {
     const items = await getPathsForSelect(currentCompany?.companyId);
-    setPathLevels([items]); 
+    setPathLevels([items]);
   }
   // filters as params here because the way React updates states
   // is asynchronous, so we need to pass the filters as params,
@@ -124,16 +124,16 @@ export function Assets() {
   const handleChangePathLevel = async (levelIndex: number, value: any) => {
     if (!value || value == '') return;
     if (selectedPaths[levelIndex] === value) return;
-  
+
     const newSelectedPaths = [...selectedPaths];
     newSelectedPaths[levelIndex] = value;
     newSelectedPaths.splice(levelIndex + 1);
-    setSelectedPaths(newSelectedPaths); 
-  
+    setSelectedPaths(newSelectedPaths);
+
     const newPathLevels = [...pathLevels];
-    newPathLevels.splice(levelIndex + 1); 
-    setPathLevels(newPathLevels);       
-  
+    newPathLevels.splice(levelIndex + 1);
+    setPathLevels(newPathLevels);
+
     const items = await getPathsForSelect(currentCompany?.companyId, Number(value));
 
     if (!items || items.length === 0) {
@@ -141,7 +141,7 @@ export function Assets() {
       setPathFinished(true);
       return;
     }
-  
+
     setPathLevels((prev) => {
       const updated = [...prev];
       updated[levelIndex + 1] = items;
@@ -156,6 +156,14 @@ export function Assets() {
       getFirstFilters();
     }, [currentCompany])
   );
+
+  const assetsFiltered = assets
+    ? assets.filter((asset) =>
+      asset?.description
+        ?.toLowerCase()
+        ?.includes(searchFieldValue.toLowerCase())
+    )
+    : [];
 
   return (
     <Container>
@@ -218,17 +226,11 @@ export function Assets() {
         </>
       ) : (
         <>
-          {assets.length > 0 ? (
+          {assets && assets.length > 0 ? (
             <List
-              data={assets.filter((asset) =>
-                asset?.description
-                  ?.toLowerCase()
-                  ?.includes(searchFieldValue.toLowerCase())
-              )}
+              data={assetsFiltered}
               keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <AssetCard item={item} key={`asset-${item.id.toString()}`} />
-              )}
+              renderItem={({ item }) => <AssetCard item={item} />}
               refreshControl={
                 <RefreshControl
                   progressBackgroundColor={THEME.colors.primary}
@@ -245,6 +247,7 @@ export function Assets() {
           )}
         </>
       )}
+
     </Container>
   );
 }

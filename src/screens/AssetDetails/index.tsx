@@ -90,7 +90,7 @@ export function AssetDetails() {
 
   function toggleIsFavorite() {
     setIsFavorite(!isFavorite);
-    updateEquipmentFavoriteStatus(piece.id, !isFavorite).catch((_) => {});
+    updateEquipmentFavoriteStatus(piece.id, !isFavorite).catch((_) => { });
   }
 
   async function getCameraPermission() {
@@ -318,11 +318,11 @@ export function AssetDetails() {
               <Header>
                 <Image
                   resizeMode="cover"
-                  source={{
-                    uri: piece?.image
-                      ? piece.image
-                      : "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png",
-                  }}
+                  source={
+                    piece?.image
+                      ? { uri: piece.image }
+                      : require('../../assets/images/blue-machine-sensor.png')
+                  }
                 />
 
                 <Icon style={styles.backIcon}>
@@ -331,7 +331,7 @@ export function AssetDetails() {
                     name="chevron-left"
                     onPress={() => navigation.navigate("Assets" as never)}
                     size={32}
-                    // style={styles.backIcon}
+                  // style={styles.backIcon}
                   />
                 </Icon>
 

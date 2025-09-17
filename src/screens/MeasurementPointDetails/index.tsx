@@ -187,13 +187,13 @@ export function MeasurementPointDetails({
       <Header>
         <Image
           resizeMode="cover"
-          source={{
-            uri:
-              item &&
-              item.measuringPoint.type === enums.MeasuringPoints.Type.PartTime
-                ? "https://synchroone.s3.amazonaws.com/white-technician-machine.jpg"
-                : "https://synchroone.s3.amazonaws.com/white-mp-sensor.png",
-          }}
+          source={
+            item
+              ? item.measuringPoint.type === enums.MeasuringPoints.Type.PartTime
+                ? require('../../assets/images/white-technician-machine.jpg')
+                : require('../../assets/images/white-mp-sensor.png')
+              : require('../../assets/images/white-mp-sensor.png')
+          }
         />
 
         {item && (
@@ -294,30 +294,30 @@ export function MeasurementPointDetails({
 
             {item.measuringPoint.type ===
               enums.MeasuringPoints.Type.PartTime && (
-              <Asset status={item.measuringPoint.readings[0]?.securityStatus}>
-                <Detail>
-                  <Subtitle>Periodicidade</Subtitle>
-                  <Title>{item.medianDays} dias</Title>
-                </Detail>
+                <Asset status={item.measuringPoint.readings[0]?.securityStatus}>
+                  <Detail>
+                    <Subtitle>Periodicidade</Subtitle>
+                    <Title>{item.medianDays} dias</Title>
+                  </Detail>
 
-                <Detail>
-                  <Subtitle>Última</Subtitle>
-                  <Title>
-                    {item.measuringPoint.readings.length === 0
-                      ? "Sem leitura"
-                      : `há ${differenceInDays(
+                  <Detail>
+                    <Subtitle>Última</Subtitle>
+                    <Title>
+                      {item.measuringPoint.readings.length === 0
+                        ? "Sem leitura"
+                        : `há ${differenceInDays(
                           new Date(),
                           new Date(item.measuringPoint.readings[0].readingAt)
                         )} dias`}
-                  </Title>
-                </Detail>
+                    </Title>
+                  </Detail>
 
-                <Detail>
-                  <Subtitle>Medições</Subtitle>
-                  <Title>{item.countReadings}</Title>
-                </Detail>
-              </Asset>
-            )}
+                  <Detail>
+                    <Subtitle>Medições</Subtitle>
+                    <Title>{item.countReadings}</Title>
+                  </Detail>
+                </Asset>
+              )}
           </>
         )}
       </Header>
@@ -325,7 +325,7 @@ export function MeasurementPointDetails({
       {item && (
         <Content>
           {item.measuringPoint.type === enums.MeasuringPoints.Type.Online &&
-          item.measuringPoint.readings.length > 0 ? (
+            item.measuringPoint.readings.length > 0 ? (
             <>
               <Text>
                 Última Medição Online (
@@ -464,84 +464,84 @@ export function MeasurementPointDetails({
               )}
             </>
           ) : null}
-          
+
           {item.measuringPoint.type === enums.MeasuringPoints.Type.Online &&
-          item.measuringPoint.readings.length > 0 && (
-          <>
-          <Text>Gráficos</Text>
+            item.measuringPoint.readings.length > 0 && (
+              <>
+                <Text>Gráficos</Text>
 
-          <Graphics>
-            <GraphicsButtons style={{ marginBottom: 25 }}>
-              <GraphicButton
-                onPress={() => handleGraphicButtonClick("A")}
-                style={{
-                  backgroundColor:
-                    actionType === "A" ? THEME.colors.primary : "transparent",
-                }}
-              >
-                <GraphicButtonText
-                  style={{
-                    color: actionType === "A" ? "white" : THEME.colors.text,
-                  }}
-                >
-                  Aceleração RMS
-                </GraphicButtonText>
-              </GraphicButton>
+                <Graphics>
+                  <GraphicsButtons style={{ marginBottom: 25 }}>
+                    <GraphicButton
+                      onPress={() => handleGraphicButtonClick("A")}
+                      style={{
+                        backgroundColor:
+                          actionType === "A" ? THEME.colors.primary : "transparent",
+                      }}
+                    >
+                      <GraphicButtonText
+                        style={{
+                          color: actionType === "A" ? "white" : THEME.colors.text,
+                        }}
+                      >
+                        Aceleração RMS
+                      </GraphicButtonText>
+                    </GraphicButton>
 
-              <GraphicButton
-                onPress={() => handleGraphicButtonClick("V")}
-                style={{
-                  backgroundColor:
-                    actionType === "V" ? THEME.colors.primary : "transparent",
-                }}
-              >
-                <GraphicButtonText
-                  style={{
-                    color: actionType === "V" ? "white" : THEME.colors.text,
-                  }}
-                >
-                  Velocidade RMS
-                </GraphicButtonText>
-              </GraphicButton>
+                    <GraphicButton
+                      onPress={() => handleGraphicButtonClick("V")}
+                      style={{
+                        backgroundColor:
+                          actionType === "V" ? THEME.colors.primary : "transparent",
+                      }}
+                    >
+                      <GraphicButtonText
+                        style={{
+                          color: actionType === "V" ? "white" : THEME.colors.text,
+                        }}
+                      >
+                        Velocidade RMS
+                      </GraphicButtonText>
+                    </GraphicButton>
 
-              <GraphicButton
-                onPress={() => handleGraphicButtonClick("T")}
-                style={{
-                  backgroundColor:
-                    actionType === "T" ? THEME.colors.primary : "transparent",
-                }}
-              >
-                <GraphicButtonText
-                  style={{
-                    color: actionType === "T" ? "white" : THEME.colors.text,
-                  }}
-                >
-                  Temperatura
-                </GraphicButtonText>
-              </GraphicButton>
-            </GraphicsButtons>
+                    <GraphicButton
+                      onPress={() => handleGraphicButtonClick("T")}
+                      style={{
+                        backgroundColor:
+                          actionType === "T" ? THEME.colors.primary : "transparent",
+                      }}
+                    >
+                      <GraphicButtonText
+                        style={{
+                          color: actionType === "T" ? "white" : THEME.colors.text,
+                        }}
+                      >
+                        Temperatura
+                      </GraphicButtonText>
+                    </GraphicButton>
+                  </GraphicsButtons>
 
-            {isChartLoading ? (
-              <ContentLoader
-                width={width}
-                height={300}
-                viewBox={`0 0 ${width} 300`}
-                preserveAspectRatio="none"
-                style={{ marginVertical: 16 }}
-              >
-                <Rect x="0" y="0" rx="0" ry="0" width={width} height={300} />
-              </ContentLoader>
-            ) : chartData && chartData.xAxis.length > 0 ? (
-              <LargeAreaChart
-                data={chartData}
-                actionType={actionType}
-                safeLines={item.measuringPoint || {}}
-              />
-            ) : (
-              <Text>Sem dados para exibir no gráfico.</Text>
-            )}
-          </Graphics>
-          </>)}
+                  {isChartLoading ? (
+                    <ContentLoader
+                      width={width}
+                      height={300}
+                      viewBox={`0 0 ${width} 300`}
+                      preserveAspectRatio="none"
+                      style={{ marginVertical: 16 }}
+                    >
+                      <Rect x="0" y="0" rx="0" ry="0" width={width} height={300} />
+                    </ContentLoader>
+                  ) : chartData && chartData.xAxis.length > 0 ? (
+                    <LargeAreaChart
+                      data={chartData}
+                      actionType={actionType}
+                      safeLines={item.measuringPoint || {}}
+                    />
+                  ) : (
+                    <Text>Sem dados para exibir no gráfico.</Text>
+                  )}
+                </Graphics>
+              </>)}
         </Content>
       )}
     </Container>
