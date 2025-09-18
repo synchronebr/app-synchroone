@@ -9,13 +9,14 @@ import {
 } from "react-native";
 
 import TuneIcon from "../../assets/icons/tune.svg";
+import QRCodeScannerIcon from "../../assets/icons/qr-code-scanner.svg";
 import CrossIcon from "../../assets/icons/cross.svg";
 import THEME from "../../global/styles/theme";
 
 import { Input } from "../../components/Input";
 import { AssetCard } from "../../components/AssetCard";
 
-import { Container, Header, List, Content, Filter, DropdownWrapper } from "./styles";
+import { Container, SearchContainer, List, Content, Filter, DropdownWrapper } from "./styles";
 import { getEquipments } from "../../services/Equipments";
 import { Loading } from "../../components/Loading";
 import Drawer from "../../components/Drawer";
@@ -23,6 +24,7 @@ import Select from "../../components/Select";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
 import { useFocusEffect } from "@react-navigation/native";
 import { getPathsForSelect } from "../../services/Companies/Paths";
+import Header from "../../components/Pages/Header";
 // import { getSectorsForSelect } from "../../services/Companies/Areas/Sectors";
 // import { getMachinesForSelect } from "../../services/Companies/Areas/Sectors/Machines";
 // import { getAreasForSelect } from "../../services/Companies/Areas";
@@ -159,18 +161,26 @@ export function Assets() {
 
   return (
     <Container>
-      <Header>
+      <Header 
+        title="Ativos Monitorados" 
+        backIcon="back" 
+        rightContent={
+          <>
+            <QRCodeScannerIcon width={24} height={24} fill={THEME.colors.dark} />
+            <TuneIcon width={24} height={24} fill={THEME.colors.dark} onPress={openFilter}/>
+          </>
+        }
+      />
+
+      <SearchContainer>
         <Input
           onChangeText={setSearchFieldValue}
           placeholder="Pesquisar ativo"
           searchable
           value={searchFieldValue}
           editable={!isLoading}
+          style={{ width: '100%' }}
         />
-
-        <Filter>
-          <TuneIcon height={18} width={18} onPress={openFilter} />
-        </Filter>
 
         <Drawer isOpen={isFiltersOpen} height="55%">
           <View style={styles.filterWrapper}>
@@ -209,7 +219,7 @@ export function Assets() {
             </View>
           </View>
         </Drawer>
-      </Header>
+      </SearchContainer>
 
       {isLoading ? (
         <>

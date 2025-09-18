@@ -20,6 +20,7 @@ import { AlertsHistory } from "../screens/AlertsHistory";
 import { More } from "../screens/More";
 import { useState } from "react";
 import { AlertFilterProvider } from "../hooks/useAlertFilter";
+import Header from "../components/Pages/Header";
 
 export function DashboardTab() {
   const { Navigator, Screen } = createBottomTabNavigator();
@@ -80,8 +81,7 @@ export function DashboardTab() {
           component={Assets}
           name="Assets"
           options={{
-            headerRight: () => <QRCodeButton />,
-            headerTitle: "Ativos Monitorados",
+            headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? <WaterPumpIcon /> : <WaterPumpOutlineIcon />,
             title: "Ativos",

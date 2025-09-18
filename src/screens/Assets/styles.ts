@@ -6,12 +6,12 @@ export const Container = styled.View`
   flex: 1;
 `;
 
-export const Header = styled.View`
+export const SearchContainer = styled.View`
   align-items: center;
   flex-direction: row;
   gap: 2px;
   margin-bottom: 16px;
-  padding: 0 30px 0 45px;
+  padding: 0 30px 0 30px;
   justify-content: center;
 `;
 
