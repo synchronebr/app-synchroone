@@ -5,8 +5,9 @@ export const Container = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
 })`
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.secondary_light};
-  border-color: ${({ theme }) => theme.colors.gray_dark};
+  /* background-color: ${({ theme }) => theme.colors.secondary_light}; */
+  border-color: ${({ theme }) => theme.colors.gray};
+  border-width: 1;
   border-radius: 12px;
   flex-direction: row;
   gap: 12px;

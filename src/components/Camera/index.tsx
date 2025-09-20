@@ -7,16 +7,16 @@ import CropPicker, { Image as CropImage } from "react-native-image-crop-picker";
 
 import { Loading } from "../../components/Loading";
 import { Container, CloseIcon, FlashIcon, TakePicture } from "./styles";
+import IconDynamicBall from "../IconDynamicBall";
 
 interface ICamera {
   close: () => void;
-  sendImage?: (image: CropImage) => void;
+  sendImage?: (image: any) => void;
 }
 
 export function Camera({ close, sendImage }: ICamera) {
   const [flashMode, setFlashMode] = useState<"on" | "off">("off");
   const [isCroppingImage, setIsCroppingImage] = useState(false);
-  const [isSendingImage, setIsSendingImage] = useState(false);
 
   const cameraRef = useRef(null);
   const THEME = useTheme();
@@ -34,8 +34,7 @@ export function Camera({ close, sendImage }: ICamera) {
     });
 
     if (cropped?.path) {
-        setIsSendingImage(true);
-        await sendImage?.(cropped);
+        sendImage?.(cropped);
         close();
       }
   }
@@ -56,8 +55,6 @@ export function Camera({ close, sendImage }: ICamera) {
     }
   }
 
-  if (isSendingImage) return <Loading />;
-
   return (
     <Container>
       <ExpoCamera
@@ -68,10 +65,11 @@ export function Camera({ close, sendImage }: ICamera) {
       >
         <CloseIcon
           disabled={isCroppingImage}
-          onPress={close}
+          // onPress={close}
         >
-          <FontAwesome name="close" size={36} color={THEME.colors.light} />
+          <IconDynamicBall icon="chevron-left" onPress={close}/>
         </CloseIcon>
+
 
         <FlashIcon
           disabled={isCroppingImage}

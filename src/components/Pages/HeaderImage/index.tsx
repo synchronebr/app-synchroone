@@ -2,14 +2,8 @@ import React, { useState } from "react";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { Camera as ExpoCamera } from "expo-camera";
-import { Toast } from "react-native-toast-notifications";
 
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
-
-import {
-  updateEquipmentFavoriteStatus,
-} from "../../../services/Equipments";
 
 import { HeaderProps } from "./types";
 import {
@@ -23,6 +17,8 @@ import {
 } from "./styles";
 import IconDynamicBall from "../../IconDynamicBall";
 import { Camera } from "../../Camera";
+import ContentLoader, { Rect } from "react-content-loader/native";
+import { useWindowDimensions } from "react-native";
 
 export default function HeaderImage<T>({
   pieceName,
@@ -30,12 +26,17 @@ export default function HeaderImage<T>({
   imageURL,
   securityStatus,
   setOpenCamera,
-  updateImage,
+  isLoading,
+  sendImage,
 }: HeaderProps<T>) {
   const THEME = useTheme();
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);
+  const { height, width } = useWindowDimensions();
   const [, requestPermission] = ExpoCamera.useCameraPermissions();
+
+  function expoToCropLike(a: { uri: string; mimeType?: string }) {
+    return { path: a.uri, mime: a.mimeType ?? "image/jpeg" }; // cria um objeto com 'path'
+  }
 
   async function loadImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -46,7 +47,8 @@ export default function HeaderImage<T>({
     });
 
     if (!result.canceled) {
-      await sendImagem(result);
+      const a = result.assets[0];
+      await sendImage(expoToCropLike(a));
     }
   }
 
@@ -58,30 +60,36 @@ export default function HeaderImage<T>({
 
   return (
     <Container>
-      <Image
-        resizeMode="cover"
-        source={{
-          uri: imageURL
-            ? imageURL
-            : "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png",
-        }}
-      />
+      {isLoading ? (
+      <ContentLoader viewBox={`0 0 ${width}`}>
+        <Rect x="1" y="1" rx="10" ry="10" width={width} height="200" />
+      </ContentLoader>
+      ) : (
+        <>
+        <Image
+          resizeMode="cover"
+          source={{
+            uri: imageURL
+              ? imageURL
+              : "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png",
+          }}
+        />
 
-      {/* Header sobreposto */}
-      <TopBar edges={["top"]} pointerEvents="box-none">
-        <IconDynamicBall icon="chevron-left" onPress={() => navigation.navigate("Assets" as never)}/>
+        <TopBar edges={["top"]} pointerEvents="box-none">
+          <IconDynamicBall icon="chevron-left" onPress={() => navigation.navigate("Assets" as never)}/>
 
-        <RightIcons>
-          <IconDynamicBall icon="add-a-photo" onPress={getCameraPermission}/>
-          <IconDynamicBall icon="add-photo-alternate" onPress={loadImage}/>
-        </RightIcons>
-      </TopBar>
+          <RightIcons>
+            <IconDynamicBall icon="add-a-photo" onPress={getCameraPermission}/>
+            <IconDynamicBall icon="add-photo-alternate" onPress={loadImage}/>
+          </RightIcons>
+        </TopBar>
 
-      {/* Faixa inferior com título/subtítulo */}
-      <Asset status={securityStatus}>
-        <Title>{pieceName}</Title>
-        <Subtitle>{pathName}</Subtitle>
-      </Asset>
+        <Asset status={securityStatus}>
+          <Title>{pieceName}</Title>
+          <Subtitle>{pathName}</Subtitle>
+        </Asset> 
+        </>
+      )}
     </Container>
   );
 }

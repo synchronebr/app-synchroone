@@ -4,7 +4,10 @@ import { rgba } from "polished";
 import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export const Container = styled.View``;
+export const Container = styled.View`
+  flex: 1;
+  min-height: 200;
+`;
 
 export const Image = styled.Image`
   height: ${RFValue(240)}px;

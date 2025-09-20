@@ -52,10 +52,12 @@ import { Camera } from "../../components/Camera";
 export function AssetDetails() {
   const { height, width } = useWindowDimensions();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [piece, setPiece] = useState<IPiece>(null);
   const [isFavorite, setIsFavorite] = useState(true);
   const [readings, setReadings] = useState([]);
   const [openCamera, setOpenCamera] = useState(false);
+  const [imageURL, setImageURL] = useState("");
 
   const route = useRoute();
   const navigation = useNavigation();
@@ -210,7 +212,9 @@ export function AssetDetails() {
     }
   }
 
-  async function sendImage(croppedImage: CropImage) {
+  async function sendImage(croppedImage: any) {
+    setIsLoadingImage(true);
+    console.log(croppedImage, croppedImage.path, croppedImage.uri)
     try {
       const formData = new FormData();
 
@@ -230,12 +234,14 @@ export function AssetDetails() {
         Toast.show("Foto salva com sucesso!", {
           type: "success",
         });
+        setImageURL(croppedImage.path);
       }
     } catch (error) {
       Toast.show(
         "Houve um erro ao enviar a imagem. Por favor, verifique sua conexão, ou tente novamente mais tarde."
       );
     }
+    setIsLoadingImage(false);
   }
 
   useFocusEffect(
@@ -245,6 +251,7 @@ export function AssetDetails() {
   );
 
   const buildReadings = async () => {
+    setImageURL(piece.image);
     const items = [] as IReading[];
     if (piece.measuringPoints) {
       const mapMP = piece.measuringPoints.map((mp) => {
@@ -286,8 +293,10 @@ export function AssetDetails() {
                 pieceName={piece.description}
                 pathName={piece.path?.title}
                 securityStatus={piece.securityStatus}
-                imageURL={piece.image}
+                imageURL={imageURL}
                 setOpenCamera={setOpenCamera}
+                isLoading={isLoadingImage}
+                sendImage={sendImage}
               />
 
               <Content>
