@@ -9,6 +9,7 @@ import { useTheme } from "styled-components/native";
 import { 
   Container, 
   LeftIcons,
+  LeftIcon,
   TitleWrapper,
   Title,
   RightIcons,
@@ -29,8 +30,8 @@ export default function Header<T>({
       <LeftIcons>
       {backIcon && (
         <>
-        {backIcon === "entypo" && (<Entypo onPress={() => backPress()} name="menu" size={24} color={THEME.colors.primary} />)}
-        {backIcon === "back" && (<AntDesign onPress={() => backPress()} name="left" size={24} color={THEME.colors.primary} />)}
+        {backIcon === "entypo" && (<LeftIcon onPress={() => backPress()} ><Entypo name="menu" size={24} color={THEME.colors.primary} /></LeftIcon>)}
+        {backIcon === "back" && (<LeftIcon onPress={() => backPress()} ><AntDesign name="left" size={24} color={THEME.colors.primary} /></LeftIcon>)}
         </>
       )}
       {leftContent}

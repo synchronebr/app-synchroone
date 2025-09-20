@@ -6,6 +6,9 @@ export interface IPiece {
     id: number;
     description: string;
     type: number;
+    company: { 
+        id: number;
+    };
     securityStatus:  "S" | "W" | "D" | "IN";
     pieceType: {
         id: true;

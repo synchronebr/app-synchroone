@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import {
   ActivityIndicator,
   View,
@@ -8,15 +8,25 @@ import {
   RefreshControl,
 } from "react-native";
 
+import {
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+
 import TuneIcon from "../../assets/icons/tune.svg";
-import QRCodeScannerIcon from "../../assets/icons/qr-code-scanner.svg";
 import CrossIcon from "../../assets/icons/cross.svg";
 import THEME from "../../global/styles/theme";
 
 import { Input } from "../../components/Input";
 import { AssetCard } from "../../components/AssetCard";
 
-import { Container, SearchContainer, List, Content, Filter, DropdownWrapper } from "./styles";
+import {
+  Container,
+  SearchContainer,
+  List,
+  Content,
+  DropdownWrapper,
+} from "./styles";
 import { getEquipments } from "../../services/Equipments";
 import { Loading } from "../../components/Loading";
 import Drawer from "../../components/Drawer";
@@ -25,70 +35,254 @@ import { useAccessLevels } from "../../hooks/useAccessLevels";
 import { useFocusEffect } from "@react-navigation/native";
 import { getPathsForSelect } from "../../services/Companies/Paths";
 import Header from "../../components/Pages/Header";
-// import { getSectorsForSelect } from "../../services/Companies/Areas/Sectors";
-// import { getMachinesForSelect } from "../../services/Companies/Areas/Sectors/Machines";
-// import { getAreasForSelect } from "../../services/Companies/Areas";
+import { QRCodeButton } from "../../components/QRCodeButton";
+
+const DEBUG = false;
+
+/** -----------------------------
+ * Tipos e Estados Normalizados
+ * ------------------------------*/
+type NormAsset = {
+  raw: any;          // asset original para render no Card
+  id: string;        // id do asset (string)
+  text: string;      // "code + description" em lowercase para busca
+  pathIds: string[]; // ids de path (strings) detectados no asset
+};
 
 export function Assets() {
   const { getAccessLevelsData } = useAccessLevels();
+  const { currentCompany } = getAccessLevelsData();
+  const navigation = useNavigation();
+
+  /** -----------------------------
+   * Estados base
+   * ------------------------------*/
   const [searchFieldValue, setSearchFieldValue] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [debouncedTerm, setDebouncedTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);     // load inicial / refresh
+  const [isFiltering, setIsFiltering] = useState(false); // aplicar filtro
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const [assets, setAssets] = useState([]);
+
+  const [assets, setAssets] = useState<any[]>([]);       // mantém se for útil em outros lugares
+  const [normAssets, setNormAssets] = useState<NormAsset[]>([]);
+  const [pathIndex, setPathIndex] = useState<Record<string, number[]>>({}); // pid -> [índices em normAssets]
   const [refreshing, setRefreshing] = useState(false);
 
-  const [dataFilters, setDataFilters] = useState({
-    companyId: 0,
-    areaId: 0,
-    sectorId: 0,
-    machineId: 0,
-    pieceId: 0,
-    measuringPointId: 0,
-  });
+  /** -----------------------------
+   * Filtro por paths
+   * ------------------------------*/
+  const [appliedPaths, setAppliedPaths] = useState<string[]>([]);      // cadeia aplicada (nível 1..n)
+  const [appliedTarget, setAppliedTarget] = useState<Set<string>>(new Set()); // conjunto alvo (selecionados + descendentes)
+  const [descCache, setDescCache] = useState<Record<string, string[]>>({});    // cache de descendentes
 
-  const [selectedArea, setSelectedArea] = useState(null);
-  const [selectedMachine, setSelectedMachine] = useState(null);
-  const [selectedSector, setSelectedSector] = useState(null);
-  const [selectedUnit, setSelectedUnit] = useState(null);
-  const [selectedResponsible, setSelectedResponsible] = useState(null);
-
-  const [pathLevels, setPathLevels] = useState<any[][]>([]);
+  /** -----------------------------
+   * Drawer (seleção temporária)
+   * ------------------------------*/
+  const [pathLevels, setPathLevels] = useState<any[][]>([]);   // opções por nível
   const [selectedPaths, setSelectedPaths] = useState<string[]>([]);
-  const [pathFinished, setPathFinished] = useState(false);
 
-  const accessLevels = getAccessLevelsData();
-  const { currentCompany } = accessLevels;
+  /** -----------------------------
+   * Debounce da busca
+   * ------------------------------*/
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedTerm(searchFieldValue.trim().toLowerCase()), 120);
+    return () => clearTimeout(t);
+  }, [searchFieldValue]);
 
-  const getFirstFilters = async () => {
-    const items = await getPathsForSelect(currentCompany?.companyId);
-    setPathLevels([items]); 
-  }
-  // filters as params here because the way React updates states
-  // is asynchronous, so we need to pass the filters as params,
-  // otherwise the filters will be outdated (old state values were being used)
-  const getEquips = async (filters) => {
-    setIsLoading(true);
-    console.log("filters", filters);
-
-    const getEquipResponse = await getEquipments({
-      companyId: accessLevels.currentCompany.companyId,
-      ...filters,
-    });
-    const assets = getEquipResponse.data.data;
-
-    setAssets(assets);
-    setIsLoading(false);
-  };
+  /** -----------------------------
+   * Carregamento inicial
+   * ------------------------------*/
+  useFocusEffect(
+    useCallback(() => {
+      loadTopLevel();
+      loadAssets();
+    }, [currentCompany?.companyId])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
-
-    getEquips({});
+    await loadAssets();
     setRefreshing(false);
   };
 
+  async function loadTopLevel() {
+    const items = await getPathsForSelect(currentCompany?.companyId);
+    setPathLevels([items ?? []]);
+    if (DEBUG) console.log("TOP LEVEL OPTIONS:", items?.slice?.(0, 3));
+  }
+
+  /** -----------------------------
+   * Extração de pathIds (robusta; usada só no load)
+   * ------------------------------*/
+  function extractAllPathIds(asset: any): string[] {
+    const out = new Set<string>();
+    const toStr = (v: any) => String(v);
+
+    const tryPush = (v: any) => {
+      if (v === undefined || v === null || v === "") return;
+      out.add(toStr(v));
+    };
+
+    const readNode = (node: any) => {
+      if (!node || typeof node !== "object") return;
+
+      // campos comuns
+      tryPush(node?.id);
+      tryPush(node?.value);
+      tryPush(node?.pathId ?? node?.path_id);
+      tryPush(node?.nodeId ?? node?.node_id);
+
+      // arrays comuns
+      const arrays = [
+        node.paths,
+        node.pathIds,
+        node.path_ids,
+        node.ancestors,
+        node.parents,
+        node.children,
+      ].filter(Boolean);
+
+      for (const arr of arrays) {
+        if (Array.isArray(arr)) {
+          for (const el of arr) {
+            if (typeof el === "object") {
+              readNode(el);
+            } else {
+              tryPush(el);
+            }
+          }
+        }
+      }
+
+      // varrer recursivamente o resto (measuringPoint, piece, etc.)
+      for (const k of Object.keys(node)) {
+        const v = (node as any)[k];
+        if (!v) continue;
+        if (Array.isArray(v)) {
+          for (const el of v) if (typeof el === "object") readNode(el);
+        } else if (typeof v === "object") {
+          readNode(v);
+        }
+      }
+    };
+
+    readNode(asset);
+    return Array.from(out);
+  }
+
+  /** -----------------------------
+   * Load de assets + normalização + índice invertido
+   * ------------------------------*/
+  async function loadAssets() {
+    try {
+      setIsLoading(true);
+      const res = await getEquipments({ companyId: currentCompany.companyId });
+      const list = res?.data?.data ?? [];
+      setAssets(list);
+
+      const nextNorm: NormAsset[] = [];
+      const nextIndex: Record<string, number[]> = {};
+
+      for (let i = 0; i < list.length; i++) {
+        const a = list[i];
+        const id = String(a?.id ?? i);
+        const text = `${a?.code ?? ""} ${a?.description ?? ""}`.toLowerCase();
+        const pathIds = extractAllPathIds(a).map(String);
+
+        nextNorm.push({ raw: a, id, text, pathIds });
+
+        // índice invertido (evita duplicata do mesmo path no mesmo asset)
+        const unique = new Set(pathIds);
+        unique.forEach((pid) => {
+          if (!nextIndex[pid]) nextIndex[pid] = [];
+          nextIndex[pid].push(i); // índice do nextNorm
+        });
+      }
+
+      setNormAssets(nextNorm);
+      setPathIndex(nextIndex);
+
+      if (DEBUG) {
+        console.log("norm sample:", nextNorm[0]);
+        const anyKey = Object.keys(nextIndex)[0];
+        console.log("index sample:", anyKey, "->", nextIndex[anyKey]?.slice(0, 10));
+      }
+    } catch (e) {
+      if (DEBUG) console.log("Erro getEquipments", e);
+      setAssets([]);
+      setNormAssets([]);
+      setPathIndex({});
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  /** -----------------------------
+   * Descendentes com cache
+   * ------------------------------*/
+  async function getAllDescendants(companyId: number, rootId: string): Promise<string[]> {
+    if (descCache[rootId]) return descCache[rootId];
+
+    const acc: string[] = [];
+    const seen = new Set<string>();
+
+    async function dfs(id: string) {
+      if (seen.has(id)) return;
+      seen.add(id);
+
+      const children = await getPathsForSelect(companyId, Number(id));
+      if (!children?.length) return;
+
+      for (const ch of children) {
+        const cid = String(ch?.value ?? ch?.id);
+        acc.push(cid);
+        await dfs(cid);
+      }
+    }
+
+    await dfs(rootId);
+    setDescCache((prev) => ({ ...prev, [rootId]: acc }));
+    if (DEBUG) console.log("DESC CACHE BUILT for", rootId, "size:", acc.length);
+    return acc;
+  }
+
+  async function prewarmDescendantsIfNeeded(rootId: string) {
+    const id = String(rootId);
+    if (!descCache[id]) {
+      try {
+        await getAllDescendants(currentCompany.companyId, id);
+      } catch {}
+    }
+  }
+
+  async function hydrateLevelsFor(applied: string[]) {
+    // garante nível 0
+    if (!pathLevels[0]?.length) {
+      const top = await getPathsForSelect(currentCompany?.companyId);
+      setPathLevels([top ?? []]);
+    }
+
+    // carrega sequencialmente as opções dos níveis seguintes
+    let levels = pathLevels.length ? [...pathLevels] : [pathLevels[0] ?? []];
+
+    for (let i = 0; i < applied.length; i++) {
+      const id = applied[i];
+      if (!levels[i + 1]) {
+        const children = await getPathsForSelect(currentCompany?.companyId, Number(id));
+        levels[i + 1] = children ?? [];
+      }
+      if (i === applied.length - 1) prewarmDescendantsIfNeeded(id);
+    }
+
+    setPathLevels(levels);
+  }
+
+  /** -----------------------------
+   * Drawer handlers
+   * ------------------------------*/
   function openFilter() {
-    // if (isLoading) return;
+    setSelectedPaths(appliedPaths);
+    hydrateLevelsFor(appliedPaths);
     setIsFiltersOpen(true);
   }
 
@@ -97,77 +291,118 @@ export function Assets() {
   }
 
   function clearFilters() {
-    const clearedFilters = {
-      areaId: null,
-      machineId: null,
-      sectorId: null,
-      unitId: null,
-      responsibleId: null,
-      search: searchFieldValue,
-    };
-
-    setSelectedArea(null);
-    setSelectedMachine(null);
-    setSelectedSector(null);
-    setSelectedUnit(null);
-    setSelectedResponsible(null);
-
+    setSelectedPaths([]);
+    setAppliedPaths([]);
+    setAppliedTarget(new Set());
     closeFilter();
-    getEquips(clearedFilters); // Pass cleared filters
-  }
-
-  function handleFilterSubmit() {
-    closeFilter();
-    console.log('selectedPaths', selectedPaths)
-    console.log('assets', assets)
-    // setAssets
   }
 
   const handleChangePathLevel = async (levelIndex: number, value: any) => {
-    if (!value || value == '') return;
+    if (!value && value !== 0) return;
     if (selectedPaths[levelIndex] === value) return;
-  
-    const newSelectedPaths = [...selectedPaths];
-    newSelectedPaths[levelIndex] = value;
-    newSelectedPaths.splice(levelIndex + 1);
-    setSelectedPaths(newSelectedPaths); 
-  
-    const newPathLevels = [...pathLevels];
-    newPathLevels.splice(levelIndex + 1); 
-    setPathLevels(newPathLevels);       
-  
-    const items = await getPathsForSelect(currentCompany?.companyId, Number(value));
 
-    if (!items || items.length === 0) {
-      console.log('buscar pieces...')
-      setPathFinished(true);
+    const newSelected = [...selectedPaths];
+    newSelected[levelIndex] = String(value);
+    newSelected.splice(levelIndex + 1);
+    setSelectedPaths(newSelected);
+
+    const newLevels = [...pathLevels];
+    newLevels.splice(levelIndex + 1);
+    setPathLevels(newLevels);
+
+    // carrega próximo nível
+    const items = await getPathsForSelect(currentCompany?.companyId, Number(value));
+    if (items?.length) {
+      setPathLevels((prev) => {
+        const updated = [...prev];
+        updated[levelIndex + 1] = items;
+        return updated;
+      });
+    }
+
+    // pré-aquecer descendentes do nó selecionado (melhora "Aplicar")
+    prewarmDescendantsIfNeeded(String(value));
+  };
+
+  async function handleFilterSubmit() {
+    const cleaned = selectedPaths.filter((v) => v != null && v !== "").map(String);
+
+    if (cleaned.length === 0) {
+      setAppliedPaths([]);
+      setAppliedTarget(new Set());
+      closeFilter();
       return;
     }
-  
-    setPathLevels((prev) => {
-      const updated = [...prev];
-      updated[levelIndex + 1] = items;
-      return updated;
+
+    setIsFiltering(true);
+
+    const deepest = cleaned[cleaned.length - 1];
+
+    // usa descendentes do cache (instantâneo)
+    const cachedDesc = descCache[deepest] ?? [];
+    const target = new Set<string>([...cleaned, ...cachedDesc]);
+
+    setAppliedPaths(cleaned);
+    setAppliedTarget(target);
+    closeFilter();
+
+    // completa cache em background e amplia alvo
+    try {
+      if (!descCache[deepest]) {
+        const desc = await getAllDescendants(currentCompany.companyId, deepest);
+        if (desc?.length) {
+          setAppliedTarget((prev) => new Set([...Array.from(prev), ...desc]));
+        }
+      }
+    } finally {
+      setIsFiltering(false);
+    }
+  }
+
+  /** -----------------------------
+   * Filtro turbo (índice invertido)
+   * ------------------------------*/
+  const filteredAssets = useMemo(() => {
+    const term = debouncedTerm;
+    const hasText = term.length > 0;
+
+    // sem path aplicado → só texto
+    if (appliedTarget.size === 0) {
+      if (!hasText) return normAssets.map((n) => n.raw);
+      return normAssets.filter((n) => n.text.includes(term)).map((n) => n.raw);
+    }
+
+    // com path aplicado → união de candidatos pelo índice
+    const candidateIndexSet = new Set<number>();
+    appliedTarget.forEach((pid) => {
+      const arr = pathIndex[pid];
+      if (arr && arr.length) {
+        for (let i = 0; i < arr.length; i++) candidateIndexSet.add(arr[i]);
+      }
     });
 
-    setPathFinished(false);
-  };
-  useFocusEffect(
-    useCallback(() => {
-      getEquips({});
-      getFirstFilters();
-    }, [currentCompany])
-  );
+    if (candidateIndexSet.size === 0) return [];
 
+    const candidates = Array.from(candidateIndexSet).map((idx) => normAssets[idx]);
+
+    const afterText = hasText
+      ? candidates.filter((n) => n.text.includes(term))
+      : candidates;
+
+    return afterText.map((n) => n.raw);
+  }, [normAssets, pathIndex, appliedTarget, debouncedTerm]);
+
+  /** -----------------------------
+   * Render
+   * ------------------------------*/
   return (
     <Container>
-      <Header 
-        title="Ativos Monitorados" 
-        backIcon="back" 
+      <Header
+        title="Ativos Monitorados"
         rightContent={
           <>
-            <QRCodeScannerIcon width={24} height={24} fill={THEME.colors.dark} />
-            <TuneIcon width={24} height={24} fill={THEME.colors.dark} onPress={openFilter}/>
+            <QRCodeButton />
+            <TuneIcon width={24} height={24} fill={THEME.colors.dark} onPress={openFilter} />
           </>
         }
       />
@@ -178,16 +413,24 @@ export function Assets() {
           placeholder="Pesquisar ativo"
           searchable
           value={searchFieldValue}
-          editable={!isLoading}
-          style={{ width: '100%' }}
+          editable={!isLoading && !isFiltering}
+          style={{ width: "100%" }}
         />
 
-        <Drawer isOpen={isFiltersOpen} height="55%">
+        <Drawer
+          isOpen={isFiltersOpen}
+          position="center"
+          maxHeightPercent={0.95}
+          onRequestClose={closeFilter}
+          animateOnFirstOpen={false}
+          durationMs={200}
+        >
           <View style={styles.filterWrapper}>
             <View style={styles.filterHeader}>
               <Text style={styles.title}>Filtrar ativos</Text>
               <CrossIcon onPress={closeFilter} />
             </View>
+
             <View style={styles.filterContent}>
               {pathLevels?.map((path, i) => (
                 <DropdownWrapper key={i}>
@@ -202,42 +445,43 @@ export function Assets() {
                 </DropdownWrapper>
               ))}
             </View>
-            <View>
-              <TouchableOpacity
-                style={styles.clearFilterButton}
-                onPress={clearFilters}
-              >
-                <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
-              </TouchableOpacity>
 
+            <View>
               <TouchableOpacity
                 style={styles.applyButton}
                 onPress={handleFilterSubmit}
+                disabled={isFiltering}
               >
-                <Text style={styles.applyButtonText}>Aplicar filtro</Text>
+                <Text style={styles.applyButtonText}>
+                  {isFiltering ? "Aplicando..." : "Aplicar filtro"}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.clearFilterButton}
+                onPress={clearFilters}
+                disabled={isFiltering}
+              >
+                <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
               </TouchableOpacity>
             </View>
           </View>
         </Drawer>
       </SearchContainer>
 
-      {isLoading ? (
+      {(isLoading || isFiltering) ? (
         <>
           <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />
-          <ActivityIndicator color={THEME.colors.light} />
+          <ActivityIndicator color={THEME.colors.primary} />
         </>
       ) : (
         <>
-          {assets.length > 0 ? (
+          {filteredAssets.length > 0 ? (
             <List
-              data={assets.filter((asset) =>
-                asset?.description
-                  ?.toLowerCase()
-                  ?.includes(searchFieldValue.toLowerCase())
-              )}
+              data={filteredAssets}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
-                <AssetCard item={item} key={`asset-${item.id.toString()}`} />
+                <AssetCard item={item} key={`asset-${item.id}`} />
               )}
               refreshControl={
                 <RefreshControl
@@ -259,6 +503,9 @@ export function Assets() {
   );
 }
 
+/** -----------------------------
+ * Styles
+ * ------------------------------*/
 const styles = StyleSheet.create({
   filterWrapper: {
     display: "flex",
@@ -288,7 +535,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 20,
     width: "100%",
   },
   applyButtonText: {
@@ -303,7 +550,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 5,
     width: "100%",
   },
   clearFilterButtonText: {

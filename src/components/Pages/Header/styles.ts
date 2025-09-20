@@ -14,6 +14,13 @@ export const LeftIcons = styled.View`
   flex-direction: row;
   align-items: center;
   width: 56px; 
+  gap: 16px;
+`;
+
+export const LeftIcon = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.7,
+})`
+  width: 56px; 
 `;
 
 export const RightIcons = styled.View`
