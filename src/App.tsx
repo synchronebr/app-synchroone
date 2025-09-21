@@ -1,7 +1,8 @@
 import "react-native-gesture-handler";
 import React from "react";
 import { LogBox } from "react-native";
-import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
+import { Platform, StatusBar, StyleSheet } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import * as NavigationBar from "expo-navigation-bar";
 import {
   useFonts,

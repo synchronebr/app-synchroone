@@ -14,7 +14,6 @@ import {
   Title,
   RightIcons,
 } from "./styles";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function Header<T>({ 
   title, 

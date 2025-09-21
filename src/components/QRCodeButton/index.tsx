@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Camera } from "expo-camera";
+import { useCameraPermissions } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 
 import QRCodeScannerIcon from "../../assets/icons/qr-code-scanner.svg";
@@ -12,7 +12,7 @@ interface IQRCodeButton {
 }
 
 export function QRCodeButton({ iconSize = 24 }: IQRCodeButton) {
-  const [, requestPermission] = Camera.useCameraPermissions();
+  const [, requestPermission] = useCameraPermissions();
 
   const navigation = useNavigation<QRCodeNavigationProps>();
 

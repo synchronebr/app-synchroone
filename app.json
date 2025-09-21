@@ -2,34 +2,25 @@
   "expo": {
     "name": "synchroone",
     "slug": "synchroone",
-    "version": "1.0.5",
     "icon": "./src/assets/images/app-icon.png",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "plugins": [
-      "expo-font",
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#1C2C3C",
-          "image": "./assets/images/splash_screen.png",
-          "dark": {
-            "image": "./assets/images/splash_screen.png",
-            "backgroundColor": "#1C2C3C"
-          },
-          "imageWidth": 200
-        }
-      ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "1acbf27b-df6b-45be-9b63-e92b8a63cabc"
-      }
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#1C2C3C"
+    },
+    "ios": {
+      "bundleIdentifier": "com.synchroone"
     },
     "android": {
-      "package": "com.synchroone",
-      "versionCode": 5
-    }
+      "package": "com.synchroone"
+    },
+    "plugins": [
+      "react-native-ble-plx",
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "development"
+        }
+      ]
+    ]
   }
 }

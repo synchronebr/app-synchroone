@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
-import { Camera } from "expo-camera";
+import { useCameraPermissions } from "expo-camera";
 import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
@@ -19,7 +19,7 @@ import { useBLEManager } from "../../hooks/useBLEManager";
 import { ActivityIndicator } from "react-native";
 
 export function PreConfigureSensor({ route }) {
-  const [, requestPermission] = Camera.useCameraPermissions();
+  const [, requestPermission] = useCameraPermissions();
   const { scanAvailableDevices } = useBLEManager();
   const [bleLoading, setBleLoading] = useState(null);
   const [devices, setDevices] = useState([]);

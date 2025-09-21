@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
-import { Camera as ExpoCamera } from "expo-camera";
+import { useCameraPermissions } from "expo-camera";
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -32,7 +32,7 @@ export default function HeaderImage<T>({
   const THEME = useTheme();
   const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
-  const [, requestPermission] = ExpoCamera.useCameraPermissions();
+  const [, requestPermission] = useCameraPermissions();
 
   function expoToCropLike(a: { uri: string; mimeType?: string }) {
     return { path: a.uri, mime: a.mimeType ?? "image/jpeg" }; // cria um objeto com 'path'
