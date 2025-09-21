@@ -3,7 +3,7 @@ export default {
     primary: "#1E293B",
     secondary: "#0284C7",
     secondary_light: "#0284C71A",
-    dark: "#0A0A0A",
+    dark: "#1E293B",
     light: "#FAFAFA",
     gray: "#CBD5E1",
     gray_dark: "#94A3B8",

@@ -6,14 +6,12 @@ import {
   useWindowDimensions,
 } from "react-native";
 import ContentLoader, { Rect, Circle } from "react-content-loader/native";
-import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
-import { Camera as ExpoCamera } from "expo-camera";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { OneSignal } from "react-native-onesignal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Toast } from "react-native-toast-notifications";
 import { useTheme } from "styled-components/native";
+import CropPicker, { Image as CropImage } from "react-native-image-crop-picker";
 import {
   useFocusEffect,
   useNavigation,
@@ -42,114 +40,35 @@ import { updatePieceImage } from "../../services/Companies/Pieces/MeasuringPoint
 import { AssetDetailsRouteProps } from "./types";
 import {
   Container,
-  Header,
-  Image,
-  Icon,
-  Asset,
-  Title,
-  Subtitle,
   Content,
   Text,
   List,
   DiagnosesButton,
   DiagnosesButtonText,
 } from "./styles";
+import HeaderImage from "../../components/Pages/HeaderImage";
+import { Camera } from "../../components/Camera";
 
 export function AssetDetails() {
   const { height, width } = useWindowDimensions();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [piece, setPiece] = useState<IPiece>(null);
   const [isFavorite, setIsFavorite] = useState(true);
   const [readings, setReadings] = useState([]);
+  const [openCamera, setOpenCamera] = useState(false);
+  const [imageURL, setImageURL] = useState("");
 
   const route = useRoute();
   const navigation = useNavigation();
 
-  const [, requestPermission] = ExpoCamera.useCameraPermissions();
   const THEME = useTheme();
 
   const params: AssetDetailsRouteProps = route.params as AssetDetailsRouteProps;
 
-  async function loadScreen() {
-    setIsLoading(true);
-
-    try {
-      const response = await getEquipmentById(Number(params.id));
-      const data = response;
-      setPiece(data);
-      setIsFavorite(data.isFavorite);
-    } catch (error) {
-      Toast.show(
-        "Houve um erro ao buscar o equipamento. Por favor, verifique sua conexão, ou tente novamente mais tarde.",
-        { duration: 5000, type: "danger" }
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   function toggleIsFavorite() {
     setIsFavorite(!isFavorite);
-    updateEquipmentFavoriteStatus(piece.id, !isFavorite).catch((_) => {});
-  }
-
-  async function getCameraPermission() {
-    const { granted } = await requestPermission();
-
-    if (granted) navigation.navigate("Camera", { piece });
-  }
-
-  async function sendImagem(result: ImagePicker.ImagePickerResult) {
-    try {
-      const imageUri = result.assets[0].uri;
-
-      const fileInfo = await FileSystem.getInfoAsync(imageUri);
-      const maxSizeInBytes = 3 * 1024 * 1024;
-
-      if (fileInfo.size > maxSizeInBytes) {
-        Toast.show("A imagem excede 3MB. Escolha uma imagem menor.");
-        return;
-      }
-
-      const formData = new FormData();
-
-      formData.append("image", {
-        uri: result.assets[0].uri,
-        name: result.assets[0].fileName || "photo.jpg",
-        type: result.assets[0].mimeType || "image/jpeg",
-      });
-
-      const { status } = await updatePieceImage(
-        piece.id,
-        formData
-      );
-
-      if (status === 200) {
-        Toast.show("Foto salva com sucesso!", {
-          type: "success",
-        });
-
-        loadScreen();
-      }
-    } catch (error) {
-      console.log(error);
-      Toast.show(
-        "Houve um erro ao enviar a imagem. Por favor, verifique sua conexão, ou tente novamente mais tarde."
-      );
-    }
-  }
-
-  async function loadImage() {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.7,
-    });
-
-    if (!result.canceled) {
-      await sendImagem(result);
-    }
+    updateEquipmentFavoriteStatus(piece.id, !isFavorite).catch((_) => { });
   }
 
   const {
@@ -275,6 +194,56 @@ export function AssetDetails() {
     initializeOneSignal();
   }, []);
 
+  async function loadScreen() {
+    setIsLoading(true);
+
+    try {
+      const response = await getEquipmentById(Number(params.id));
+      const data = response;
+      setPiece(data);
+      setIsFavorite(data.isFavorite);
+    } catch (error) {
+      Toast.show(
+        "Houve um erro ao buscar o equipamento. Por favor, verifique sua conexão, ou tente novamente mais tarde.",
+        { duration: 5000, type: "danger" }
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function sendImage(croppedImage: any) {
+    setIsLoadingImage(true);
+    console.log(croppedImage, croppedImage.path, croppedImage.uri)
+    try {
+      const formData = new FormData();
+
+      formData.append("image", {
+        uri: croppedImage.path,
+        name: "photo.jpg",
+        type: "image/jpeg",
+      });
+
+      const { status } = await updatePieceImage(
+        piece.company.id,
+        piece.id,
+        formData
+      );
+
+      if (status === 200) {
+        Toast.show("Foto salva com sucesso!", {
+          type: "success",
+        });
+        setImageURL(croppedImage.path);
+      }
+    } catch (error) {
+      Toast.show(
+        "Houve um erro ao enviar a imagem. Por favor, verifique sua conexão, ou tente novamente mais tarde."
+      );
+    }
+    setIsLoadingImage(false);
+  }
+
   useFocusEffect(
     useCallback(() => {
       loadScreen();
@@ -282,6 +251,7 @@ export function AssetDetails() {
   );
 
   const buildReadings = async () => {
+    setImageURL(piece.image);
     const items = [] as IReading[];
     if (piece.measuringPoints) {
       const mapMP = piece.measuringPoints.map((mp) => {
@@ -312,63 +282,22 @@ export function AssetDetails() {
           <Rect x="1" y="470" rx="10" ry="10" width={width} height="100" />
         </ContentLoader>
       ) : (
+        <>
+        {openCamera ? (
+          <Camera close={() => setOpenCamera(false)} sendImage={sendImage}/>
+        ) : (
         <ScrollView>
           {piece && (
             <>
-              <Header>
-                <Image
-                  resizeMode="cover"
-                  source={{
-                    uri: piece?.image
-                      ? piece.image
-                      : "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png",
-                  }}
-                />
-
-                <Icon style={styles.backIcon}>
-                  <Entypo
-                    color={THEME.colors.primary}
-                    name="chevron-left"
-                    onPress={() => navigation.navigate("Assets" as never)}
-                    size={32}
-                    // style={styles.backIcon}
-                  />
-                </Icon>
-
-                <View style={styles.icons}>
-                  <Icon>
-                    <MaterialIcons
-                      style={styles.icon}
-                      color={THEME.colors.primary}
-                      name="add-a-photo"
-                      onPress={getCameraPermission}
-                      size={24}
-                    />
-                  </Icon>
-
-                  <Icon>
-                    <MaterialIcons
-                      style={styles.icon}
-                      color={THEME.colors.primary}
-                      name="add-photo-alternate"
-                      onPress={loadImage}
-                      size={24}
-                    />
-                  </Icon>
-
-                  {/* <View>
-                  <AssetDetailHeaderIcon
-                    isFavorite={isFavorite}
-                    toggleIsFavorite={toggleIsFavorite}
-                  />
-                </View> */}
-                </View>
-
-                <Asset status={piece?.securityStatus}>
-                  <Title>{piece?.description}</Title>
-                  <Subtitle>{piece?.path?.title}</Subtitle>
-                </Asset>
-              </Header>
+              <HeaderImage 
+                pieceName={piece.description}
+                pathName={piece.path?.title}
+                securityStatus={piece.securityStatus}
+                imageURL={imageURL}
+                setOpenCamera={setOpenCamera}
+                isLoading={isLoadingImage}
+                sendImage={sendImage}
+              />
 
               <Content>
                 <Text>Detalhes do Ativo</Text>
@@ -421,6 +350,8 @@ export function AssetDetails() {
             </>
           )}
         </ScrollView>
+        )}
+        </>
       )}
     </Container>
   );

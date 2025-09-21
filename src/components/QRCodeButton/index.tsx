@@ -4,18 +4,17 @@ import { Camera } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 
 import QRCodeScannerIcon from "../../assets/icons/qr-code-scanner.svg";
-
 import THEME from "../../global/styles/theme";
-
-import { Container } from "./styles";
 import { QRCodeNavigationProps } from "./types";
 
-export function QRCodeButton() {
+interface IQRCodeButton {
+  iconSize?: number;
+}
+
+export function QRCodeButton({ iconSize = 24 }: IQRCodeButton) {
   const [, requestPermission] = Camera.useCameraPermissions();
 
   const navigation = useNavigation<QRCodeNavigationProps>();
-
-  const iconSize = 16;
 
   async function getCameraPermission() {
     const { granted } = await requestPermission();
@@ -27,9 +26,13 @@ export function QRCodeButton() {
   }
 
   return (
-    <Container style={styles.container} onPress={getCameraPermission}>
-      <QRCodeScannerIcon height={iconSize} width={iconSize} />
-    </Container>
+    <QRCodeScannerIcon 
+      style={styles.container} 
+      onPress={getCameraPermission} 
+      height={iconSize} 
+      width={iconSize} 
+      fill={THEME.colors.dark} 
+    />
   );
 }
 

@@ -11,7 +11,6 @@ import { PreConfigureGateway } from "../screens/PreConfigureGateway";
 import { ConfigureParameters } from "../screens/ConfigureParameters";
 import { ConfigureGateway } from "../screens/ConfigureGateway";
 import { AssetDetails } from "../screens/AssetDetails";
-import { Camera } from "../screens/Camera";
 import { EditAssetDetails } from "../screens/EditAssetDetails";
 import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
@@ -135,13 +134,6 @@ export function Dashboard() {
       <Screen
         component={AssetDetails}
         name="AssetDetails"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Screen
-        component={Camera}
-        name="Camera"
         options={{
           headerShown: false,
         }}

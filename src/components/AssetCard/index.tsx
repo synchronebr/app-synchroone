@@ -30,7 +30,7 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
   return (
     <Container onPress={() => navigation.navigate("AssetDetails", { id: item.id })} {...rest} status={item.securityStatus}>
       <Image
-        source={{ uri: item.image ? item.image : "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png"}}
+        source={item.image ? { uri: item.image } : require('../../assets/images/blue-machine-sensor.png')}
       />
       {item.securityStatus === 'S' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Seguro</CardStatusSafeText></CardStatusSafe>)}
       {item.securityStatus === 'W' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Alerta</CardStatusSafeText></CardStatusSafe>)}
@@ -52,12 +52,12 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
 
         <Elipses>
           {item.readings?.slice(0, 8).sort((a, b) => a.id - b.id).map(reading => (
-            <>
-            {reading.securityStatus === 'S' && (<SuccessElipse />)}
-            {reading.securityStatus === 'W' && (<WarningElipse />)}
-            {reading.securityStatus === 'D' && (<DangerElipse />)}
-            {reading.securityStatus === 'IN' && (<InvalidElipse />)}
-            </>
+            <React.Fragment key={reading.id}>
+              {reading.securityStatus === 'S' && (<SuccessElipse />)}
+              {reading.securityStatus === 'W' && (<WarningElipse />)}
+              {reading.securityStatus === 'D' && (<DangerElipse />)}
+              {reading.securityStatus === 'IN' && (<InvalidElipse />)}
+            </React.Fragment>
           ))}
         </Elipses>
       </Content>
