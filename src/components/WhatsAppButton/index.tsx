@@ -36,7 +36,7 @@ export function WhatsAppButton() {
       <Content>
         <Title>Precisa de ajuda?</Title>
 
-        <Subtitle>Seguir para WhatsApp</Subtitle>
+        <Subtitle>Fale com um de nossos atendentes para lhe ajudar!</Subtitle>
       </Content>
 
       <ArrowForwardIcon
