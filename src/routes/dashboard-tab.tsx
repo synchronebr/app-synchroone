@@ -10,7 +10,6 @@ import ChartPieIcon from "../assets/icons/chart-pie.svg";
 import SettingsBoldIcon from "../assets/icons/settings-bold.svg";
 import SettingsLinearIcon from "../assets/icons/settings-linear.svg";
 
-import { QRCodeButton } from "../components/QRCodeButton";
 import { TabBarCenterButton } from "../components/TabBarCenterButton";
 
 import { Home } from "../screens/Home";
@@ -20,7 +19,6 @@ import { AlertsHistory } from "../screens/AlertsHistory";
 import { More } from "../screens/More";
 import { useState } from "react";
 import { AlertFilterProvider } from "../hooks/useAlertFilter";
-import Header from "../components/Pages/Header";
 
 export function DashboardTab() {
   const { Navigator, Screen } = createBottomTabNavigator();

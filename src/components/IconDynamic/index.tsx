@@ -2,12 +2,13 @@
 import React from "react";
 
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import TuneIcon from "../../assets/icons/tune.svg";
 
 import THEME from "../../global/styles/theme";
 import { AccordionProps } from "./types";
 import { Container } from "./styles";
 
-export default function IconDynamicBall<T>({ 
+export default function IconDynamic<T>({ 
   icon,
   onPress,
  }: AccordionProps<T>) {

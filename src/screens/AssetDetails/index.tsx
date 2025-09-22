@@ -286,7 +286,7 @@ export function AssetDetails() {
         {openCamera ? (
           <Camera close={() => setOpenCamera(false)} sendImage={sendImage}/>
         ) : (
-        <ScrollView>
+        <>
           {piece && (
             <>
               <HeaderImage 
@@ -299,6 +299,7 @@ export function AssetDetails() {
                 sendImage={sendImage}
               />
 
+              <ScrollView>
               <Content>
                 <Text>Detalhes do Ativo</Text>
 
@@ -347,9 +348,10 @@ export function AssetDetails() {
                   }
                 />
               </Content>
+              </ScrollView>
             </>
           )}
-        </ScrollView>
+        </>
         )}
         </>
       )}

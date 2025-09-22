@@ -1,6 +1,6 @@
 export type HeaderProps<T> = {
   pieceName: string;
-  pathName: string;
+  pathName?: string;
   securityStatus: string;
   imageURL?: string;
   isLoading?: boolean;

@@ -48,14 +48,15 @@ export default function HeaderImage<T>({
 
     if (!result.canceled) {
       const a = result.assets[0];
-      await sendImage(expoToCropLike(a));
+      const image = expoToCropLike(a);
+      if (image && sendImage) await sendImage(image);
     }
   }
 
   async function getCameraPermission() {
     const { granted } = await requestPermission();
 
-    if (granted) setOpenCamera(true);
+    if (granted && setOpenCamera) setOpenCamera(true);
   }
 
   return (
@@ -76,7 +77,7 @@ export default function HeaderImage<T>({
         />
 
         <TopBar edges={["top"]} pointerEvents="box-none">
-          <IconDynamicBall icon="chevron-left" onPress={() => navigation.navigate("Assets" as never)}/>
+          <IconDynamicBall icon="chevron-left" onPress={() => navigation.goBack()}/>
 
           <RightIcons>
             <IconDynamicBall icon="add-a-photo" onPress={getCameraPermission}/>

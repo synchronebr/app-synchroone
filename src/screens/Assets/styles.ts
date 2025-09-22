@@ -11,7 +11,7 @@ export const SearchContainer = styled.View`
   flex-direction: row;
   gap: 2px;
   margin-bottom: 16px;
-  padding: 0 30px 0 30px;
+  padding: 0 20px 0 20px;
   justify-content: center;
 `;
 

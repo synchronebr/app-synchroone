@@ -401,7 +401,7 @@ export function Assets() {
         title="Ativos Monitorados"
         rightContent={
           <>
-            <QRCodeButton />
+            {/* <QRCodeButton /> */}
             <TuneIcon width={24} height={24} fill={THEME.colors.dark} onPress={openFilter} />
           </>
         }
@@ -414,6 +414,7 @@ export function Assets() {
           searchable
           value={searchFieldValue}
           editable={!isLoading && !isFiltering}
+          qrcode
           style={{ width: "100%" }}
         />
 

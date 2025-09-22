@@ -8,4 +8,5 @@ type InputProps = MaskInputProps & {
   labelColor?: string;
   searchable?: boolean;
   secureTextEntry?: boolean;
+  qrcode?: boolean;
 };

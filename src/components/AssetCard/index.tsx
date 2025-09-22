@@ -21,6 +21,7 @@ import {
   WarningElipse,
   SuccessElipse,
   InvalidElipse,
+  LastMeasurementSubText,
 } from "./styles";
 
 export function AssetCard({ item, ...rest }: AssetCardProps) {
@@ -46,20 +47,30 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
 
         {/* <Text>5 sensores</Text> */}
 
+        {/* {item?.readings?.length > 0 && ( */}
         <LastMeasurementInfo>
           <LastMeasurementText>Últimas medições:</LastMeasurementText>
+          <Elipses>
+            <>
+            {item.readings && item.readings.length > 0 ? (
+              <>
+              {item.readings?.slice(0, 8).sort((a, b) => a.id - b.id).map(reading => (
+                <React.Fragment key={reading.id}>
+                  {reading.securityStatus === 'S' && (<SuccessElipse />)}
+                  {reading.securityStatus === 'W' && (<WarningElipse />)}
+                  {reading.securityStatus === 'D' && (<DangerElipse />)}
+                  {reading.securityStatus === 'IN' && (<InvalidElipse />)}
+                </React.Fragment>
+              ))}
+              </>
+            ) : (
+            <LastMeasurementSubText>Sem medições</LastMeasurementSubText>
+            )}
+            </>
+          </Elipses>
         </LastMeasurementInfo>
+        {/* )} */}
 
-        <Elipses>
-          {item.readings?.slice(0, 8).sort((a, b) => a.id - b.id).map(reading => (
-            <React.Fragment key={reading.id}>
-              {reading.securityStatus === 'S' && (<SuccessElipse />)}
-              {reading.securityStatus === 'W' && (<WarningElipse />)}
-              {reading.securityStatus === 'D' && (<DangerElipse />)}
-              {reading.securityStatus === 'IN' && (<InvalidElipse />)}
-            </React.Fragment>
-          ))}
-        </Elipses>
       </Content>
 
       <ArrowForwardIcon

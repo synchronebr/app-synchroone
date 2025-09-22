@@ -37,6 +37,7 @@ export const Image = styled.Image`
 export const Content = styled.View`
   flex: 1;
   gap: 2px;
+  /* align-self: stretch;  */
 `;
 
 export const Title = styled.Text`
@@ -60,15 +61,21 @@ export const Text = styled.Text`
 `;
 
 export const LastMeasurementInfo = styled.View`
-  align-items: center;
-  flex-direction: row;
   justify-content: space-between;
-  margin-top: 4px;
+  margin-top: 6px;
+  gap: 6px;
 `;
 
 export const LastMeasurementText = styled.Text`
   color: ${({ theme }) => theme.colors.dark};
   font-family: ${({ theme }) => theme.fonts.semiBold};
+  font-size: ${({ theme }) => theme.fontSize.smallest}px;
+  line-height: 15px;
+`;
+
+export const LastMeasurementSubText = styled.Text`
+  color: ${({ theme }) => theme.colors.dark};
+  font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${({ theme }) => theme.fontSize.smallest}px;
   line-height: 15px;
 `;

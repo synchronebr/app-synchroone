@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export const Container = styled.View`
   flex: 1;
-  min-height: 200;
+  min-height: 166;
 `;
 
 export const Image = styled.Image`
@@ -56,7 +56,7 @@ export const Asset = styled.View<IAsset>`
     }
   }};
   position: absolute;
-  bottom: 0;
+  bottom: 17;
   width: 100%;
   padding: 16px 32px;
   gap: 8px;

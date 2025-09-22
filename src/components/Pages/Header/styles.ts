@@ -26,6 +26,7 @@ export const LeftIcon = styled.TouchableOpacity.attrs({
 export const RightIcons = styled.View`
   flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
   gap: 16px;
   width: 56px; 
 `;

@@ -1,9 +1,14 @@
 import React, { useRef, useState } from "react";
 import { StyleSheet } from "react-native";
-import { CameraType, Camera as ExpoCamera } from "expo-camera";
+import {
+  CameraView,
+  useCameraPermissions,
+  type CameraViewRef,
+} from "expo-camera";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
-import CropPicker, { Image as CropImage } from "react-native-image-crop-picker";
+import CropPicker from "react-native-image-crop-picker";
+import type { ComponentRef } from "react";
 
 import { Loading } from "../../components/Loading";
 import { Container, CloseIcon, FlashIcon, TakePicture } from "./styles";
@@ -18,7 +23,8 @@ export function Camera({ close, sendImage }: ICamera) {
   const [flashMode, setFlashMode] = useState<"on" | "off">("off");
   const [isCroppingImage, setIsCroppingImage] = useState(false);
 
-  const cameraRef = useRef(null);
+  type CameraInstance = ComponentRef<typeof CameraView>;
+  const cameraRef = useRef<CameraInstance>(null);
   const THEME = useTheme();
 
   async function openCropper(uri: string) {
@@ -34,20 +40,18 @@ export function Camera({ close, sendImage }: ICamera) {
     });
 
     if (cropped?.path) {
-        sendImage?.(cropped);
-        close();
-      }
+      sendImage?.(cropped);
+      close();
+    }
   }
 
   async function handleTakePicture() {
     setIsCroppingImage(true);
-
     try {
-      const { uri } = await cameraRef.current.takePictureAsync({
-        quality: 1,
-      });
-
-      await openCropper(uri);
+      const photo = await cameraRef.current?.takePictureAsync({ quality: 1 });
+      if (photo?.uri) {
+        await openCropper(photo.uri);
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -57,19 +61,15 @@ export function Camera({ close, sendImage }: ICamera) {
 
   return (
     <Container>
-      <ExpoCamera
-        style={styles.cameraView}
-        flashMode={ExpoCamera.Constants.FlashMode[flashMode]}
+      <CameraView
         ref={cameraRef}
-        type={CameraType.back}
+        style={styles.cameraView}
+        facing="back"
+        enableTorch={flashMode === "on"}
       >
-        <CloseIcon
-          disabled={isCroppingImage}
-          // onPress={close}
-        >
-          <IconDynamicBall icon="chevron-left" onPress={close}/>
+        <CloseIcon disabled={isCroppingImage}>
+          <IconDynamicBall icon="chevron-left" onPress={close} />
         </CloseIcon>
-
 
         <FlashIcon
           disabled={isCroppingImage}
@@ -85,13 +85,11 @@ export function Camera({ close, sendImage }: ICamera) {
         <TakePicture disabled={isCroppingImage} onPress={handleTakePicture}>
           <FontAwesome name="circle" size={96} color={THEME.colors.light} />
         </TakePicture>
-      </ExpoCamera>
+      </CameraView>
     </Container>
   );
 }
 
 export const styles = StyleSheet.create({
-  cameraView: {
-    flex: 1,
-  },
+  cameraView: { flex: 1 },
 });

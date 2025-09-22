@@ -63,6 +63,8 @@ export const Subtitle = styled.Text`
 
 export const Content = styled.View`
   padding: 0px 18px 18px 18px;
+  display: flex;
+  gap: 10px;
 `;
 
 export const Text = styled.Text`
@@ -70,7 +72,6 @@ export const Text = styled.Text`
   font-family: ${({ theme }) => theme.fonts.semiBold};
   font-size: ${({ theme }) => theme.fontSize.normal}px;
   line-height: 21px;
-  margin: 16px 0;
 `;
 
 export const List = styled.FlatList.attrs({
@@ -91,7 +92,6 @@ export const DiagnosesButton = styled.TouchableOpacity.attrs({
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
 `;
 
 export const DiagnosesButtonText = styled.Text`
