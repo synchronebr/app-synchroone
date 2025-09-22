@@ -147,9 +147,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   inner: {
-    paddingHorizontal: 4,
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingHorizontal: 2,
+    paddingTop: 2,
+    paddingBottom: 2,
     // evita “esticadas” ao crescer conteúdo:
     flexGrow: 0,
   },
