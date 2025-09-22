@@ -8,10 +8,21 @@
       "backgroundColor": "#1C2C3C"
     },
     "ios": {
-      "bundleIdentifier": "com.synchroone"
+      "bundleIdentifier": "org.name.synchroone"
     },
     "android": {
-      "package": "com.synchroone"
+      "package": "com.synchroone",
+      "versionCode": 18,
+      "permissions": [
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.BLUETOOTH_CONNECT"
+      ],
+      "splash": {                  
+        "image": "./src/assets/images/splash_screen.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#1C2C3C"
+      }
     },
     "plugins": [
       "react-native-ble-plx",
@@ -21,6 +32,28 @@
           "mode": "development"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "build": {
+          "experimental": {
+            "ios": {
+              "appExtensions": [
+                {
+                  "targetName": "OneSignalNotificationServiceExtension",
+                  "bundleIdentifier": "com.synchroone.OneSignalNotificationServiceExtension",
+                  "entitlements": {
+                    "com.apple.security.application-groups": [
+                      "group.com.synchroone.onesignal"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "projectId": "1acbf27b-df6b-45be-9b63-e92b8a63cabc"
+      }
+    }
   }
 }
