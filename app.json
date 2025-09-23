@@ -2,58 +2,33 @@
   "expo": {
     "name": "synchroone",
     "slug": "synchroone",
+    "version": "1.0.4",
     "icon": "./src/assets/images/app-icon.png",
-    "splash": {
-      "resizeMode": "contain",
-      "backgroundColor": "#1C2C3C"
-    },
-    "ios": {
-      "bundleIdentifier": "org.name.synchroone"
-    },
-    "android": {
-      "package": "com.synchroone",
-      "versionCode": 18,
-      "permissions": [
-        "android.permission.BLUETOOTH",
-        "android.permission.BLUETOOTH_ADMIN",
-        "android.permission.BLUETOOTH_CONNECT"
-      ],
-      "splash": {                  
-        "image": "./src/assets/images/splash_screen.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#1C2C3C"
-      }
-    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "plugins": [
-      "react-native-ble-plx",
+      "expo-font",
       [
-        "onesignal-expo-plugin",
+        "expo-splash-screen",
         {
-          "mode": "development"
+          "backgroundColor": "#1C2C3C",
+          "image": "./assets/images/splash_screen.png",
+          "dark": {
+            "image": "./assets/images/splash_screen.png",
+            "backgroundColor": "#1C2C3C"
+          },
+          "imageWidth": 200
         }
       ]
     ],
     "extra": {
       "eas": {
-        "build": {
-          "experimental": {
-            "ios": {
-              "appExtensions": [
-                {
-                  "targetName": "OneSignalNotificationServiceExtension",
-                  "bundleIdentifier": "com.synchroone.OneSignalNotificationServiceExtension",
-                  "entitlements": {
-                    "com.apple.security.application-groups": [
-                      "group.com.synchroone.onesignal"
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        },
         "projectId": "1acbf27b-df6b-45be-9b63-e92b8a63cabc"
       }
+    },
+    "android": {
+      "package": "com.synchroone"
     }
   }
 }

@@ -6,9 +6,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useTheme } from "styled-components/native";
 import * as yup from "yup";
 import { Toast } from "react-native-toast-notifications";
-import Icon from '@expo/vector-icons/MaterialIcons';
-
-import LogoWhiteIconIcon from "../../assets/icons/logo-white-text.svg";
 
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
@@ -117,7 +114,7 @@ export function Register() {
           {/* <Title>Synchroone</Title> */}
           <Content>
             <IconBack onPress={() => navigation.navigate('Login' as never)}>
-              <Icon name="arrow-back" color="#ffffff" size={30} />
+              {/* <Icon name="arrow-back" color="#ffffff" size={30} /> */}
             </IconBack>
 
             <Form>

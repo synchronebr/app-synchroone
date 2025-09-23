@@ -59,6 +59,11 @@ export function Camera({ close, sendImage }: ICamera) {
     }
   }
 
+  const handleFlash = () => {
+    setFlashMode(flashMode === "on" ? "off" : "on");
+    console.log('entrou')
+  }
+
   return (
     <Container>
       <CameraView
@@ -66,19 +71,16 @@ export function Camera({ close, sendImage }: ICamera) {
         style={styles.cameraView}
         facing="back"
         enableTorch={flashMode === "on"}
+        autofocus="on"
       >
         <CloseIcon disabled={isCroppingImage}>
           <IconDynamicBall icon="chevron-left" onPress={close} />
         </CloseIcon>
 
-        <FlashIcon
-          disabled={isCroppingImage}
-          onPress={() => setFlashMode(flashMode === "on" ? "off" : "on")}
-        >
-          <Ionicons
-            name={flashMode === "off" ? "flash-off" : "flash"}
-            size={36}
-            color={THEME.colors.light}
+        <FlashIcon disabled={isCroppingImage} >
+          <IconDynamicBall 
+            icon={flashMode === "on" ? "flash" : "flash-off"} 
+            onPress={handleFlash}
           />
         </FlashIcon>
 

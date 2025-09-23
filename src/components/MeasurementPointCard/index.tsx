@@ -45,7 +45,7 @@ export function MeasurementPointCard({ equipmentId, item, ...rest }: IMeasuremen
         source={
           item.type === enums.MeasuringPoints.Type.PartTime
             ? require('../../assets/images/white-technician-machine.jpg')
-            : require('../../assets/images/white-mp-sensor.png')
+            : require('../../assets/images/blue-mp-sensor.png')
         }
       />
       {item.securityStatus === "S" && (

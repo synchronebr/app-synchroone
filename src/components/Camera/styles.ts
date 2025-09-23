@@ -5,15 +5,15 @@ export const Container = styled.View`
 `;
 
 export const CloseIcon = styled.TouchableOpacity`
-  left: 24px;
+  left: 16px;
   position: absolute;
-  top: 24px;
+  top: 10px;
 `;
 
 export const FlashIcon = styled.TouchableOpacity`
   position: absolute;
-  right: 24px;
-  top: 24px;
+  right: 16px;
+  top: 10px;
 `;
 
 export const TakePicture = styled.TouchableOpacity`
