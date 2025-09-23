@@ -72,7 +72,7 @@ export default function HeaderImage<T>({
           source={{
             uri: imageURL
               ? imageURL
-              : "https://synchroone.s3.amazonaws.com/blue-machine-sensor.png",
+              : require('../../../assets/images/blue-machine-sensor.png'),
           }}
         />
 
