@@ -7,6 +7,7 @@ import WhatsAppIcon from "../../assets/icons/whatsapp.svg";
 import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
 
 import { Container, Content, Title, Subtitle } from "./styles";
+import { t } from "i18next";
 
 export function WhatsAppButton() {
   const THEME = useTheme();
@@ -21,11 +22,11 @@ export function WhatsAppButton() {
       if (supported) {
         return Linking.openURL(url);
       } else {
-        Toast.show("O WhatsApp não está instalado no teu dispositivo.");
+        Toast.show(t('home.notinstalledWhatsApp'));
       }
     } catch (error) {
       console.log(error);
-      Toast.show("Erro ao abrir o WhatsApp.");
+      Toast.show(t('home.errorOpenWhatsApp'));
     }
   }
 
@@ -34,9 +35,9 @@ export function WhatsAppButton() {
       <WhatsAppIcon height={28} width={28} />
 
       <Content>
-        <Title>Precisa de ajuda?</Title>
+        <Title>{t('home.needHelp')}</Title>
 
-        <Subtitle>Fale com um de nossos atendentes para lhe ajudar!</Subtitle>
+        <Subtitle>{t('home.needHelpSubtite')}</Subtitle>
       </Content>
 
       <ArrowForwardIcon

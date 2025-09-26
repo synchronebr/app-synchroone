@@ -21,6 +21,8 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 
+import './utils/translations/i18n';
+
 import THEME from "./global/styles/theme";
 
 import { AuthProvider } from "./hooks/useAuth";

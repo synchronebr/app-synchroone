@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
+import { useTranslation } from 'react-i18next';
 
 import NotificationsIcon from "../../assets/icons/notifications.svg";
 import BlueLogoIcon from "../../assets/icons/blue-logo.svg";
@@ -24,8 +25,10 @@ import {
   GreetingsMessage,
   Buttons,
 } from "./styles";
+import { View, Text } from "react-native";
 
 export function Home() {
+  const { t, i18n } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [unreadNotificationsTotal, setUnreadNotificationsTotal] = useState<
     number | null
@@ -91,7 +94,7 @@ export function Home() {
 
       <GreetingsContainer>
         <BlueLogoIcon width={36} height={68} />
-        <GreetingsMessage>Bem-vindo ao Synchroone!</GreetingsMessage>
+        <GreetingsMessage>{t('home.welcomeSynchroone')}</GreetingsMessage>
       </GreetingsContainer>
 
       <Buttons>
@@ -100,6 +103,12 @@ export function Home() {
       </Buttons>
 
       <WhatsAppButton />
+
+      {/* <View style={{ padding: 30, flex: 1, flexDirection: 'row', gap: 30, height: 50 }} >
+        <Text onPress={() => i18n.changeLanguage('pt')} style={{ padding: 10, backgroundColor: 'silver', height: 50 }}>PT</Text>
+        <Text onPress={() => i18n.changeLanguage('en')} style={{ padding: 10, backgroundColor: 'silver', height: 50 }}>EN</Text>
+        <Text onPress={() => i18n.changeLanguage('es')} style={{ padding: 10, backgroundColor: 'silver', height: 50 }}>ES</Text>
+      </View> */}
     </Container>
   );
 }
