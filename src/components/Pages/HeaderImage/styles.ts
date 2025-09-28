@@ -4,14 +4,23 @@ import { rgba } from "polished";
 import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+export const HEADER_HEIGHT = RFValue(240);
+
 export const Container = styled.View`
-  flex: 1;
-  min-height: 166;
+  width: 100%;
+  height: ${HEADER_HEIGHT}px;     
+  position: relative;            
+  overflow: hidden;            
 `;
 
 export const Image = styled.Image`
-  height: ${RFValue(240)}px;
+  position: absolute;   
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
+  height: 100%;
 `;
 
 /** Barra superior absoluta sobre a imagem */
@@ -56,7 +65,7 @@ export const Asset = styled.View<IAsset>`
     }
   }};
   position: absolute;
-  bottom: 17;
+  bottom: 0;
   width: 100%;
   padding: 16px 32px;
   gap: 8px;

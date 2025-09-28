@@ -62,7 +62,7 @@ export const Subtitle = styled.Text`
 `;
 
 export const Content = styled.View`
-  padding: 0px 18px 18px 18px;
+  padding: 10px 18px 18px 18px;
   display: flex;
   gap: 10px;
 `;

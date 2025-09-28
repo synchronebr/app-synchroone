@@ -5,6 +5,8 @@ import { useCameraPermissions } from "expo-camera";
 
 import * as ImagePicker from "expo-image-picker";
 
+const fallback = require('../../../assets/images/blue-machine-sensor.png');
+
 import { HeaderProps } from "./types";
 import {
   Container,
@@ -33,6 +35,11 @@ export default function HeaderImage<T>({
   const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
   const [, requestPermission] = useCameraPermissions();
+    
+  const source =
+    typeof imageURL === 'string' && imageURL.trim().length > 0
+      ? { uri: imageURL }
+      : fallback;
 
   function expoToCropLike(a: { uri: string; mimeType?: string }) {
     return { path: a.uri, mime: a.mimeType ?? "image/jpeg" }; // cria um objeto com 'path'
@@ -69,11 +76,7 @@ export default function HeaderImage<T>({
         <>
         <Image
           resizeMode="cover"
-          source={{
-            uri: imageURL
-              ? imageURL
-              : require('../../../assets/images/blue-machine-sensor.png'),
-          }}
+          source={source}
         />
 
         <TopBar edges={["top"]} pointerEvents="box-none">
