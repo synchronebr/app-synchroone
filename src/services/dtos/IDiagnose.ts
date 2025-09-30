@@ -9,6 +9,7 @@ export interface IDiagnose {
     read: boolean;
     reading: {
         id: string;
+        type: string;
         measuringPoint: {
             id: string;
             piece: {

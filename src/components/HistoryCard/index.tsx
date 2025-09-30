@@ -32,7 +32,9 @@ export function HistoryCard({ isLastCard, item, ...rest }: HistoryCardProps) {
         </Header>
 
         <Content>
-          <TextPath>{`${item.reading.measuringPoint.piece.path?.title}`}</TextPath>
+          {/* <TextPath>{`${item.reading.measuringPoint.piece.path?.title}`} </TextPath> */}
+          <TextPath>{`${item.reading.type === 'O' ? 'Online' : 'Part-time'}`} </TextPath>
+          
         </Content>
 
         <Content>

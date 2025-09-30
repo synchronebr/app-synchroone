@@ -152,10 +152,10 @@ export const CardInfoSubtitle = styled.Text`
 
 
 export const CardCauses = styled.View`
-margin-top: 25px;
-  flex-direction: row;
+  margin-top: 25px;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
   margin-bottom: 8px;
 `;
 
@@ -163,8 +163,8 @@ export const CardCause = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 16px;
+  /* gap: 8px; */
+  /* margin-bottom: 16px; */
 `;
 
 export const CardCauseTitle = styled.Text``;

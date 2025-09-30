@@ -171,7 +171,7 @@ export function AlertDetails() {
 
           <Divider />
 
-          <Header>
+          <Header>ola
             {data.hazardousness === "D" && (
               <DangerIcon fill={THEME.colors.danger} />
             )}
