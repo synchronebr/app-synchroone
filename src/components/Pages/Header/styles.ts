@@ -8,6 +8,7 @@ export const Container = styled.View`
   justify-content: space-between;
   padding: 20px 30px 20px 20px;
   position: relative; 
+  height: 60;
 `;
 
 export const LeftIcons = styled.View`

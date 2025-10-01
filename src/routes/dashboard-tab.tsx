@@ -89,7 +89,7 @@ export function DashboardTab() {
           component={AlertsWrapper}
           name="AlertsHistory"
           options={{
-            headerTitle: "Histórico de Alertas",
+            headerShown: false,
             tabBarLabel: "",
             tabBarIcon: ({ focused }) => (
               <TabBarCenterButton

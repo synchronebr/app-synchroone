@@ -94,7 +94,7 @@ export function Home() {
 
       <GreetingsContainer>
         <BlueLogoIcon width={36} height={68} />
-        <GreetingsMessage>{t('home.welcomeSynchroone')}</GreetingsMessage>
+        <GreetingsMessage>{t('index.welcomeSynchroone')}</GreetingsMessage>
       </GreetingsContainer>
 
       <Buttons>

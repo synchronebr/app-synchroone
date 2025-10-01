@@ -22,11 +22,11 @@ export function WhatsAppButton() {
       if (supported) {
         return Linking.openURL(url);
       } else {
-        Toast.show(t('home.notinstalledWhatsApp'));
+        Toast.show(t('index.notinstalledWhatsApp'));
       }
     } catch (error) {
       console.log(error);
-      Toast.show(t('home.errorOpenWhatsApp'));
+      Toast.show(t('index.errorOpenWhatsApp'));
     }
   }
 
@@ -35,9 +35,9 @@ export function WhatsAppButton() {
       <WhatsAppIcon height={28} width={28} />
 
       <Content>
-        <Title>{t('home.needHelp')}</Title>
+        <Title>{t('index.needHelp')}</Title>
 
-        <Subtitle>{t('home.needHelpSubtite')}</Subtitle>
+        <Subtitle>{t('index.needHelpSubtite')}</Subtitle>
       </Content>
 
       <ArrowForwardIcon

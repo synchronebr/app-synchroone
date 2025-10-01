@@ -6,6 +6,17 @@ export const Container = styled.View`
   flex: 1;
 `;
 
+export const SubtitleContent = styled.View`
+  align-items: center; 
+  margin: -10px 0px 15px 0px;
+`;
+
+export const Subtitle = styled.Text`
+  color: ${({ theme }) => theme.colors.primary};
+  font-family: ${({ theme }) => theme.fonts.bold};
+  font-size: ${({ theme }) => theme.fontSize.normal};
+`;
+
 export const List = styled.FlatList.attrs({
   contentContainerStyle: {
     gap: 8,
@@ -14,7 +25,7 @@ export const List = styled.FlatList.attrs({
 })`` as typeof FlatList;
 
 export const Content = styled.View`
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
 `;
 
 export const Text = styled.Text``;
