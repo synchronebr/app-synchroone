@@ -25,7 +25,7 @@ export const List = styled.FlatList.attrs({
 })`` as typeof FlatList;
 
 export const Content = styled.View`
-  padding: 0px 20px 20px 20px;
+  padding: 0px 20px 80px 20px;
 `;
 
 export const Text = styled.Text``;
