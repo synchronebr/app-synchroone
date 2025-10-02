@@ -185,6 +185,7 @@ export function Dashboard() {
         name="AlertDetails"
         options={{
           title: "Detalhes alerta",
+          headerShown: false,
         }}
       />
       <Screen
@@ -192,6 +193,7 @@ export function Dashboard() {
         name="AlertPrescriptionDetails"
         options={{
           title: "Prescrição",
+          headerShown: false,
         }}
       />
       <Screen

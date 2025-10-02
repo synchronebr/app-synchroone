@@ -20,7 +20,6 @@
             "branch": "Marca",
             "model": "Modelo",
             "diagnosesHistory": "Histórico de Diagnósticos",
-            "diagnoseFilter": "Filtrar dianósticos",
             "diagnoseDetails": "Detalhes do Dianóstico",
             "range": "Período",
             "status": "Status",
@@ -90,6 +89,7 @@
             "selectOEntity": "Selecione o {{entidade}}",
             "deviceSuccessfullyConnected!": "{{device}} conectado com suceso!",
             "weCouldntFindDevice": "Não econtramos o {{device}} ",
+            "diagnoseFilter": "Filtrar dianósticos",
             "initiatingPairingProtocol": "Iniciando protocolo de pareamento",
             "initiatingSecureChannelBetweenAppSensor": "Iniciando canal seguro entre o app e o sensor",
             "notifications": "Notificações",
@@ -145,7 +145,8 @@
             "theSensorConfiguredReadyConnectedSyncCassiaX2000": "O sensor está configurado e pronto para ser conectado ao Sync Cassia X2000",
             "noDiagnosis": "Felizmente não temos nenhum diagnóstico criado para esses filtros.",
             "applying": "Aplicando...",
-            "period": "Período"
+            "period": "Período",
+            "dataNotFound": "Dados não encontrados"
         }
     }
 }

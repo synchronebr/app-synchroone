@@ -29,8 +29,8 @@ export default function Header<T>({
       <LeftIcons>
       {backIcon && (
         <>
-        {backIcon === "entypo" && (<LeftIcon onPress={() => backPress()} ><Entypo name="menu" size={24} color={THEME.colors.primary} /></LeftIcon>)}
-        {backIcon === "back" && (<LeftIcon onPress={() => backPress()} ><AntDesign name="left" size={24} color={THEME.colors.primary} /></LeftIcon>)}
+        {backIcon === "entypo" && (<LeftIcon onPress={() => backPress?.()} ><Entypo name="menu" size={24} color={THEME.colors.primary} /></LeftIcon>)}
+        {backIcon === "back" && (<LeftIcon onPress={() => backPress?.()} ><AntDesign name="left" size={24} color={THEME.colors.primary} /></LeftIcon>)}
         </>
       )}
       {leftContent}

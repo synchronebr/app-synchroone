@@ -22,7 +22,8 @@ export interface IDiagnose {
                 path?: {
                     id: number;
                     title: string;
-                }
+                },
+                pathNames: string[];
             }
         }
     },

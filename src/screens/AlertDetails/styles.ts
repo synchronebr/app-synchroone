@@ -7,7 +7,7 @@ export const Container = styled.View`
 
 export const Scroll = styled.ScrollView.attrs({
   contentContainerStyle: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
 })``;
 
@@ -18,7 +18,7 @@ export const PieceDiv = styled.View`
   gap: 10px;
   justify-content: start;
   gap: 4px;
-  margin: 10px 0;
+  margin: 5px 10px;
 `;
 
 export const PieceText = styled.Text`
@@ -33,18 +33,19 @@ export const PiecePath = styled.Text`
   font-size: ${({ theme }) => theme.fontSize.smaller}px;
 `;
 
-export const Header = styled.View`
+export const HeaderDiagnose = styled.View`
   align-items: center;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 4px;
-  margin: 6px 0;
+  margin: 6px 0px;
+  margin-right: 30px;
 `;
 
 export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.primary};
   font-family: ${({ theme }) => theme.fonts.semiBold};
-  font-size: ${({ theme }) => theme.fontSize.larger}px;
+  font-size: ${({ theme }) => theme.fontSize.normal}px;
 `;
 
 export const Subtitle = styled.Text`
@@ -91,7 +92,7 @@ export const ShareButtonContainer = styled.View`
 
 
 export const DiagnoseDescription = styled.View`
-  background-color: ${({ theme }) => theme.colors.gray_light};
+  background-color: ${({ theme }) => theme.colors.primary_light};
   padding: 8px;
   border-radius: 5px;
 `;
@@ -104,6 +105,7 @@ export const DiagnoseDescriptionTitleDiv = styled.View`
 `;
 
 export const DiagnoseDescriptionTitle = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.semiBold};
 `;
 
 export const DiagnoseDescriptionSubtitle = styled.Text``;
@@ -173,7 +175,7 @@ export const CardCauseButton = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   gap: 4px;
-  background-color: ${({ theme }) => theme.colors.gray_light};
+  background-color: ${({ theme }) => theme.colors.primary_light};
   padding: 8px;
   border-radius: 5px;
 `;

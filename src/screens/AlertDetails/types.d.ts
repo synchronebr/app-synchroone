@@ -8,4 +8,5 @@ export type AlertCardProps = {
 
 export type AlertCardNavigationProps = {
   navigate(screen: string, data: GetNotificationByIDResponse);
+  goBak();
 };

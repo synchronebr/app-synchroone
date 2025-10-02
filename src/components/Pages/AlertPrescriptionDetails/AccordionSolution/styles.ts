@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 
 
 export const AccordionDiv = styled.View`
-  background-color: ${({ theme }) => theme.colors.gray_light};
+  background-color: ${({ theme }) => theme.colors.primary_light};
   border-radius: 6px;
   padding: 10px;
 `;

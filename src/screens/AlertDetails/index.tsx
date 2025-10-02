@@ -23,7 +23,7 @@ import {
   PieceDiv,
   PieceText,
   PiecePath,
-  Header,
+  HeaderDiagnose,
   Title,
   Subtitle,
   Text,
@@ -41,6 +41,8 @@ import {
   CardCauseTitle,
   CardCauseButton,
 } from "./styles";
+import Header from "../../components/Pages/Header";
+import { t } from "i18next";
 
 const STATUS_HAZARDOUSNESS = {
   D: { title: "Perigo" },
@@ -61,18 +63,8 @@ export function AlertDetails() {
     },
   });
 
-  const {
-    AUTH_TOKEN_STORAGE_KEY,
-    REFRESH_TOKEN_STORAGE_KEY,
-    USER_STORAGE_KEY,
-    setUser,
-    logout,
-  } = useAuth();
-
   useEffect(() => {
     async function initialize() {
-      createAPIInterceptors();
-      getToken();
       initializeOneSignal();
       setRead();
     }
@@ -87,72 +79,17 @@ export function AlertDetails() {
     }
   };
 
-  function createAPIInterceptors() {
-    api.interceptors.request.use(
-      async (config) => {
-        const authToken = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
-        if (authToken)
-          config.headers.Authorization = `Bearer ${authToken.replace(
-            /"/g,
-            ""
-          )}`;
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
-
-    api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        if (
-          error.response?.status === 401 &&
-          error.response.data?.code === "token.expired"
-        ) {
-          try {
-            const refreshToken = await AsyncStorage.getItem(
-              REFRESH_TOKEN_STORAGE_KEY
-            );
-            if (refreshToken) {
-              const response = await api.post("sessions/refreshToken", {
-                refreshToken: JSON.parse(refreshToken),
-              });
-              if (response.status === 200) {
-                const {
-                  token,
-                  refreshToken: newRefreshToken,
-                  user,
-                }: SessionsResponse = response.data;
-                await AsyncStorage.multiSet([
-                  [AUTH_TOKEN_STORAGE_KEY, JSON.stringify(token)],
-                  [REFRESH_TOKEN_STORAGE_KEY, JSON.stringify(newRefreshToken)],
-                  [USER_STORAGE_KEY, JSON.stringify(user)],
-                ]);
-                return api.request(error.config);
-              }
-            }
-          } catch (err) {
-            await logout();
-            navigation.reset({ index: 0, routes: [{ name: "Auth" as never }] });
-          }
-        }
-        return Promise.reject(error);
-      }
-    );
-  }
-
-  async function getToken() {
-    const token = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
-    const userData = await AsyncStorage.getItem(USER_STORAGE_KEY);
-    if (token && userData) setUser(JSON.parse(userData));
-    else navigation.reset({ index: 0, routes: [{ name: "Auth" as never }] });
-  }
-
   function initializeOneSignal() {
     OneSignal.initialize("5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7");
   }
 
   return (
     <Container>
+      <Header
+        title={t("index.diagnoseDetails")}
+        backIcon="back"
+        backPress={() => navigation.goBack()}
+      />
       {isLoading ? (
         <View style={{ marginTop: 50 }}>
           <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />
@@ -162,16 +99,17 @@ export function AlertDetails() {
         <Scroll>
           <PieceDiv>
             <PieceText>
-              {data.reading.measuringPoint.piece.description}
+              {data.reading.measuringPoint.piece.description} - {data.reading.measuringPoint.piece.pathNames.join(" - ")}
             </PieceText>
             <PiecePath>
+              {data.reading.measuringPoint.piece.company.name}
               {/* {`${data.reading.measuringPoint.piece.machine.sector.area.company.name} > ${data.reading.measuringPoint.piece.machine.sector.area.name} > ${data.reading.measuringPoint.piece.machine.sector.name} > ${data.reading.measuringPoint.piece.machine.name}`} */}
             </PiecePath>
           </PieceDiv>
 
           <Divider />
 
-          <Header>ola
+          <HeaderDiagnose>
             {data.hazardousness === "D" && (
               <DangerIcon fill={THEME.colors.danger} />
             )}
@@ -179,13 +117,13 @@ export function AlertDetails() {
               <WarnIcon fill={THEME.colors.warning} />
             )}
             <Title>{data?.title}</Title>
-          </Header>
+          </HeaderDiagnose>
 
           <Divider />
 
           <DiagnoseDescription>
             <DiagnoseDescriptionTitleDiv>
-              <DangerIcon fill={THEME.colors.gray} />
+              {/* <DangerIcon fill={THEME.colors.gray} /> */}
               <DiagnoseDescriptionTitle>
                 Falha Identificada (
                 {STATUS_HAZARDOUSNESS[data.hazardousness]?.title})
@@ -215,7 +153,7 @@ export function AlertDetails() {
                     }
                   >
                     <BookOpenCheckIcon fill={THEME.colors.gray} />
-                    <CardCauseTitle>Prescrição</CardCauseTitle>
+                    <CardCauseTitle>{t('index.prescription')}</CardCauseTitle>
                   </CardCauseButton>
                 </CardCause>
                 <Divider />
@@ -225,7 +163,7 @@ export function AlertDetails() {
         </Scroll>
       ) : (
         <Scroll>
-          <Text>Dados não encontrados</Text>
+          <Text>{t('index.dataNotFound')}</Text>
         </Scroll>
       )}
     </Container>
