@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { OneSignal } from "react-native-onesignal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Notifications from "expo-notifications";
 
 import { sessions, deleteUser } from "../../services/Auth";
 import {
@@ -10,11 +11,34 @@ import {
 } from "../../services/Auth/types";
 
 import { AuthProviderProps, IAuthContextData } from "./types";
+import api, { setupApi } from "../../services/api";
+import { useNavigation } from "@react-navigation/native";
 
 const AuthContext = createContext({} as IAuthContextData);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User);
+
+  function initializeOneSignal() {
+    OneSignal.initialize("5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7");
+
+    OneSignal.Notifications.addEventListener("click", (event) => {
+      console.log("Notification clicked:", event);
+    });
+  }
+
+  async function requestPushNotificationPermissions() {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== "granted") {
+      requestPushNotificationPermissions();
+    }
+  }
+
+  useEffect(() => {
+    initializeOneSignal();
+    requestPushNotificationPermissions();
+    setupApi();
+  }, [])
 
   const AUTH_TOKEN_STORAGE_KEY = "@synchroone:auth_token";
   const REFRESH_TOKEN_STORAGE_KEY = "@synchroone:refresh_token";
@@ -49,6 +73,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return response;
   }
 
+  async function updateUser() {
+    try {
+      const response = await api.get("me");
+      const { user, accessLevels } = response.data;
+
+      setUser({
+        ...user,
+        userAcess: accessLevels,
+      });
+    } catch (error) {
+      console.error("Error updating user:", error);
+      // signOut();
+    }
+  }
+
   async function logout() {
     await AsyncStorage.clear();
     setUser({} as User);
@@ -69,6 +108,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser,
         login,
         logout,
+        updateUser,
         deleteRegister,
       }}
     >

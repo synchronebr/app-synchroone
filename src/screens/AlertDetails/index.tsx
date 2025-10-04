@@ -65,7 +65,6 @@ export function AlertDetails() {
 
   useEffect(() => {
     async function initialize() {
-      initializeOneSignal();
       setRead();
     }
     initialize();
@@ -78,10 +77,6 @@ export function AlertDetails() {
       console.error("Error marking as read", error);
     }
   };
-
-  function initializeOneSignal() {
-    OneSignal.initialize("5f7e98d9-9cca-4e86-8aaa-3de1e8fa36d7");
-  }
 
   return (
     <Container>

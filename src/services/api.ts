@@ -2,8 +2,8 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { SessionsResponse } from "../services/Auth/types";
 
-export const AUTH_TOKEN_STORAGE_KEY = "@synchroone:token";
-export const REFRESH_TOKEN_STORAGE_KEY = "@synchroone:refreshToken";
+export const AUTH_TOKEN_STORAGE_KEY = "@synchroone:auth_token";
+export const REFRESH_TOKEN_STORAGE_KEY = "@synchroone:refresh_token";
 export const USER_STORAGE_KEY = "@synchroone:user";
 
 type SetupOptions = {
@@ -15,7 +15,7 @@ const api = axios.create({
   baseURL:
     process.env.EXPO_PUBLIC_API_URL ||
     /*"http://192.168.4.5:3333/"*/ "https://api.synchroone.com/",
-    // "http://192.168.6.4:3333/",
+    // "http://192.168.6.78:3333/",
 });
 
 export default api;

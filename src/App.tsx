@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React from "react";
+import React, { useEffect } from "react";
 import { LogBox } from "react-native";
 import { Platform, StatusBar, StyleSheet } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,6 +30,7 @@ import { AccessLevelsProvider } from "./hooks/useAccessLevels";
 import { BLEManagerProvider } from "./hooks/useBLEManager";
 
 import { Routes } from "./routes";
+import { setupApi } from "./services/api";
 
 const queryClient = new QueryClient();
 

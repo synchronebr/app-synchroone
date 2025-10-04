@@ -19,6 +19,7 @@ import { AlertsHistory } from "../screens/AlertsHistory";
 import { More } from "../screens/More";
 import { useState } from "react";
 import { AlertFilterProvider } from "../hooks/useAlertFilter";
+import ImageIcon from "../components/ImageIcon";
 
 export function DashboardTab() {
   const { Navigator, Screen } = createBottomTabNavigator();
@@ -53,7 +54,7 @@ export function DashboardTab() {
           tabBarHideOnKeyboard: true,
           tabBarInactiveTintColor: THEME.colors.gray_dark,
           tabBarItemStyle: {
-            paddingVertical: 8,
+            paddingVertical: 2,
           },
           tabBarLabelStyle: {
             fontFamily: THEME.fonts.semiBold,
@@ -61,7 +62,7 @@ export function DashboardTab() {
           },
           tabBarStyle: {
             height: 62,
-            paddingHorizontal: 20,
+            // paddingHorizontal: 20,
           },
         }}
       >
@@ -71,7 +72,8 @@ export function DashboardTab() {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) =>
-              focused ? <HomeSolidIcon /> : <HomeOutlineIcon />,
+              // focused ? <HomeSolidIcon /> : <HomeOutlineIcon />,
+              <ImageIcon focused={focused}/>,
             title: "Início",
           }}
         />
