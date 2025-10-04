@@ -19,7 +19,7 @@ import { AlertsHistory } from "../screens/AlertsHistory";
 import { More } from "../screens/More";
 import { useState } from "react";
 import { AlertFilterProvider } from "../hooks/useAlertFilter";
-import ImageIcon from "../components/ImageIcon";
+import IconCompanyImage from "../components/IconCompanyImage";
 
 export function DashboardTab() {
   const { Navigator, Screen } = createBottomTabNavigator();
@@ -73,7 +73,7 @@ export function DashboardTab() {
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               // focused ? <HomeSolidIcon /> : <HomeOutlineIcon />,
-              <ImageIcon focused={focused}/>,
+              <IconCompanyImage focused={focused}/>,
             title: "Início",
           }}
         />

@@ -2,7 +2,7 @@
 import React from "react";
 
 import { Entypo, AntDesign } from "@expo/vector-icons";
-import { ImageIconProps } from "./types";
+import { IconCompanyImageProps } from "./types";
 
 import { useTheme } from "styled-components/native";
 
@@ -13,9 +13,9 @@ import {
 } from "./styles";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
 
-export default function ImageIcon<T>({ 
+export default function IconCompanyImage<T>({ 
   focused,
- }: ImageIconProps<T>) {
+ }: IconCompanyImageProps<T>) {
 
   const { getAccessLevels, getAccessLevelsData } = useAccessLevels();
   const accessLevels = getAccessLevelsData();
