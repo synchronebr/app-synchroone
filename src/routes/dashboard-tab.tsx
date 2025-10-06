@@ -20,6 +20,7 @@ import { More } from "../screens/More";
 import { useState } from "react";
 import { AlertFilterProvider } from "../hooks/useAlertFilter";
 import IconCompanyImage from "../components/IconCompanyImage";
+import { t } from "i18next";
 
 export function DashboardTab() {
   const { Navigator, Screen } = createBottomTabNavigator();
@@ -74,7 +75,7 @@ export function DashboardTab() {
             tabBarIcon: ({ focused }) =>
               // focused ? <HomeSolidIcon /> : <HomeOutlineIcon />,
               <IconCompanyImage focused={focused}/>,
-            title: "Início",
+            title: t('index.home'),
           }}
         />
         <Screen
@@ -84,7 +85,7 @@ export function DashboardTab() {
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? <WaterPumpIcon /> : <WaterPumpOutlineIcon />,
-            title: "Ativos",
+            title: t('index.assets'),
           }}
         />
         <Screen
@@ -108,17 +109,18 @@ export function DashboardTab() {
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? <ChartPieFilledIcon /> : <ChartPieIcon />,
-            title: "Análises",
+            title: t('index.analysis'),
           }}
         />
         <Screen
           component={More}
           name="More"
           options={{
-            headerTitle: "Configurações",
+            // headerTitle: "Configurações",
+            headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? <SettingsBoldIcon /> : <SettingsLinearIcon />,
-            title: "Mais",
+            title: t('index.more'),
           }}
         />
       </Navigator>

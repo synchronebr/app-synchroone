@@ -33,5 +33,7 @@ export type User = {
   email: string;
   phone: string;
   refreshToken: string;
+  country: string;
+  locale: string;
   isAdmin?: boolean;
 };

@@ -1,4 +1,4 @@
-export function formatDateByLocale(dateInput, locale = 'pt-BR') {
+export function formatDateByLocale(dateInput: any, locale = 'pt-BR') {
     const timeZone = locale === 'pt-BR' ? 'America/Sao_Paulo' : 'UTC';
   
     const date = new Date(dateInput);

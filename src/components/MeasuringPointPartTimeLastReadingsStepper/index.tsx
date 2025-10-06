@@ -19,6 +19,7 @@ import {
 
 import { MeasurementPointCardNavigationProps } from "./types";
 import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
+import { t } from "i18next";
 
 // const CleanListWithStepper = ({ children, style }) => {
 //   return <Container style={style}>{children}</Container>;
@@ -59,7 +60,7 @@ export const MeasuringPointPartTimeLastReadingsStepper = ({ id, status, date, do
               <BoldText>{doneBy}</BoldText> 
             </InfoText>
             <InfoText>
-              <BoldText>Status da Medição:</BoldText> {statusDetails.title}
+              <BoldText>{t('index.measurementStatus')}:</BoldText> {statusDetails.title}
             </InfoText>
             <InfoText>
               {date}

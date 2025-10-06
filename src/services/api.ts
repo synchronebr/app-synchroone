@@ -15,7 +15,7 @@ const api = axios.create({
   baseURL:
     process.env.EXPO_PUBLIC_API_URL ||
     /*"http://192.168.4.5:3333/"*/ "https://api.synchroone.com/",
-    // "http://192.168.6.78:3333/",
+    // "http://192.168.6.163:3333/",
 });
 
 export default api;

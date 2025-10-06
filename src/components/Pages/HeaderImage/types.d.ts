@@ -4,6 +4,7 @@ export type HeaderProps<T> = {
   securityStatus: string;
   imageURL?: string;
   isLoading?: boolean;
+  withoutChangeImage?: boolean;
   setOpenCamera?: React.Dispatch<React.SetStateAction<boolean>>;
   sendImage?: (image: any) => void;
 };

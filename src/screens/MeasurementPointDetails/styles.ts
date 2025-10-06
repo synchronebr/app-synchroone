@@ -71,7 +71,7 @@ export const Content = styled.ScrollView.attrs({
   },
 })``;
 
-export const Text = styled.Text`
+export const CardsContentText = styled.Text`
   color: ${({ theme }) => theme.colors.dark};
   font-family: ${({ theme }) => theme.fonts.semiBold};
   font-size: ${({ theme }) => theme.fontSize.normal}px;

@@ -6,10 +6,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Toast } from "react-native-toast-notifications";
 import {
   format,
-  differenceInDays,
   differenceInMinutes,
-  subDays,
-  addDays,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -17,40 +14,24 @@ import { LargeAreaChart } from "../../components/Charts/LargeAreaChart";
 
 import {
   Container,
-  Header,
-  Image,
-  Asset,
-  Detail,
-  DetailIcon,
-  Title,
-  Subtitle,
   Content,
   CardsContent,
-  Text,
   Card,
-  Info,
-  InfoData,
   CardTitle,
-  CardText,
-  CardSubtitle,
-  TemperatureCard,
-  Temperature,
   MeasuringPointPartTimeLastReadingsViewStepper,
-  Graphics,
-  GraphicsButtons,
-  GraphicButton,
-  GraphicButtonText,
 } from "./styles";
 
-import { useWindowDimensions, View } from "react-native";
+import { StyleSheet, useWindowDimensions, View, Text } from "react-native";
 import { MeasuringPointPartTimeLastReadingsStepper } from "../../components/MeasuringPointPartTimeLastReadingsStepper";
 import { enums } from "../../utils/enums";
 import {
   getMeasuringPointById,
-  getReadingsByMeasuringPoint,
 } from "../../services/MeasuringPoints";
 import { Loading } from "../../components/Loading";
-import { formatDateByLocale } from "../../utils/formatDateByLocale";
+import HeaderImage from "../../components/Pages/HeaderImage";
+import theme from "../../global/styles/theme";
+import { t } from "i18next";
+import MeasuringPointOnlinePage from "../../components/Pages/MeasuringPointOnlinePage";
 
 interface MeasurementPointDetailsProps {
   route: {
@@ -70,10 +51,7 @@ export function MeasurementPointDetails({
   const THEME = useTheme();
 
   const [item, setItem] = useState<any>(null);
-  const [chartData, setChartData] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isChartLoading, setIsChartLoading] = useState(false);
-  const [actionType, setActionType] = useState<"A" | "V" | "T">("A");
 
   async function loadScreen() {
     setIsLoading(true);
@@ -82,7 +60,6 @@ export function MeasurementPointDetails({
         Number(route.params.equipmentId),
         Number(route.params.mesuringPointId)
       );
-      console.log("response", response);
       setItem(response);
     } catch (error) {
       Toast.show(
@@ -94,46 +71,12 @@ export function MeasurementPointDetails({
     }
   }
 
-  function formatNumber(value: number | null | undefined, decimals = 2) {
-    return typeof value === "number" ? value.toFixed(decimals) : "-";
-  }
-
-  async function loadChartData(selectedActionType: "A" | "V" | "T") {
-    setIsChartLoading(true);
-    try {
-      const today = new Date();
-      const tomorow = addDays(today, 1);
-      const startDate = subDays(today, 30);
-
-      const readingsResponse = await getReadingsByMeasuringPoint(
-        Number(route.params.mesuringPointId),
-        {
-          startDate: format(startDate, "yyyy-MM-dd"),
-          endDate: format(tomorow, "yyyy-MM-dd"),
-          type: selectedActionType,
-          withoutInvalids: false,
-        }
-      );
-      setChartData(readingsResponse);
-    } catch (error) {
-      Toast.show(
-        "Houve um erro ao buscar os dados do gráfico. Por favor, verifique sua conexão, ou tente novamente mais tarde.",
-        { duration: 5000, type: "danger" }
-      );
-    } finally {
-      setIsChartLoading(false);
-    }
-  }
-
   useFocusEffect(
     useCallback(() => {
       loadScreen();
     }, [])
   );
 
-  useEffect(() => {
-    loadChartData(actionType);
-  }, [actionType]);
 
   // Atualiza o tempo restante para próxima leitura
   useEffect(() => {
@@ -173,10 +116,6 @@ export function MeasurementPointDetails({
     nextExecutionIn: 0,
   });
 
-  const handleGraphicButtonClick = (type: "A" | "V" | "T") => {
-    setActionType(type);
-  };
-
   if (isLoading)
     return (
       <Loading bgColor={THEME.colors.light} color={THEME.colors.primary} />
@@ -184,366 +123,147 @@ export function MeasurementPointDetails({
 
   return (
     <Container>
-      <Header>
-        <Image
-          resizeMode="cover"
-          source={
-            item
-              ? item.measuringPoint.type === enums.MeasuringPoints.Type.PartTime
-                ? require('../../assets/images/white-technician-machine.jpg')
-                : require('../../assets/images/white-mp-sensor.png')
-              : require('../../assets/images/white-mp-sensor.png')
-          }
-        />
-
-        {item && (
+      {isLoading ? (
+        <ContentLoader viewBox={`0 0 ${width} ${height}`}>
+          <Rect x="1" y="10" rx="10" ry="10" width={width} height="200" />
+          <Rect x="1" y="230" rx="10" ry="10" width={width} height="100" />
+          <Rect x="1" y="350" rx="10" ry="10" width={width} height="100" />
+          <Rect x="1" y="470" rx="10" ry="10" width={width} height="100" />
+        </ContentLoader>
+      ) : (
+        <>
+        {item ? (
           <>
-            <Entypo
-              color={THEME.colors.dark}
-              name="chevron-left"
-              onPress={() => navigation.goBack()}
-              size={32}
-              style={{
-                position: "absolute",
-                left: 8,
-                top: 16,
-              }}
-            />
+          <HeaderImage 
+            pieceName={item.measuringPoint.name}
+            pathName={item.measuringPoint.piece.description}
+            securityStatus={item.measuringPoint.securityStatus}
+            imageURL={item
+                  ? item.measuringPoint.type === enums.MeasuringPoints.Type.PartTime
+                    ? require('../../assets/images/white-technician-machine.jpg')
+                    : require('../../assets/images/white-mp-sensor.png')
+                  : require('../../assets/images/white-mp-sensor.png')}
+            isLoading={isLoading}
+            withoutChangeImage
+          />
 
-            {item.measuringPoint.type === enums.MeasuringPoints.Type.Online && (
-              <Asset status={item.measuringPoint.readings[0]?.securityStatus}>
-                <Detail>
-                  {/* <Title>
-                    {item.measuringPoint.device
-                      ? item.measuringPoint.device.battery
-                      : "-"}{" "}
-                    %
-                  </Title> */}
-                  <DetailIcon>
-                    {item.measuringPoint.device?.battery == 5 && (
-                      <FontAwesome
-                        name="battery-full"
-                        size={20}
-                        style={{ justifyContent: "center" }}
-                        color={THEME.colors.light}
-                      />
-                    )}
-                    {item.measuringPoint.device?.battery == 4 && (
-                      <FontAwesome
-                        name="battery-full"
-                        size={20}
-                        style={{ justifyContent: "center" }}
-                        color={THEME.colors.light}
-                      />
-                    )}
-                    {item.measuringPoint.device?.battery == 3 && (
-                      <FontAwesome
-                        name="battery-3"
-                        size={20}
-                        style={{ justifyContent: "center" }}
-                        color={THEME.colors.light}
-                      />
-                    )}
-                    {item.measuringPoint.device?.battery == 2 && (
-                      <FontAwesome
-                        name="battery-2"
-                        size={20}
-                        style={{ justifyContent: "center" }}
-                        color={THEME.colors.light}
-                      />
-                    )}
-                    {item.measuringPoint.device?.battery == 1 && (
-                      <FontAwesome
-                        name="battery-1"
-                        size={20}
-                        style={{ justifyContent: "center" }}
-                        color={THEME.colors.danger}
-                      />
-                    )}
-                    {item.measuringPoint.device?.battery == 0 && (
-                      <FontAwesome
-                        name="battery-0"
-                        size={20}
-                        style={{ justifyContent: "center" }}
-                        color={THEME.colors.danger}
-                      />
-                    )}
-                  </DetailIcon>
-                  <Subtitle>Bateria</Subtitle>
-                </Detail>
-
-                <Detail>
-                  <Title>
-                    {item.measuringPoint.device
-                      ? `${item.measuringPoint.device.readingWindow} min`
-                      : "-"}
-                  </Title>
-                  <Subtitle>Janela</Subtitle>
-                </Detail>
-
-                <Detail>
-                  <Title>
-                    {item.measuringPoint.device
-                      ? `${timeInfo.nextExecutionIn} min`
-                      : "-"}
-                  </Title>
-                  <Subtitle>Próxima</Subtitle>
-                </Detail>
-              </Asset>
-            )}
-
-            {item.measuringPoint.type ===
-              enums.MeasuringPoints.Type.PartTime && (
-                <Asset status={item.measuringPoint.readings[0]?.securityStatus}>
-                  <Detail>
-                    <Subtitle>Periodicidade</Subtitle>
-                    <Title>{item.medianDays} dias</Title>
-                  </Detail>
-
-                  <Detail>
-                    <Subtitle>Última</Subtitle>
-                    <Title>
-                      {item.measuringPoint.readings.length === 0
-                        ? "Sem leitura"
-                        : `há ${differenceInDays(
-                          new Date(),
-                          new Date(item.measuringPoint.readings[0].readingAt)
-                        )} dias`}
-                    </Title>
-                  </Detail>
-
-                  <Detail>
-                    <Subtitle>Medições</Subtitle>
-                    <Title>{item.countReadings}</Title>
-                  </Detail>
-                </Asset>
-              )}
-          </>
-        )}
-      </Header>
-
-      {item && (
-        <Content>
-          {item.measuringPoint.type === enums.MeasuringPoints.Type.Online &&
-            item.measuringPoint.readings.length > 0 ? (
-            <>
-              <Text>
-                Última Medição Online (
-                {formatDateByLocale(item.measuringPoint.readings[0].createdAt)})
-              </Text>
-              <CardsContent>
-                <Card>
-                  <CardTitle>Aceleração</CardTitle>
-
-                  <Info>
-                    <InfoData>
-                      <CardText>Axial</CardText>
-                      <CardSubtitle>
-                        {formatNumber(
-                          item.measuringPoint.readings[0].accelAbsoluteX
-                        )}{" "}
-                        G
-                      </CardSubtitle>
-                    </InfoData>
-
-                    <InfoData>
-                      <CardText>Vertical</CardText>
-                      <CardSubtitle>
-                        {formatNumber(
-                          item.measuringPoint.readings[0].accelAbsoluteY
-                        )}{" "}
-                        G
-                      </CardSubtitle>
-                    </InfoData>
-
-                    <InfoData>
-                      <CardText>Horizontal</CardText>
-                      <CardSubtitle>
-                        {formatNumber(
-                          item.measuringPoint.readings[0].accelAbsoluteZ
-                        )}{" "}
-                        G
-                      </CardSubtitle>
-                    </InfoData>
-                  </Info>
-                </Card>
-
-                <Card>
-                  <CardTitle>Velocidade</CardTitle>
-
-                  <Info>
-                    <InfoData>
-                      <CardText>Axial</CardText>
-                      <CardSubtitle>
-                        {formatNumber(
-                          item.measuringPoint.readings[0].velAbsoluteX
-                        )}{" "}
-                        m/s²
-                      </CardSubtitle>
-                    </InfoData>
-
-                    <InfoData>
-                      <CardText>Vertical</CardText>
-                      <CardSubtitle>
-                        {formatNumber(
-                          item.measuringPoint.readings[0].velAbsoluteY
-                        )}{" "}
-                        m/s²
-                      </CardSubtitle>
-                    </InfoData>
-
-                    <InfoData>
-                      <CardText>Horizontal</CardText>
-                      <CardSubtitle>
-                        {formatNumber(
-                          item.measuringPoint.readings[0].velAbsoluteZ
-                        )}{" "}
-                        m/s²
-                      </CardSubtitle>
-                    </InfoData>
-                  </Info>
-                </Card>
-
-                <TemperatureCard>
-                  <CardTitle>Temperatura</CardTitle>
-
-                  <Temperature>
-                    <FontAwesome
-                      name="thermometer-three-quarters"
-                      size={24}
-                      color={THEME.colors.primary}
-                    />
-
-                    <CardTitle>
-                      {item.measuringPoint.readings[0].temperature} C
-                    </CardTitle>
-                  </Temperature>
-                </TemperatureCard>
-              </CardsContent>
-            </>
-          ) : item.measuringPoint.type === enums.MeasuringPoints.Type.Online &&
-            item.measuringPoint.readings.length === 0 ? (
-            <CardsContent>
-              <Card>
-                <CardTitle>Nenhuma leitura feita.</CardTitle>
-              </Card>
-            </CardsContent>
-          ) : item.measuringPoint.type ===
-            enums.MeasuringPoints.Type.PartTime ? (
-            <>
-              {item.measuringPoint.readings.length > 0 ? (
+          {item && (
+            <Content>
+              {item.measuringPoint.type === enums.MeasuringPoints.Type.Online &&
+                item.measuringPoint.readings.length > 0 ? (
+                <MeasuringPointOnlinePage item={item} route={route}/>
+              ) : item.measuringPoint.type === enums.MeasuringPoints.Type.Online &&
+                item.measuringPoint.readings.length === 0 ? (
+                <CardsContent>
+                  <Card>
+                    <CardTitle>{t('index.noReadingsTaken')}</CardTitle>
+                  </Card>
+                </CardsContent>
+              ) : item.measuringPoint.type ===
+                enums.MeasuringPoints.Type.PartTime ? (
                 <>
-                  <Text>Últimas Medições Part-Time</Text>
-                  <MeasuringPointPartTimeLastReadingsViewStepper>
-                    {item.measuringPoint.readings.map(
-                      (reading: any, i: number) => (
-                        <MeasuringPointPartTimeLastReadingsStepper
-                          key={reading.id}
-                          id={reading.id}
-                          lastOne={
-                            i === item.measuringPoint.readings.length - 1
-                          }
-                          status={reading.securityStatus || "default"}
-                          date={format(
-                            new Date(reading.readingAt),
-                            "dd 'de' MMMM 'de' yyyy",
-                            { locale: ptBR }
-                          )}
-                          doneBy={reading.responsibleCompany.name}
-                          diagnoseId={reading?.diagnoses[0]?.id}
-                        />
-                      )
-                    )}
-                  </MeasuringPointPartTimeLastReadingsViewStepper>
-                </>
-              ) : (
-                <Text>
-                  Ainda não temos nenhum registro de leitura para esse ponto de
-                  medição
-                </Text>
-              )}
-            </>
-          ) : null}
+                  {item.measuringPoint.readings.length > 0 ? (
+                    <View style={styles.container}>
+                      <View style={styles.infosContainer}>
+                        <View style={styles.infoContent}>
+                          <Text style={styles.infoTextTitle}>{t('index.frequency')}</Text>
+                          <Text style={styles.infoTextInfo}>{t('index.xDays', { days: 3 })}</Text>
+                        </View>
+                        <View style={styles.infoContent}>
+                          <Text style={styles.infoTextTitle}>{t('index.last')}</Text>
+                          <Text style={styles.infoTextInfo}>{t('index.xDaysAgo', { days: 3 })}</Text>
+                        </View>
+                        <View style={styles.infoContent}>
+                          <Text style={styles.infoTextTitle}>{t('index.measurements')}</Text>
+                          <Text style={styles.infoTextInfo}>32</Text>
+                        </View>
+                      </View>
 
-          {item.measuringPoint.type === enums.MeasuringPoints.Type.Online &&
-            item.measuringPoint.readings.length > 0 && (
-              <>
-                <Text>Gráficos</Text>
+                      <View style={styles.lastReadingContainer}>
+                        <Text>{t('index.lastPartTimeMeasurements')}</Text>
+                      </View>
 
-                <Graphics>
-                  <GraphicsButtons style={{ marginBottom: 25 }}>
-                    <GraphicButton
-                      onPress={() => handleGraphicButtonClick("A")}
-                      style={{
-                        backgroundColor:
-                          actionType === "A" ? THEME.colors.primary : "transparent",
-                      }}
-                    >
-                      <GraphicButtonText
-                        style={{
-                          color: actionType === "A" ? "white" : THEME.colors.text,
-                        }}
-                      >
-                        Aceleração RMS
-                      </GraphicButtonText>
-                    </GraphicButton>
-
-                    <GraphicButton
-                      onPress={() => handleGraphicButtonClick("V")}
-                      style={{
-                        backgroundColor:
-                          actionType === "V" ? THEME.colors.primary : "transparent",
-                      }}
-                    >
-                      <GraphicButtonText
-                        style={{
-                          color: actionType === "V" ? "white" : THEME.colors.text,
-                        }}
-                      >
-                        Velocidade RMS
-                      </GraphicButtonText>
-                    </GraphicButton>
-
-                    <GraphicButton
-                      onPress={() => handleGraphicButtonClick("T")}
-                      style={{
-                        backgroundColor:
-                          actionType === "T" ? THEME.colors.primary : "transparent",
-                      }}
-                    >
-                      <GraphicButtonText
-                        style={{
-                          color: actionType === "T" ? "white" : THEME.colors.text,
-                        }}
-                      >
-                        Temperatura
-                      </GraphicButtonText>
-                    </GraphicButton>
-                  </GraphicsButtons>
-
-                  {isChartLoading ? (
-                    <ContentLoader
-                      width={width}
-                      height={300}
-                      viewBox={`0 0 ${width} 300`}
-                      preserveAspectRatio="none"
-                      style={{ marginVertical: 16 }}
-                    >
-                      <Rect x="0" y="0" rx="0" ry="0" width={width} height={300} />
-                    </ContentLoader>
-                  ) : chartData && chartData.xAxis.length > 0 ? (
-                    <LargeAreaChart
-                      data={chartData}
-                      actionType={actionType}
-                      safeLines={item.measuringPoint || {}}
-                    />
+                      <MeasuringPointPartTimeLastReadingsViewStepper>
+                        {item.measuringPoint.readings.map(
+                          (reading: any, i: number) => (
+                            <MeasuringPointPartTimeLastReadingsStepper
+                              key={reading.id}
+                              id={reading.id}
+                              lastOne={
+                                i === item.measuringPoint.readings.length - 1
+                              }
+                              status={reading.securityStatus || "default"}
+                              date={format(
+                                new Date(reading.readingAt),
+                                "dd 'de' MMMM 'de' yyyy",
+                                { locale: ptBR }
+                              )}
+                              doneBy={reading.responsibleCompany.name}
+                              diagnoseId={reading?.diagnoses[0]?.id}
+                            />
+                          )
+                        )}
+                      </MeasuringPointPartTimeLastReadingsViewStepper>
+                    </View>
                   ) : (
-                    <Text>Sem dados para exibir no gráfico.</Text>
+                    <Text>
+                      {t('index.weDonotHaveReadingMP')}
+                    </Text>
                   )}
-                </Graphics>
-              </>)}
-        </Content>
+                </>
+              ) : null}
+            </Content>
+          )} 
+          </>
+         ) : (<></>)}
+        </>
       )}
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginVertical: 10,
+    gap: 10,
+  },
+  infosContainer: {
+    flexDirection: "row",
+    alignItems: "stretch",
+    justifyContent: "space-between",
+    backgroundColor: theme.colors.light,
+    borderWidth: 1,
+    borderColor: theme.colors.gray,
+    borderRadius: 4,
+  },
+  infoContent: {
+    flex: 1,
+    flexDirection: 'column',
+    gap: 0,
+    alignItems: "center",
+    // marginHorizontal: 20,
+    paddingVertical: 16,
+    // justifyContent: "center",
+  },
+  infoTextTitle: {
+    fontSize: 12,
+    color: theme.colors.primary,
+  },
+  infoTextInfo: {
+    marginTop: 2,
+    fontSize: 16,
+    fontWeight: "700",
+    color: theme.colors.primary,
+  },
+  lastReadingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    backgroundColor: theme.colors.light,
+    borderWidth: 1,
+    borderColor: theme.colors.gray,
+    borderRadius: 4,
+  },
+})

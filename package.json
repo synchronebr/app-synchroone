@@ -36,6 +36,7 @@
     "expo-status-bar": "~3.0.8",
     "i18next": "^25.5.2",
     "locale": "^0.1.0",
+    "lucide-react-native": "^0.544.0",
     "onesignal-expo-plugin": "^2.0.3",
     "polished": "^4.3.1",
     "prop-types": "^15.8.1",

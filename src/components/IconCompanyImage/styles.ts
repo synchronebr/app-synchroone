@@ -15,8 +15,8 @@ interface ContentProps {
 }
 
 export const Content = styled.View<ContentProps>`
-  width: 26px;        
-  height: 26px;
+  width: 24px;        
+  height: 24px;
   border-radius: 25px;  
   border-width: 1px;
   overflow: hidden;

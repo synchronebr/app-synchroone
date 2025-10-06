@@ -27,6 +27,7 @@ export default function HeaderImage<T>({
   pathName,
   imageURL,
   securityStatus,
+  withoutChangeImage,
   setOpenCamera,
   isLoading,
   sendImage,
@@ -83,8 +84,12 @@ export default function HeaderImage<T>({
           <IconDynamicBall icon="chevron-left" onPress={() => navigation.goBack()}/>
 
           <RightIcons>
-            <IconDynamicBall icon="add-a-photo" onPress={getCameraPermission}/>
-            <IconDynamicBall icon="add-photo-alternate" onPress={loadImage}/>
+            {withoutChangeImage ? (<></>) : (
+              <>
+                <IconDynamicBall icon="add-a-photo" onPress={getCameraPermission}/>
+                <IconDynamicBall icon="add-photo-alternate" onPress={loadImage}/>
+              </>
+            )}
           </RightIcons>
         </TopBar>
 
