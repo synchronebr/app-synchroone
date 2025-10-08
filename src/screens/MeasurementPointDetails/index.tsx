@@ -18,6 +18,7 @@ import {
   CardsContent,
   Card,
   CardTitle,
+  CardText,
   MeasuringPointPartTimeLastReadingsViewStepper,
 } from "./styles";
 
@@ -32,6 +33,7 @@ import HeaderImage from "../../components/Pages/HeaderImage";
 import theme from "../../global/styles/theme";
 import { t } from "i18next";
 import MeasuringPointOnlinePage from "../../components/Pages/MeasuringPointOnlinePage";
+import { Button } from "../../components/Button";
 
 interface MeasurementPointDetailsProps {
   route: {
@@ -156,8 +158,10 @@ export function MeasurementPointDetails({
                 item.measuringPoint.readings.length === 0 ? (
                 <CardsContent>
                   <Card>
-                    <CardTitle>{t('index.noReadingsTaken')}</CardTitle>
+                    <CardTitle>{t('index.measurementPointUnmonitored')}</CardTitle>
+                    <CardText>{t('index.linkSyncAlertMP')}</CardText>
                   </Card>
+                  <Button title={t('index.deviceConfiguration')} />
                 </CardsContent>
               ) : item.measuringPoint.type ===
                 enums.MeasuringPoints.Type.PartTime ? (

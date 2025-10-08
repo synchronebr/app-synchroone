@@ -29,6 +29,7 @@ import EmptyState from "../../EmptyState";
 import { convertFloatToString } from "../../../utils/convertFloatToString";
 import { useAuth } from "../../../hooks/useAuth";
 import { formatDateByLocale } from "../../../utils/formatDateByLocale";
+import { Button } from "../../Button";
 
 interface IMeasuringPointOnlinePageProps {
   item: any;
@@ -83,12 +84,11 @@ export default function MeasuringPointOnlinePage({ item, route }: IMeasuringPoin
 
   const lastReading = item.measuringPoint.readings[0];
   const device = item.measuringPoint?.device;
-  const nextReadingDate = addMinutes(lastReading.readingAt, device?.readingWindow);
 
   return (
     <View style={styles.container}>
       <View style={styles.sensorContainer}>
-         <View style={styles.sensorAboutContainer}>
+        <View style={styles.sensorAboutContainer}>
           {device ? (
             <>
             <SensorSyncIcon height={120} width={60} />
@@ -98,7 +98,7 @@ export default function MeasuringPointOnlinePage({ item, route }: IMeasuringPoin
                 <Text>{t('index.minutesMin', { minutes: device?.readingWindow })}</Text>
                 <Text style={styles.sensorAboutTextSmall}>{t('index.window')}</Text>
               </View>
-              <TouchableOpacity style={styles.detalhesButton}>
+              <TouchableOpacity style={styles.detalhesButton} onPress={() => navigation.navigate("Device", { code: device.code})}>
                 <ArrowForwardIcon 
                   fill={THEME.colors.primary} 
                   height={8} 
@@ -129,7 +129,7 @@ export default function MeasuringPointOnlinePage({ item, route }: IMeasuringPoin
           <View style={styles.buttonsDataView}>
             <Text style={styles.buttonsDataViewTextBig}>{t('index.lastMeasurement')}</Text>
             <Text style={styles.buttonsDataViewTextNormal}>{formatDateByLocale(lastReading.readingAt, user?.locale)}</Text>
-            {device && (<Text style={styles.buttonsDataViewTextSmall}>{t('index.next')} - {nextReadingDate > new Date() ? formatDateByLocale(nextReadingDate, user?.locale) : formatDateByLocale(new Date(), user?.locale)}</Text>)}
+            {device && (<Text style={styles.buttonsDataViewTextSmall}>{t('index.next')} - {addMinutes(lastReading.readingAt, device?.readingWindow) > new Date() ? formatDateByLocale(addMinutes(lastReading.readingAt, device?.readingWindow), user?.locale) : formatDateByLocale(new Date(), user?.locale)}</Text>)}
           </View>
         </View>
       </View> 
@@ -202,7 +202,6 @@ export default function MeasuringPointOnlinePage({ item, route }: IMeasuringPoin
         )}
         </>
       )}
-
     </View>
   );
 }
@@ -210,7 +209,7 @@ export default function MeasuringPointOnlinePage({ item, route }: IMeasuringPoin
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 12,
+    paddingVertical: 12,
     gap: 16,
   },
   sensorContainer: {
@@ -310,5 +309,20 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 4,
     padding: 8,
+  },
+  notConfigMPContainer: {
+    flex: 1,
+    alignSelf: 'stretch', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 12,
+    padding: 20,
+  },
+  notConfigMPTitle: {
+    fontFamily: theme.fonts.semiBold,
+    fontSize: theme.fontSize.normal,
+  },
+  notConfigMPDesc: {
+
   },
 });

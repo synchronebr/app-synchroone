@@ -13,6 +13,6 @@ export const Container = styled.TouchableOpacity.attrs({
 export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.light};
   font-family: ${({ theme }) => theme.fonts.medium};
-  font-size: ${({ theme }) => theme.fontSize.normal}px;
+  font-size: ${({ theme }) => theme.fontSize.smaller}px;
   text-align: center;
 `;

@@ -19,6 +19,8 @@ import { MyData } from "../screens/MyData";
 import { AlertDetails } from "../screens/AlertDetails";
 import { AlertPrescriptionDetails } from "../screens/AlertPrescriptionDetails";
 import { DiagnosesByPiece } from "../screens/DiagnosesByPiece";
+import { Device } from "../screens/Device";
+import { DeviceGateway } from "../screens/DeviceGateway";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -148,6 +150,20 @@ export function Dashboard() {
       <Screen
         component={MeasurementPointDetails}
         name="MeasurementPointDetails"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={Device}
+        name="Device"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={DeviceGateway}
+        name="DeviceGateway"
         options={{
           headerShown: false,
         }}
