@@ -295,7 +295,7 @@ export const styles = StyleSheet.create({
     fontSize: theme.fontSize.smaller,
   },
   buttonsDataViewTextSmall: {
-    fontSize: theme.fontSize.smallest,
+    fontSize: 8,
     color: theme.colors.gray_dark,
   },
   accelContainer: {
