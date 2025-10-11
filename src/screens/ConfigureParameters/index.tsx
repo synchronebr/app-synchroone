@@ -178,9 +178,9 @@ export function ConfigureParameters( { route } ) {
 
       navigation.reset({
         index: 0,
-        routes: [{ name: "Home" as never }],
+        routes: [{ name: "HomeNew" as never }],
       });
-      navigation.navigate("Home")
+      navigation.navigate("HomeNew")
     } catch (error) {
       Toast.show(
         "Ocorreu um erro ao tentar configurar o sensor. Por favor, tente novamente.",

@@ -24,7 +24,7 @@ export default function Tabs({
   return (
     <View style={styles.container}>
       {options.map(option => (
-        <TouchableOpacity style={[styles.button, value === option.value && styles.buttonActive]} onPress={() => setValue(option.value)}>
+        <TouchableOpacity style={[styles.button, smallText && styles.buttonSmall, value === option.value && styles.buttonActive]} onPress={() => setValue(option.value)}>
           <Text style={[styles.buttonText, smallText && styles.buttonTextSmall]}>{option.label}</Text>
         </TouchableOpacity>
       ))}
@@ -44,6 +44,14 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 4,
     padding: 8,
+    borderWidth: 0,
+    backgroundColor: theme.colors.primary_light,
+  },
+  buttonSmall: {
+    flex: 1,
+    alignItems: "center",
+    borderRadius: 4,
+    padding: 4,
     borderWidth: 0,
     backgroundColor: theme.colors.primary_light,
   },

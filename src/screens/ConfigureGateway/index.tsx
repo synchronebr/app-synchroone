@@ -143,7 +143,7 @@ export function ConfigureGateway( { route } ) {
         { type: "success" }
       );
 
-      navigation.navigate("Home" as never);
+      navigation.navigate("HomeNew" as never);
     } catch (error) {
       // console.log('ERRROOOOO')
       // console.log(error)
@@ -152,7 +152,7 @@ export function ConfigureGateway( { route } ) {
         { type: "danger" }
       );
 
-      navigation.navigate("Home" as never);
+      navigation.navigate("HomeNew" as never);
       setIsLoadingPost(false);
       console.log(error)
     }

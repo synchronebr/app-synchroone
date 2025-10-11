@@ -13,6 +13,7 @@ import SettingsLinearIcon from "../assets/icons/settings-linear.svg";
 import { TabBarCenterButton } from "../components/TabBarCenterButton";
 
 import { Home } from "../screens/Home";
+import { HomeNew } from "../screens/HomeNew";
 import { Assets } from "../screens/Assets";
 import { Analyses } from "../screens/Analyses";
 import { AlertsHistory } from "../screens/AlertsHistory";
@@ -68,6 +69,17 @@ export function DashboardTab() {
         }}
       >
         <Screen
+          component={HomeNew}
+          name="HomeNew"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              // focused ? <HomeSolidIcon /> : <HomeOutlineIcon />,
+              <IconCompanyImage focused={focused}/>,
+            title: t('index.home'),
+          }}
+        />
+        {/* <Screen
           component={Home}
           name="Home"
           options={{
@@ -77,7 +89,7 @@ export function DashboardTab() {
               <IconCompanyImage focused={focused}/>,
             title: t('index.home'),
           }}
-        />
+        /> */}
         <Screen
           component={Assets}
           name="Assets"

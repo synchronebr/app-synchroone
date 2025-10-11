@@ -5,7 +5,7 @@ export default {
     secondary: "#0284C7",
     secondary_light: "#0284C71A",
     dark: "#1E293B",
-    light: "#FAFAFA",
+    light: "#fafafa",
     gray: "#CBD5E1",
     gray_dark: "#94A3B8",
     gray_light: "#F4F4F5",
