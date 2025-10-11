@@ -55,9 +55,6 @@ export const Fill = styled.View`
 export const FillValue = styled.Text`
   position: absolute;
   right: 8px;
-  top: 60%;
-  /* translateY(-50%) no RN = usar lineHeight/position — aqui centralizamos por padding */
-  transform: translateY(-8px);
   font-size: 7px;
   font-weight: 700;
   color: #ffffff;
