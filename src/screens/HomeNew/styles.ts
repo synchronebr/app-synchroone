@@ -38,7 +38,7 @@ export const ContentHeader = styled.View`
   border-top-right-radius: 30px;
   border-top-left-radius: 30px;
   padding: 20px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 `;
 
 export const ContentHeaderTop = styled.View`
@@ -94,8 +94,8 @@ export const ContentHeaderGraphTextDesc = styled.Text`
 `;
 
 export const ContentView = styled.View`
-  padding: 0 20px;
-  gap: 12px;
+  padding: 0 10px;
+  gap: 10px;
 `;
 
 export const ContentViewContainer = styled.View`

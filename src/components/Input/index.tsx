@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     flexDirection: "row",
     paddingHorizontal: 12,
-    paddingVertical: Platform.OS === "android" ? 8 : 12,
+    paddingVertical: Platform.OS === "android" ? 4 : 6,
   },
   leftIcon: {
     marginRight: 8,

@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "styled-components/native";
 
 import { DashboardTab } from "./dashboard-tab";
+import { Companies } from "../screens/Companies";
 import { Notifications } from "../screens/Notifications";
 import { NotificationDetails } from "../screens/NotificationDetails";
 import { QRCodeScanner } from "../screens/QRCodeScanner";
@@ -50,6 +51,13 @@ export function Dashboard() {
       <Screen
         component={DashboardTab}
         name="DashboardTab"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={Companies}
+        name="Companies"
         options={{
           headerShown: false,
         }}

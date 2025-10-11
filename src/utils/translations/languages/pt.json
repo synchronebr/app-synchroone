@@ -1468,7 +1468,12 @@
             "controlAllOk": "Tudo sob controle",
             "assetsNoneAlert": "Não há ativos em estado de alerta ou perigo",
             "dataNone": "Nenhum dado encontrado",
-            "diagnosesNone": "Não encontramos nenhum diagnóstico"
+            "diagnosesNone": "Não encontramos nenhum diagnóstico",
+            "selectCompay": "Selecionar empresa",
+            "exitApplication": "Fazer logout do aplicativo",
+            "qrCode": "QR Code",
+            "scanDeviceQRCode": "Ler qr code do dispositivo",
+            "goWhatsApp": "Seguir para o WhatsApp"
         }
     }
 }
