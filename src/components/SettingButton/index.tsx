@@ -4,11 +4,12 @@ import { useTheme } from "styled-components/native";
 import ArrowForwardIcon from "../../assets/icons/arrow-forward.svg";
 
 import { SettingButtonProps } from "./types";
-import { Container, Title } from "./styles";
+import { Container, TextContainer, Title, Subtitle } from "./styles";
 
 export function SettingButton({
   icon: Icon,
   title,
+  subtitle,
   ...rest
 }: SettingButtonProps) {
   const THEME = useTheme();
@@ -17,10 +18,13 @@ export function SettingButton({
     <Container {...rest}>
       <Icon />
 
-      <Title>{title}</Title>
+      <TextContainer>
+        <Title>{title}</Title>
+        {subtitle && (<Subtitle>{subtitle}</Subtitle>)}
+      </TextContainer>
 
       <ArrowForwardIcon
-        fill={THEME.colors.gray_dark}
+        fill={THEME.colors.primary}
         height={12}
         width={12}
       />

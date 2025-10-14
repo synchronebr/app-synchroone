@@ -17,6 +17,8 @@ import { MeasurementPointDetails } from "../screens/MeasurementPointDetails";
 import { MeasurementHistory } from "../screens/MeasurementHistory";
 import { Manuals } from "../screens/Manuals";
 import { MyData } from "../screens/MyData";
+import { Languages } from "../screens/Languages";
+import { Countries } from "../screens/Countries";
 import { AlertDetails } from "../screens/AlertDetails";
 import { AlertPrescriptionDetails } from "../screens/AlertPrescriptionDetails";
 import { DiagnosesByPiece } from "../screens/DiagnosesByPiece";
@@ -201,7 +203,21 @@ export function Dashboard() {
         component={MyData}
         name="MyData"
         options={{
-          title: "Meus Dados",
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={Languages}
+        name="Languages"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={Countries}
+        name="Countries"
+        options={{
+          headerShown: false,
         }}
       />
       <Screen

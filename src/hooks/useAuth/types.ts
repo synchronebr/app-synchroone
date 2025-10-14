@@ -16,5 +16,6 @@ export type IAuthContextData = {
   login(form: SessionsRequest): Promise<AxiosResponse<any, any>>;
   logout(): Promise<void>;
   updateUser: () => void;
+  updateUserServer: (user: User) => void;
   deleteRegister(): Promise<void>;
 };

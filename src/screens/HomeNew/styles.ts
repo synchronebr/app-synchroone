@@ -38,6 +38,7 @@ export const ContentHeader = styled.View`
   border-top-right-radius: 30px;
   border-top-left-radius: 30px;
   padding: 20px;
+  gap: 10;
   margin-bottom: 10px;
 `;
 
@@ -68,6 +69,7 @@ export const CalendarText = styled.Text`
 export const ContentHeaderGraphContainer = styled.View`
   flex-direction: row;
   align-items: center;
+  /* background-color: rebeccapurple; */
 `;
 
 export const ContentHeaderGraph = styled.View`

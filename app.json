@@ -30,6 +30,9 @@
     "android": {
       "package": "com.synchroone",
       "versionCode": 21
+    },
+    "ios": {
+      "newArchEnabled": true
     }
   }
 }

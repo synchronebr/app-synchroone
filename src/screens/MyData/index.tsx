@@ -6,6 +6,8 @@ import { useAuth } from "../../hooks/useAuth";
 import { Container, TextDiv, Text, SubText, ButtonWrapper } from "./styles";
 import { ButtonDelete } from "../../components/ButtonDelete";
 import { Alert } from "react-native";
+import Header from "../../components/Pages/Header";
+import { t } from "i18next";
 
 export function MyData() {
   const navigation = useNavigation();
@@ -33,16 +35,21 @@ export function MyData() {
 
   return (
     <Container>
+      <Header
+        title={t("index.myAccount") ?? "Minha conta"}
+        backIcon="back"
+        backPress={() => navigation.goBack()}
+      />
       <TextDiv>
-        <Text>Nome:</Text>
+        <Text>{t('index.name')}:</Text>
         <SubText>{user?.name}</SubText>
       </TextDiv>
       <TextDiv>
-        <Text>Email:</Text>
+        <Text>{t('index.email')}:</Text>
         <SubText>{user?.email}</SubText>
       </TextDiv>
       <TextDiv>
-        <Text>Telefone:</Text>
+        <Text>{t('index.phone')}:</Text>
         <SubText>{user?.phone}</SubText>
       </TextDiv>
 

@@ -15,6 +15,7 @@ export const Title = styled.Text`
   text-align: center;
   padding: 10px;
   border-radius: 6px;
+  margin-bottom: 10px;
 `;
 
 export const HeaderSpacing = styled.View`

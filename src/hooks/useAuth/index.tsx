@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { OneSignal } from "react-native-onesignal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
+import i18n from "i18next";
 
 import { sessions, deleteUser } from "../../services/Auth";
 import {
@@ -59,6 +60,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const { refreshToken, token, user } = data;
 
       OneSignal.login(user.email);
+      await updateUser()
 
       await AsyncStorage.setItem(AUTH_TOKEN_STORAGE_KEY, JSON.stringify(token));
       await AsyncStorage.setItem(
@@ -82,6 +84,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ...user,
         userAcess: accessLevels,
       });
+      i18n.changeLanguage(user.locale);
+    } catch (error) {
+      console.error("Error updating user:", error);
+      // signOut();
+    }
+  }
+
+  async function updateUserServer(user: User) {
+    try {
+      const response = await api.put("me", user);
+      setUser(user);
     } catch (error) {
       console.error("Error updating user:", error);
       // signOut();
@@ -109,6 +122,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         login,
         logout,
         updateUser,
+        updateUserServer,
         deleteRegister,
       }}
     >

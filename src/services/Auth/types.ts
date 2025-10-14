@@ -36,4 +36,5 @@ export type User = {
   country: string;
   locale: string;
   isAdmin?: boolean;
+  avatar?: string;
 };

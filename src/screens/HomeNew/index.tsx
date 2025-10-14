@@ -70,6 +70,7 @@ import Drawer from "../../components/Drawer";
 import Select from "../../components/Select";
 import { Button } from "../../components/Button";
 import { convertStringToFloatByCountry } from "../../utils/convertStringToFloatByCountry";
+import PeriodSelect from "../../components/Pages/Home/PeriodSelect";
 
 export function HomeNew() {
   const { t } = useTranslation();
@@ -181,47 +182,12 @@ export function HomeNew() {
                 />
               </ContentHeaderTopTabs>
 
-              <CalendarContainer onPress={()=> setIsFiltersOpen(true)}>
-                <CalendarIcon size={15} color={THEME.colors.gray_dark} />
-                <View style={{ width: 4 }} />
-                <CalendarText>{t("index.lastValueDay", { value: applyedTimeFilter })}</CalendarText>
-              </CalendarContainer>
-              
-              <Drawer
-                isOpen={isFiltersOpen}
-                position="center"
-                maxHeightPercent={0.95}
-                onRequestClose={closeFilter}
-                animateOnFirstOpen={false}
-                durationMs={200}
-              >
-                <FilterWrapper>
-                  <FilterHeader>
-                    <FilterWrapperTitle>{t("index.dataRange")}</FilterWrapperTitle>
-                    <CrossIcon onPress={closeFilter} />
-                  </FilterHeader>
-
-                  <FilterContent>
-                    <DropdownWrapper>
-                      <Select
-                        editable
-                        values={[
-                          { label: t("index.lastValueDay", { value: 120 }), value: "120" },
-                          { label: t("index.lastValueDay", { value: 90 }), value: "90" },
-                          { label: t("index.lastValueDay", { value: 60 }), value: "60" },
-                        ]}
-                        selected={timeFilter} 
-                        onSelect={(v) => setTimeFilter(v)}
-                        label={t("index.period")}
-                        placeholder="Selecione um nível"
-                      />
-                    </DropdownWrapper>
-
-                    <Button title={t("index.applyFilter")} onPress={() => {setApplyedTimeFilter(timeFilter);closeFilter()}} />
-                  </FilterContent>
-                </FilterWrapper>
-              </Drawer>
-            </ContentHeaderTop>
+              <PeriodSelect
+                value={applyedTimeFilter}
+                onChange={(v) => setApplyedTimeFilter(v)}
+                labelText={t("index.period")}
+              />
+            </ContentHeaderTop> 
 
             <ContentHeaderGraphContainer>
               <ContentHeaderGraph>
