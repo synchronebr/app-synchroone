@@ -23,7 +23,7 @@ import THEME from "../../global/styles/theme";
 
 export function Countries() {
   const navigation = useNavigation();
-  const { user, setUser, updateUserServer } = useAuth();
+  const { user, setUser, updateUser } = useAuth();
   const [countries, setCountries] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,7 +42,7 @@ export function Countries() {
       const userNew =  {...user, country: selected}
       setUser(userNew)
 
-      await updateUserServer(userNew);
+      await updateUser(userNew);
       navigation.navigate("DashboardTab" as never, { screen: "More" } as never);
     } catch (e) {
     }

@@ -57,10 +57,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const data = response.data as SessionsResponse;
 
     if (response.status === 200) {
-      const { refreshToken, token, user } = data;
+      const { refreshToken, token } = data;
 
+      const user = await getUserDB()
       OneSignal.login(user.email);
-      await updateUser()
 
       await AsyncStorage.setItem(AUTH_TOKEN_STORAGE_KEY, JSON.stringify(token));
       await AsyncStorage.setItem(
@@ -68,30 +68,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
         JSON.stringify(refreshToken)
       );
       await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
-
-      setUser(user);
     }
 
     return response;
   }
 
-  async function updateUser() {
+  async function getUserDB() {
     try {
       const response = await api.get("me");
       const { user, accessLevels } = response.data;
 
-      setUser({
+      const updatedUser = {
         ...user,
         userAcess: accessLevels,
-      });
+      };
+      setUser(updatedUser);
       i18n.changeLanguage(user.locale);
+      return updatedUser;
     } catch (error) {
       console.error("Error updating user:", error);
       // signOut();
     }
   }
 
-  async function updateUserServer(user: User) {
+  async function updateUser(user: User) {
     try {
       const response = await api.put("me", user);
       setUser(user);
@@ -121,8 +121,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser,
         login,
         logout,
+        getUserDB,
         updateUser,
-        updateUserServer,
         deleteRegister,
       }}
     >

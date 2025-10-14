@@ -15,7 +15,7 @@ export type IAuthContextData = {
   setUser: React.Dispatch<React.SetStateAction<User>>;
   login(form: SessionsRequest): Promise<AxiosResponse<any, any>>;
   logout(): Promise<void>;
-  updateUser: () => void;
-  updateUserServer: (user: User) => void;
+  getUserDB: () => void;
+  updateUser: (user: User) => void;
   deleteRegister(): Promise<void>;
 };

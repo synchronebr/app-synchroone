@@ -19,7 +19,7 @@ export function Splash() {
     REFRESH_TOKEN_STORAGE_KEY,
     USER_STORAGE_KEY,
     setUser,
-    updateUser,
+    getUserDB,
     logout,
   } = useAuth();
 
@@ -28,7 +28,7 @@ export function Splash() {
     const userData = await AsyncStorage.getItem(USER_STORAGE_KEY);
 
     if (token && userData) {
-      updateUser();
+      getUserDB();
       setUser(JSON.parse(userData));
 
       navigation.reset({
