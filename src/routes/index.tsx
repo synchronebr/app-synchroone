@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Splash } from "../screens/Splash";
 import { Auth } from "./auth";
 import { DashboardDrawer } from "./dashboard-drawer";
+import { AnimationRoutes } from "./animations";
 
 export function Routes() {
   const { Navigator, Screen } = createStackNavigator();
@@ -64,6 +65,7 @@ export function Routes() {
         <Screen component={Splash} name="Splash" />
         <Screen component={Auth} name="Auth" />
         <Screen component={DashboardDrawer} name="DashboardDrawer" />
+        <Screen name="Animations" component={AnimationRoutes} />
       </Navigator>
     </NavigationContainer>
   );
