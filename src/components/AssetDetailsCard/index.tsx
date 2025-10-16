@@ -5,6 +5,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Container, Details, Title, Text } from "./styles";
 import { IPiece } from "../../services/dtos/IPiece";
 import { useTheme } from "styled-components/native";
+import { t } from "i18next";
 
 interface IAssetDetailsCard extends TouchableOpacityProps {
   piece: IPiece;
@@ -17,15 +18,15 @@ export function AssetDetailsCard({ piece, ...rest }: IAssetDetailsCard) {
     <Container {...rest}>
       <Details>
         <Text>
-          <Title>Tipo: </Title>
+          <Title>{t('index.type')}: </Title>
           {piece && piece.pieceType ? piece.pieceType.description : "-"}
         </Text>
         <Text>
-          <Title>Marca: </Title>
+          <Title>{t('index.branch')}: </Title>
           {piece && piece.brand ? piece.brand : "-"}
         </Text>
         <Text>
-          <Title>Modelo: </Title>
+          <Title>{t('index.model')}: </Title>
           {piece && piece.model ? piece.model : "-"}
         </Text>
       </Details>

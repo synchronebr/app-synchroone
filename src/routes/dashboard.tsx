@@ -24,6 +24,7 @@ import { AlertPrescriptionDetails } from "../screens/AlertPrescriptionDetails";
 import { DiagnosesByPiece } from "../screens/DiagnosesByPiece";
 import { Device } from "../screens/Device";
 import { DeviceGateway } from "../screens/DeviceGateway";
+import { t } from "i18next";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -154,7 +155,7 @@ export function Dashboard() {
         component={EditAssetDetails}
         name="EditAssetDetails"
         options={{
-          headerTitle: "Detalhes do Ativo",
+          headerTitle: t('index.pieceDetails'),
         }}
       />
       <Screen
@@ -182,7 +183,7 @@ export function Dashboard() {
         component={MeasurementHistory}
         name="MeasurementHistory"
         options={{
-          title: "Histórico de medições",
+          title: t('index.diagnosesHistory'),
         }}
       />
       <Screen
@@ -196,7 +197,7 @@ export function Dashboard() {
         component={Manuals}
         name="Manuals"
         options={{
-          title: "Acessar Manuais",
+          title: t('index.accessManuals'),
         }}
       />
       <Screen

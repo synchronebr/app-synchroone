@@ -76,7 +76,7 @@ export function LastMeasurementCard({ item }: ILastMeasurementCard) {
         </CardViews>
 
         {/* <MeasurementHistory onPress={() => navigation.navigate("MeasurementHistory")}>
-          <MeasurementHistoryText>Histórico de medições</MeasurementHistoryText>
+          <MeasurementHistoryText>t('index.diagnosesHistory')</MeasurementHistoryText>
           <Entypo color={THEME.colors.secondary} name="chevron-right" />
         </MeasurementHistory> */}
       </Details>

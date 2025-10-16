@@ -33,6 +33,7 @@ import { getPathsForSelect } from "../../services/Companies/Paths";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
 import { getPiecesForSelect } from "../../services/Companies/Pieces";
 import { useAuth } from "../../hooks/useAuth";
+import { t } from "i18next";
 
 export function ConfigureParameters( { route } ) {
   const { user } = useAuth();
@@ -226,8 +227,8 @@ export function ConfigureParameters( { route } ) {
                 values={path}
                 selected={selectedPaths[i]}
                 onSelect={(value) => handleChangePathLevel(i, value)}
-                label={`Nível ${i + 1}`}
-                placeholder="Selecione um nível"
+                label={t('index.level', { level: i + 1 })}
+                placeholder={t('index.selectLevel')}
               />
             </DropdownWrapper>
           ))}

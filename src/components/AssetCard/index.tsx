@@ -23,6 +23,7 @@ import {
   InvalidElipse,
   LastMeasurementSubText,
 } from "./styles";
+import { t } from "i18next";
 
 export function AssetCard({ item, ...rest }: AssetCardProps) {
   const navigation = useNavigation<AssetCardNavigationProps>();
@@ -33,10 +34,10 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
       <Image
         source={item.image ? { uri: item.image } : require('../../assets/images/blue-machine-sensor.png')}
       />
-      {item.securityStatus === 'S' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Seguro</CardStatusSafeText></CardStatusSafe>)}
-      {item.securityStatus === 'W' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Alerta</CardStatusSafeText></CardStatusSafe>)}
-      {item.securityStatus === 'D' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Perigo</CardStatusSafeText></CardStatusSafe>)}
-      {item.securityStatus === 'IN' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>Não Monitorado</CardStatusSafeText></CardStatusSafe>)}
+      {item.securityStatus === 'S' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>{t('index.securityStatus-S')}</CardStatusSafeText></CardStatusSafe>)}
+      {item.securityStatus === 'W' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>{t('index.securityStatus-W')}</CardStatusSafeText></CardStatusSafe>)}
+      {item.securityStatus === 'D' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>{t('index.securityStatus-D')}</CardStatusSafeText></CardStatusSafe>)}
+      {item.securityStatus === 'IN' && (<CardStatusSafe status={item.securityStatus}><CardStatusSafeText>{t('index.unmonitored')}</CardStatusSafeText></CardStatusSafe>)}
       <Content>
         <Title>{item.pathNames?.length
           ? `${item.description} - ${item.pathNames.join(" - ")}`
@@ -49,7 +50,7 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
 
         {/* {item?.readings?.length > 0 && ( */}
         <LastMeasurementInfo>
-          <LastMeasurementText>Últimas medições:</LastMeasurementText>
+          <LastMeasurementText>{t('index.latestMeasurements')}:</LastMeasurementText>
           <Elipses>
             <>
             {item.readings && item.readings.length > 0 ? (
@@ -64,7 +65,7 @@ export function AssetCard({ item, ...rest }: AssetCardProps) {
               ))}
               </>
             ) : (
-            <LastMeasurementSubText>Sem medições</LastMeasurementSubText>
+            <LastMeasurementSubText>{t('index.noMeasurements')}</LastMeasurementSubText>
             )}
             </>
           </Elipses>

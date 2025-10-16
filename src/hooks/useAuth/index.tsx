@@ -57,9 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const data = response.data as SessionsResponse;
 
     if (response.status === 200) {
-      const { refreshToken, token } = data;
-
-      const user = await getUserDB()
+      const { refreshToken, token, user } = data;
       OneSignal.login(user.email);
 
       await AsyncStorage.setItem(AUTH_TOKEN_STORAGE_KEY, JSON.stringify(token));

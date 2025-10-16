@@ -25,6 +25,7 @@ import { Container, Scroll, Form, Wrapper } from "./styles";
 import { Toast } from "react-native-toast-notifications";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
 import Select from "../../components/Select";
+import { t } from "i18next";
 
 export function EditAssetDetails() {
   const [isLoading, setIsLoading] = useState(true);
@@ -145,8 +146,8 @@ export function EditAssetDetails() {
           <Wrapper>
             <Select
                 editable
-                label="Tipo do Ativo"
-                placeholder="Tipo do Ativo"
+                label={t('index.assetType')}
+                placeholder={t('index.assetType')}
                 selected={selectedPieceType}
                 values={piecesTypesSelectData}
                 onSelect={(value) => setSelectedPieceType(Number(value))}

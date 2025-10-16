@@ -44,11 +44,6 @@ import {
 import Header from "../../components/Pages/Header";
 import { t } from "i18next";
 
-const STATUS_HAZARDOUSNESS = {
-  D: { title: "Perigo" },
-  W: { title: "Alerta" },
-};
-
 export function AlertDetails() {
   const navigation = useNavigation<AlertCardNavigationProps>();
   const route = useRoute();
@@ -121,7 +116,7 @@ export function AlertDetails() {
               {/* <DangerIcon fill={THEME.colors.gray} /> */}
               <DiagnoseDescriptionTitle>
                 Falha Identificada (
-                {STATUS_HAZARDOUSNESS[data.hazardousness]?.title})
+                {t('index.securityStatus-'+data.hazardousness)})
               </DiagnoseDescriptionTitle>
             </DiagnoseDescriptionTitleDiv>
             <DiagnoseDescriptionSubtitle>
@@ -131,7 +126,7 @@ export function AlertDetails() {
 
           <Divider />
 
-          <Title>Possíveis causas</Title>
+          <Title>{t('index.possibleCausas')}</Title>
           <CardCauses>
             {data?.causes.map((cause, index) => (
               <React.Fragment key={index}>

@@ -240,7 +240,7 @@ export function AlertsHistory({ setReadingsCount }: IAlertsHistoryProps) {
                   setDraftFilters((f) => ({ ...f, lastDays: Number(v) as 60 | 90 | 120 }))
                 }
                 label={t("index.period")}
-                placeholder="Selecione um nível"
+                placeholder={t('index.selectLevel')}
               />
             </DropdownWrapper>
 

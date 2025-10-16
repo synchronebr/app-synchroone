@@ -39,6 +39,7 @@ import {
 } from "./styles";
 import HeaderImage from "../../components/Pages/HeaderImage";
 import { Camera } from "../../components/Camera";
+import { t } from "i18next";
 
 export function AssetDetails() {
   const { height, width } = useWindowDimensions();
@@ -169,7 +170,7 @@ export function AssetDetails() {
 
               <ScrollView>
               <Content>
-                <Text>Detalhes do Ativo</Text>
+                <Text>{t('index.pieceDetails')}</Text>
 
                 <AssetDetailsCard
                   onPress={() =>
@@ -189,9 +190,7 @@ export function AssetDetails() {
                     navigation.navigate("DiagnosesByPiece", { id: piece.id })
                   }
                 >
-                  <DiagnosesButtonText>
-                    Histórico de diagnósticos
-                  </DiagnosesButtonText>
+                  <DiagnosesButtonText>{t('index.diagnosesHistory')}</DiagnosesButtonText>
                   <ArrowForwardIcon
                     fill={THEME.colors.primary}
                     height={12}
@@ -199,7 +198,7 @@ export function AssetDetails() {
                   />
                 </DiagnosesButton>
 
-                <Text>Pontos de medição</Text>
+                <Text>{t('index.measuringPointsTitle')}</Text>
 
                 <List
                   data={piece.measuringPoints}
