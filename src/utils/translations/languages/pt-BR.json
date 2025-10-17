@@ -1603,7 +1603,9 @@
             "noMeasurements": "Sem medições",
             "readingsByTechnician": "Leituras feitas por um técnico",
             "noSensorsLinked": "Nenhum sensor vinculado",
-            "accessManuals": "Acessar Manuais"
+            "accessManuals": "Acessar Manuais",
+            "whatsapp": "WhatsApp",
+            "app": "App"
         }
     }
 }

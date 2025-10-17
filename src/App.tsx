@@ -58,6 +58,7 @@ export default function App() {
         animationType="zoom-in"
         duration={3500}
         placement="top"
+        offset={50}
         textStyle={{
           fontSize: 12,
           fontFamily: THEME.fonts.medium,

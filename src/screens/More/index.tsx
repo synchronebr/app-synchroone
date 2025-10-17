@@ -40,6 +40,13 @@ export function More() {
     });
   }
 
+  async function handleUserPreferences() {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "UserPreferences" as never }],
+    });
+  }
+
   async function showAbout() {
     const version = DeviceInfo.getVersion(); // Gets version from native files
     const buildNumber = DeviceInfo.getBuildNumber(); // Gets the build number
@@ -129,6 +136,7 @@ export function More() {
           icon={() => <User2Icon height={22} width={22} />}
           title={t('index.userPreferences')}
           subtitle={t('index.customizePreferences')}
+          onPress={handleUserPreferences}
         />
       </Buttons>
     </Container>

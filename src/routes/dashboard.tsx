@@ -19,6 +19,7 @@ import { Manuals } from "../screens/Manuals";
 import { MyData } from "../screens/MyData";
 import { Languages } from "../screens/Languages";
 import { Countries } from "../screens/Countries";
+import { UserPreferences } from "../screens/UserPreferences";
 import { AlertDetails } from "../screens/AlertDetails";
 import { AlertPrescriptionDetails } from "../screens/AlertPrescriptionDetails";
 import { DiagnosesByPiece } from "../screens/DiagnosesByPiece";
@@ -217,6 +218,13 @@ export function Dashboard() {
       <Screen
         component={Countries}
         name="Countries"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={UserPreferences}
+        name="UserPreferences"
         options={{
           headerShown: false,
         }}
