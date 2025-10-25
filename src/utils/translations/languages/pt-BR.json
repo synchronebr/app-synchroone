@@ -620,9 +620,9 @@
             "noInsightsAvailable": "Nenhum insight disponível no momento",
             "recordClassifiedSingular": "registro classificado como",
             "recordClassifiedPlural": "registros classificados como",
-            "asAlarm": "como <span class=\"font-semibold text-amber-600\">Alarme</span>",
-            "asDanger": "como <span class=\"font-semibold text-red-600\">Perigo</span>",
-            "asNormal": "como <span class=\"font-semibold text-green-600\">Normal</span>",
+            "asAlarm": "como Alarme",
+            "asDanger": "como Perigo",
+            "asNormal": "como Normal",
             "none": "nenhum",
             "recordOf": "registro de",
             "readingSingular": "leitura",
@@ -1605,7 +1605,10 @@
             "noSensorsLinked": "Nenhum sensor vinculado",
             "accessManuals": "Acessar Manuais",
             "whatsapp": "WhatsApp",
-            "app": "App"
+            "app": "App",
+            "occurrences": "ocorrências",
+            "notConnectedToGateway": "Não Conectado ao Gateway",
+            "notConfigured": "Não Configurado"
         }
     }
 }

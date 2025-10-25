@@ -1,5 +1,6 @@
 export type HeaderProps<T> = {
   title: string;
+  variant?: 'primary' | 'secondary';
   backIcon?: "entypo" | "back";
   backPress?: () => void;
   infoIcon?: boolean;

@@ -26,6 +26,8 @@ import { DiagnosesByPiece } from "../screens/DiagnosesByPiece";
 import { Device } from "../screens/Device";
 import { DeviceGateway } from "../screens/DeviceGateway";
 import { t } from "i18next";
+import { DeviceSetupStack } from "./device-setup";
+import { HomeOld } from "../screens/HomeOld";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -62,6 +64,13 @@ export function Dashboard() {
       <Screen
         component={Companies}
         name="Companies"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={HomeOld}
+        name="HomeOld"
         options={{
           headerShown: false,
         }}
@@ -251,6 +260,11 @@ export function Dashboard() {
         options={{
           title: "Diagnósticos",
         }}
+      />
+      <Screen
+        name="DeviceSetupStack"
+        component={DeviceSetupStack}
+        options={{ headerShown: false }} // o stack interno já desenha o header
       />
     </Navigator>
   );

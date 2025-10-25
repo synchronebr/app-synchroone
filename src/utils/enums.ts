@@ -29,6 +29,12 @@ export const enums = {
         Offline: 'O',
         Active: 'A',
         Disabled: 'D',
+      },
+      ConnectionStatus: {
+        Online: 'ON',
+        Offline: 'OF',
+        NotConnectedGateway: 'NG',
+        NotConfigured: 'NC',
       }
     },
     Claims: {

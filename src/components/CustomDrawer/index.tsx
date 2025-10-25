@@ -7,7 +7,7 @@ import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
 } from "@react-navigation/drawer";
-import { RepeatIcon, ScanQrCodeIcon, LogOutIcon } from "lucide-react-native";
+import { RepeatIcon, ScanQrCodeIcon, LogOutIcon, HomeIcon } from "lucide-react-native";
 import WhatsAppIcon from "../../assets/icons/whatsapp.svg";
 
 import { Loading } from "../Loading";
@@ -39,7 +39,7 @@ import { useAuth } from "../../hooks/useAuth";
 export function CustomDrawer(props: DrawerContentComponentProps) {
   const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const THEME = useTheme();
 
@@ -151,6 +151,28 @@ export function CustomDrawer(props: DrawerContentComponentProps) {
                 <LeftItemButtonSubtitle>{t('index.goWhatsApp')}</LeftItemButtonSubtitle>
               </LeftItemButtonText>
             </LeftItemButton>
+
+            {user.isAdmin && (
+              <LeftItemButton
+              onPress={() => {
+                props.navigation.closeDrawer?.();
+                props.navigation.dispatch(
+                  CommonActions.navigate({
+                    name: 'Dashboard',      
+                    params: {
+                      screen: 'HomeOld',  
+                    },
+                  })
+                );
+              }}
+            >
+              <HomeIcon height={28} width={28} />
+              <LeftItemButtonText>
+                <LeftItemButtonTitle>Home Antiga</LeftItemButtonTitle>
+                <LeftItemButtonSubtitle>Home Antiga</LeftItemButtonSubtitle>
+              </LeftItemButtonText>
+            </LeftItemButton>
+            )}
           </LeftItemButtons>
       </DrawerContentScrollView>
 

@@ -9,19 +9,20 @@ import ChartPieFilledIcon from "../assets/icons/chart-pie-filled.svg";
 import ChartPieIcon from "../assets/icons/chart-pie.svg";
 import SettingsBoldIcon from "../assets/icons/settings-bold.svg";
 import SettingsLinearIcon from "../assets/icons/settings-linear.svg";
+import { LayersIcon } from "lucide-react-native";
 
 import { TabBarCenterButton } from "../components/TabBarCenterButton";
 
 import { Home } from "../screens/Home";
-import { HomeNew } from "../screens/HomeNew";
 import { Assets } from "../screens/Assets";
-import { Analyses } from "../screens/Analyses";
+import { Devices } from "../screens/Devices";
 import { AlertsHistory } from "../screens/AlertsHistory";
 import { More } from "../screens/More";
 import { useState } from "react";
 import { AlertFilterProvider } from "../hooks/useAlertFilter";
 import IconCompanyImage from "../components/IconCompanyImage";
 import { t } from "i18next";
+import theme from "../global/styles/theme";
 
 export function DashboardTab() {
   const { Navigator, Screen } = createBottomTabNavigator();
@@ -69,17 +70,6 @@ export function DashboardTab() {
         }}
       >
         <Screen
-          component={HomeNew}
-          name="HomeNew"
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ focused }) =>
-              // focused ? <HomeSolidIcon /> : <HomeOutlineIcon />,
-              <IconCompanyImage focused={focused}/>,
-            title: t('index.home'),
-          }}
-        />
-        {/* <Screen
           component={Home}
           name="Home"
           options={{
@@ -89,7 +79,7 @@ export function DashboardTab() {
               <IconCompanyImage focused={focused}/>,
             title: t('index.home'),
           }}
-        /> */}
+        />
         <Screen
           component={Assets}
           name="Assets"
@@ -115,13 +105,13 @@ export function DashboardTab() {
           }}
         />
         <Screen
-          component={Analyses}
-          name="Analyses"
+          component={Devices}
+          name="Devices"
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) =>
-              focused ? <ChartPieFilledIcon /> : <ChartPieIcon />,
-            title: t('index.analysis'),
+              focused ? <LayersIcon  strokeWidth={2}/> : <LayersIcon strokeWidth={1}/>,
+            title: t('index.devices'),
           }}
         />
         <Screen
