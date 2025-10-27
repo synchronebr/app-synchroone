@@ -48,7 +48,7 @@ export default function IconStatusBall<T>({ status }: IconStatusBallProps<T>) {
       style={{
         width: 16,
         height: 16,
-        borderRadius: 8,
+        borderRadius: 10,
         backgroundColor: getColor(),
         transform: [{ scale: pulseAnim }],
       }}

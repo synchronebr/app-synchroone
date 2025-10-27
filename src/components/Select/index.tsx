@@ -20,6 +20,7 @@ export default function Select<T>({ label, placeholder, values, selected, onSele
         <Picker
           style={{
             ...pickerSelectStyles,
+            inputIOSContainer: { height: 40, justifyContent: "center" },
             placeholder: [
               pickerSelectStyles.placeholder,
               error && { color: errorTextColor }, // Cor vermelha no texto para iOS
@@ -33,6 +34,7 @@ export default function Select<T>({ label, placeholder, values, selected, onSele
               error && { color: errorTextColor }, // Cor vermelha no texto para Android
             ],
           }}
+          modalPropsIOS={{ presentationStyle: 'overFullScreen' }}
           enabled={editable}
           placeholder={{ label: placeholder, value: null }}
           value={selected}
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderWidth: 1,
     borderColor: THEME.colors.gray_dark,
-    borderRadius: 10,
+    borderRadius: 5,
     overflow: "hidden",
     backgroundColor: "#f9f9f9",
     justifyContent: "center",

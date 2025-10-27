@@ -81,6 +81,7 @@ export default function Drawer({
       animationType="none" // animação controlada manualmente
       statusBarTranslucent
       onRequestClose={onRequestClose}
+      presentationStyle="overFullScreen"
     >
       <Animated.View
         style={[
@@ -89,6 +90,7 @@ export default function Drawer({
           Platform.select({ android: { paddingTop: 24 }, ios: undefined }),
           { opacity: overlayOpacity },
         ]}
+        pointerEvents="box-none"
       >
         <Pressable style={StyleSheet.absoluteFill} onPress={onRequestClose} />
 
@@ -109,6 +111,7 @@ export default function Drawer({
                 opacity: containerOpacity,
               },
             ]}
+            pointerEvents="auto"
           >
             <ScrollView
               bounces={false}

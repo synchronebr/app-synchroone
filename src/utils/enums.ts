@@ -63,5 +63,20 @@ export const enums = {
         Analyzed: 'A',
         FailurePending: 'FP',
       }
+    },
+    Diagnoses: {
+      Status: {
+        Pending: 'P',
+        Analyse: 'A',
+        Concluded: 'C',
+      },
+      Causes: {
+        Feedback: {
+          NotClassified: 'I',
+          Confirmed: 'C',
+          PartiallyConfirmed: 'P',
+          NotConfirmed: 'N',
+        }
+      }
     }
   }

@@ -19,6 +19,7 @@ import { Loading } from "../../components/Loading";
 
 import {
   Container,
+  ContainerData,
   Scroll,
   PieceDiv,
   PieceText,
@@ -43,6 +44,8 @@ import {
 } from "./styles";
 import Header from "../../components/Pages/Header";
 import { t } from "i18next";
+import { enums } from "../../utils/enums";
+import { Button } from "../../components/Button";
 
 export function AlertDetails() {
   const navigation = useNavigation<AlertCardNavigationProps>();
@@ -54,6 +57,7 @@ export function AlertDetails() {
     queryKey: ["diagnose", id],
     queryFn: async () => {
       const response = await api.get(`/diagnoses/${id}`);
+      console.log(response.data);
       return response.data || {};
     },
   });
@@ -86,6 +90,7 @@ export function AlertDetails() {
           <ActivityIndicator color={THEME.colors.light} />
         </View>
       ) : data ? (
+        <ContainerData>
         <Scroll>
           <PieceDiv>
             <PieceText>
@@ -151,6 +156,11 @@ export function AlertDetails() {
             ))}
           </CardCauses>
         </Scroll>
+        {data.status === enums.Diagnoses.Status.Pending && (
+          <Button title="teste" />
+        )}
+          <Button onPress={() => navigation.navigate("DiagnoseFeedback", data)} title="Feedback do diagnóstico pendente" />
+        </ContainerData>
       ) : (
         <Scroll>
           <Text>{t('index.dataNotFound')}</Text>

@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: THEME.colors.light,
     padding: 16,
-    borderRadius: 10,
+    borderRadius: 4,
   },
   filterHeader: {
     display: "flex",

@@ -1,6 +1,9 @@
+import { ICause } from "./ICause";
+
 export interface IDiagnose {
     id: number;
     title: string; 
+    status: string; 
     description: string; 
     type: 'S' | 'W' | 'D' | 'IN';
     hazardousness: string;
@@ -27,18 +30,5 @@ export interface IDiagnose {
             }
         }
     },
-    causes: {
-        causesType: {
-            id: string;
-            title: string;
-            description: string;
-        },
-        solutions: {
-            solutionType: {
-                id: string;
-                title: string;
-                description: string;
-            }
-        }[]
-    }[];
+    causes: ICause[];
 }

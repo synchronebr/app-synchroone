@@ -28,6 +28,7 @@ import { DeviceGateway } from "../screens/DeviceGateway";
 import { t } from "i18next";
 import { DeviceSetupStack } from "./device-setup";
 import { HomeOld } from "../screens/HomeOld";
+import { DiagnoseFeedback } from "../screens/DiagnoseFeedback";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -243,6 +244,13 @@ export function Dashboard() {
         name="AlertDetails"
         options={{
           title: "Detalhes alerta",
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={DiagnoseFeedback}
+        name="DiagnoseFeedback"
+        options={{
           headerShown: false,
         }}
       />

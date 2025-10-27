@@ -16,6 +16,7 @@ export default {
     warning_light: "#dbb31182",
     success: "#16A34A",
     success_light: "#16a34a87",
+    orange: "#FF8D28",
   },
   fonts: {
     medium: "Montserrat_400Regular",
