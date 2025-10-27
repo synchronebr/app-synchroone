@@ -1638,7 +1638,8 @@
             "pendingDiagnosisFeedback": "Feedback do diagnóstico pendente",
             "causeList": "Lista de causas",
             "addCommentsIfNecessary": "Adicione comentários se necessário",
-            "causeOfTotal": "Causa {{index}} de {{total}}"
+            "causeOfTotal": "Causa {{index}} de {{total}}",
+            "procedureBasedOnDiagnosis": "Foi realizado algum procedimento baseado no diagnóstico gerado?"
         }
     }
 }

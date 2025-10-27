@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from "react";
+import { View } from 'react-native';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { t } from "i18next";
 
 import {
   Container, Content, Title, SubTitle, SummaryBlock, SummaryTitle,
   SummarySubValue, SummarySolution, SummaryRow, SummaryLabel, SummaryValue,
-  SectionTitle, Row, CheckItem, CheckSquare, CheckLabel, Field, FieldLabel, Footer
+  SectionTitle, Row, CheckItem, CheckSquare, CheckLabel, Field, FieldLabel, Footer,
+  ActionContainer, ActionTitle, ActionSubTitle,
 } from "./styles";
 
 import Header from "../../components/Pages/Header";
@@ -31,7 +33,7 @@ const allSolutionsClassified = (cause: IDiagnose["causes"][number]) =>
 
 // --------------------------
 
-type Phase = "causes" | "summary";
+type Phase = "causes" | "action" | "evidence";
 
 export function DiagnoseFeedback() {
   const navigation = useNavigation();
@@ -118,11 +120,12 @@ export function DiagnoseFeedback() {
     if (phase === "causes") {
       if (!isLastCause) {
         setStep((s) => s + 1);
-      } else {
-        // terminou causas -> vai para RESUMO
-        setPhase("summary");
+      } else{
+        setPhase("action");
       }
-    } else {
+    } else if (phase === "action") {
+        setPhase("evidence");
+    }else {
       onSubmit();
     }
   };
@@ -171,12 +174,10 @@ export function DiagnoseFeedback() {
       />
 
       {/* Conteúdo rolável */}
-      <Content>
         {phase === "causes" ? (
-          <>
+          <Content>
             <Title>
               {t("index.causeOfTotal", {
-                defaultValue: "Causa {{index}} de {{total}}",
                 index: step + 1,
                 total,
               })}
@@ -190,45 +191,57 @@ export function DiagnoseFeedback() {
                 updateSolutionStatus(current!.causeId, solutionId, st)
               }
             />
-          </>
+          </Content>
         ) : (
           <>
-            <Title>{t("index.reviewAndFinish") || "Resumo & Conclusão"}</Title>
-            <SubTitle>
-              {t("index.checkInfoBeforeFinish") ||
-                "Revise as informações e finalize o feedback do diagnóstico."}
-            </SubTitle>
+            {phase === "action" ? (
+              <ActionContainer>
+                <ActionTitle>{t("index.performedAnyAction")}</ActionTitle>
+                <ActionSubTitle>{t("index.procedureBasedOnDiagnosis")}</ActionSubTitle>
+                <View style={{ gap: 5 }}>
+                  <Button title={t('index.yes')} />
+                  <Button title={t('index.no')} />
+                </View>
+              </ActionContainer>
+            ) : (
+              <>
+              <Title>{t("index.reviewAndFinish") || "Resumo & Conclusão"}</Title>
+              <SubTitle>
+                {t("index.checkInfoBeforeFinish") ||
+                  "Revise as informações e finalize o feedback do diagnóstico."}
+              </SubTitle>
 
-            {/* Campos finais */}
-            <SectionTitle>{t("index.finalFields") || "Campos Finais"}</SectionTitle>
+              {/* Campos finais */}
+              <SectionTitle>{t("index.finalFields") || "Campos Finais"}</SectionTitle>
 
-            <Field>
-              <FieldLabel>{t("index.comments") || "Comentários gerais"}</FieldLabel>
-              {/* <FieldInput
-                placeholder={t("index.addComment") || "Digite..."}
-                value={diagComments}
-                onChangeText={setDiagComments}
-                multiline
-              /> */}
-            </Field>
+              <Field>
+                <FieldLabel>{t("index.comments") || "Comentários gerais"}</FieldLabel>
+                {/* <FieldInput
+                  placeholder={t("index.addComment") || "Digite..."}
+                  value={diagComments}
+                  onChangeText={setDiagComments}
+                  multiline
+                /> */}
+              </Field>
+              </>
+            )}
           </>
         )}
-      </Content>
 
       {/* Rodapé fixo */}
+      {phase !== "action" && (
       <Footer>
         <Button
           title={
             phase === "causes"
-              ? isLastCause
-                ? (t("index.goToReview") || "Ir para Resumo")
-                : (t("index.next") || "Avançar")
+              ? (t("index.next") || "Avançar")
               : (t("index.finish") || "Concluir")
           }
           onPress={goNext}
           disabled={phase === "causes" ? !canAdvanceCauses : false}
         />
       </Footer>
+      )}
     </Container>
   );
 }

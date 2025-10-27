@@ -25,7 +25,7 @@ export const Title = styled.Text`
 export const SubTitle = styled.Text`
   margin-top: 6px;
   margin-bottom: 10px;
-  font-size: ${({ theme }) => theme.fontSize.small}px;
+  font-size: ${({ theme }) => theme.fontSize.smaller}px;
   color: ${({ theme }) => theme.colors.text_dark};
   opacity: 0.8;
 `;
@@ -115,4 +115,29 @@ export const CheckSquare = styled.Text`
 `;
 export const CheckLabel = styled.Text`
   color: ${({ theme }) => theme.colors.text_dark};
+`;
+
+export const ActionContainer = styled.View`
+  flex: 1;
+  padding-left: 10px;
+  padding-right: 10px;
+  justify-content: center;
+  align-items: stretch;
+  gap: 4;
+`;
+
+export const ActionTitle = styled.Text`
+  text-align: center;
+  margin-top: 6px;
+  font-size: ${({ theme }) => theme.fontSize.normal}px;
+  font-family: ${({ theme }) => theme.fonts.bold};
+`;
+
+export const ActionSubTitle = styled.Text`
+  text-align: center;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  font-size: ${({ theme }) => theme.fontSize.smaller}px;
+  color: ${({ theme }) => theme.colors.text_dark};
+  opacity: 0.8;
 `;
