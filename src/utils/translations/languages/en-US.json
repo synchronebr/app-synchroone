@@ -1631,7 +1631,11 @@
       "causeList": "List of causes",
       "addCommentsIfNecessary": "Add comments if necessary",
       "causeOfTotal": "Cause {{index}} of {{total}}",
-      "procedureBasedOnDiagnosis": "Was any procedure performed based on the generated diagnosis?"
+      "procedureBasedOnDiagnosis": "Was any procedure performed based on the generated diagnosis?",
+        "noActionPerformed": "No action was performed!",
+        "describeReasonNoAction": "Describe the reason for not performing...",
+        "actionExecuted": "An action was executed!",
+        "describeExecutedAction": "Describe the action..."
     }
   }
 }

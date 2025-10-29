@@ -9,6 +9,7 @@ import { Input } from "../../../Input";
 import SelectStatusDiagnose from "../SelectStatusDiagnose";
 import { t } from "i18next";
 import { enums } from "../../../../utils/enums";
+import SelectDiagnoseSolutionAction from "../SelectDiagnoseSolutionAction";
 
 type Enums = {
   CAUSE: { C: string; P: string; N: string; I: string };
@@ -37,7 +38,7 @@ type Props = {
   onChangeSolutionStatus: (solutionId: number, status: string) => void;
 };
 
-const needSolutions = (st?: string) => st === enums.Diagnoses.Causes.Feedback.NotConfirmed || st === enums.Diagnoses.Causes.Feedback.PartiallyConfirmed;
+const needSolutions = (st?: string) => st !== enums.Diagnoses.Causes.Feedback.NotClassified;
 
 export const CauseWithSolutions: React.FC<Props> = ({
   cause, onChangeCauseStatus, onChangeCauseComment, onChangeSolutionStatus,
@@ -89,7 +90,13 @@ export const CauseWithSolutions: React.FC<Props> = ({
                         <SolutionDesc>{s.solutionType.description}</SolutionDesc>
                         )}
 
-                        <SelectStatusDiagnose
+                        {/* <SelectStatusDiagnose
+                            key={s.solutionId.toString()}
+                            editable
+                            selected={s.status ? s.status : enums.Diagnoses.Causes.Feedback.NotClassified}
+                            onSelect={(value) => { onChangeSolutionStatus(s.solutionId, value); }}
+                        /> */}
+                        <SelectDiagnoseSolutionAction
                             key={s.solutionId.toString()}
                             editable
                             selected={s.status ? s.status : enums.Diagnoses.Causes.Feedback.NotClassified}

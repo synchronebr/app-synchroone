@@ -1633,7 +1633,11 @@
       "causeList": "Lista de causas",
       "addCommentsIfNecessary": "Agregue comentarios si es necesario",
       "causeOfTotal": "Causa {{index}} de {{total}}",
-      "procedureBasedOnDiagnosis": "¿Se realizó algún procedimiento basado en el diagnóstico generado?"
+      "procedureBasedOnDiagnosis": "¿Se realizó algún procedimiento basado en el diagnóstico generado?",
+      "noActionPerformed": "No se realizó ninguna acción!",
+      "describeReasonNoAction": "Describa el motivo de la no realización...",
+      "actionExecuted": "¡Se ejecutó una acción!",
+      "describeExecutedAction": "Describa la acción..."
     }
   }
 }

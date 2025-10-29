@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { t } from "i18next";
 
@@ -15,6 +15,9 @@ import { Button } from "../../components/Button";
 import { IDiagnose } from "../../services/dtos/IDiagnose";
 import { CauseWithSolutions } from "../../components/Pages/DiagnoseFeedback/CauseWithSolutions";
 import { enums } from "../../utils/enums";
+import { Toast } from "react-native-toast-notifications";
+import { Input } from "../../components/Input";
+import { InputArea } from "../../components/InputArea";
 
 // ----- CONFIG / ENUMS -----
 const FOOTER_HEIGHT = 72; // ajuste ao seu Button
@@ -23,13 +26,9 @@ const CauseFB = enums.Diagnoses.Causes.Feedback;
 // status da solução (ajuste se tiver em outro lugar)
 const SOL = { Confirmed: "C", NotConfirmed: "N", NotApplicable: "NA", Pending: "R" } as const;
 
-// precisa classificar soluções quando causa é C ou P
-const needSolutions = (st?: string) =>
-  st === CauseFB.Confirmed || st === CauseFB.PartiallyConfirmed;
-
 // todas as soluções classificadas (≠ pendente)
 const allSolutionsClassified = (cause: IDiagnose["causes"][number]) =>
-  (cause?.solutions ?? []).every((s) => s.status && s.status !== SOL.Pending);
+  (cause?.solutions ?? []).every((s) => s.status && s.status !== enums.Diagnoses.Causes.Feedback.NotClassified);
 
 // --------------------------
 
@@ -52,8 +51,7 @@ export function DiagnoseFeedback() {
   // campos finais do diagnóstico (etapa 2)
   const [diagComments, setDiagComments] = useState(diagnose?.comments ?? "");
   const [executed, setExecuted] = useState<boolean>(diagnose?.executed ?? false);
-  const [executionDate, setExecutionDate] = useState<string>(diagnose?.executionDate ?? "");
-  const [stopAsset, setStopAsset] = useState<boolean>(diagnose?.stopAsset ?? false);
+  const [executedComment, setExecutedComment] = useState<string>(diagnose?.executed ?? "");
   const [downtimeMinutes, setDowntimeMinutes] = useState<string>(
     diagnose?.downtimeMinutes ? String(diagnose.downtimeMinutes) : ""
   );
@@ -67,22 +65,22 @@ export function DiagnoseFeedback() {
 
         // REGRAS:
         // C -> todas as soluções = C
-        if (status === CauseFB.Confirmed) {
-          return {
-            ...c,
-            status,
-            solutions: (c.solutions ?? []).map((s) => ({ ...s, status: SOL.Confirmed })),
-          };
-        }
+        // if (status === CauseFB.Confirmed) {
+        //   return {
+        //     ...c,
+        //     status,
+        //     solutions: (c.solutions ?? []).map((s) => ({ ...s, status: SOL.Confirmed })),
+        //   };
+        // }
 
-        // N -> todas as soluções = N
-        if (status === CauseFB.NotConfirmed) {
-          return {
-            ...c,
-            status,
-            solutions: (c.solutions ?? []).map((s) => ({ ...s, status: SOL.NotConfirmed })),
-          };
-        }
+        // // N -> todas as soluções = N
+        // if (status === CauseFB.NotConfirmed) {
+        //   return {
+        //     ...c,
+        //     status,
+        //     solutions: (c.solutions ?? []).map((s) => ({ ...s, status: SOL.NotConfirmed })),
+        //   };
+        // }
 
         // P ou I -> não mexe nas soluções
         return { ...c, status };
@@ -111,12 +109,17 @@ export function DiagnoseFeedback() {
   const canAdvanceCauses = useMemo(() => {
     if (!current) return false;
     if (!current.status || current.status === CauseFB.NotClassified) return false;
-    return needSolutions(current.status) ? allSolutionsClassified(current) : true;
+    return allSolutionsClassified(current);
   }, [current]);
 
   const isLastCause = step === total - 1;
 
   const goNext = () => {
+    if (!canAdvanceCauses) {
+      Toast.show('Necessário classificar todas as causas e soluções', { type: 'danger' });
+      return false;
+    } 
+
     if (phase === "causes") {
       if (!isLastCause) {
         setStep((s) => s + 1);
@@ -130,27 +133,31 @@ export function DiagnoseFeedback() {
     }
   };
 
+  function normalizeStrKeepEmpty(value?: string) {
+    return value ?? "";
+  }
+
   // monta o payload final e envia
   const onSubmit = async () => {
-    const payload = {
-      diagnoseId: diagnose.id,
-      comments: diagComments,
-      executed,
-      executionDate: executionDate || null,
-      stopAsset,
-      downtimeMinutes: downtimeMinutes ? Number(downtimeMinutes) : null,
-      analysisAction,
-      causes: causes.map((c) => ({
-        causeId: c.causeId,
-        status: c.status,
-        comments: c.comments ?? "",
-        solutions: (c.solutions ?? []).map((s) => ({
-          solutionId: s.solutionId,
-          status: s.status,
-          comments: s.comments ?? "",
-        })),
-      })),
-    };
+    // const payload = {
+    //   executionDate: new Date().toDateString(),
+    //   comments: normalizeStrKeepEmpty(values.evidences.note),
+    //   stopAsset: values.evidences.active ?? null,
+    //   analysisAction: normalizeStrKeepEmpty(values.evidences.result),
+    //   executed: values.evidences.executed ?? null,
+    //   downtimeMinutes: downtime,
+    //   causes: values.causes?.map((c) => ({
+    //     causeId: c.causeId,
+    //     status: c.status,
+    //     comment: normalizeStrKeepEmpty(c.comment),
+    //   })) ?? [],
+    //   prescriptions: values.prescriptions?.map((p) => ({
+    //     causeId: p.causeId,
+    //     solutionId: p.solutionId,
+    //     status: p.status,
+    //     comment: normalizeStrKeepEmpty(p.comment),
+    //   })) ?? [],
+    // };
 
     try {
       // TODO: troque pela sua chamada real
@@ -198,32 +205,36 @@ export function DiagnoseFeedback() {
               <ActionContainer>
                 <ActionTitle>{t("index.performedAnyAction")}</ActionTitle>
                 <ActionSubTitle>{t("index.procedureBasedOnDiagnosis")}</ActionSubTitle>
-                <View style={{ gap: 5 }}>
-                  <Button title={t('index.yes')} />
-                  <Button title={t('index.no')} />
-                </View>
+                {executed ? (
+                  <></>
+                ) : (
+                  <View style={{ gap: 5 }}>
+                    <Button title={t('index.yes')} onPress={() => {setExecuted(true)}}/>
+                    <Button title={t('index.no')} onPress={() => {setExecuted(false);goNext();}}/>
+                  </View>
+                )}
               </ActionContainer>
             ) : (
-              <>
-              <Title>{t("index.reviewAndFinish") || "Resumo & Conclusão"}</Title>
-              <SubTitle>
-                {t("index.checkInfoBeforeFinish") ||
-                  "Revise as informações e finalize o feedback do diagnóstico."}
-              </SubTitle>
 
-              {/* Campos finais */}
-              <SectionTitle>{t("index.finalFields") || "Campos Finais"}</SectionTitle>
-
-              <Field>
-                <FieldLabel>{t("index.comments") || "Comentários gerais"}</FieldLabel>
-                {/* <FieldInput
-                  placeholder={t("index.addComment") || "Digite..."}
-                  value={diagComments}
-                  onChangeText={setDiagComments}
-                  multiline
-                /> */}
-              </Field>
-              </>
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
+            >
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <ActionContainer>
+                <ActionTitle>{executed ? t('index.actionExecuted') : t("index.noActionPerformed")}</ActionTitle>
+                <InputArea
+                  placeholder={executed ? t('index.describeExecutedAction') : t('index.describeReasonNoAction')}
+                  maxLength={500}
+                  minRows={3}
+                  maxRows={10}
+                  autoGrow
+                  value={executedComment}
+                  onChangeText={(text) => setExecutedComment(text)}
+                />
+              </ActionContainer>
+              </TouchableWithoutFeedback>
+              </KeyboardAvoidingView>
             )}
           </>
         )}
@@ -238,7 +249,6 @@ export function DiagnoseFeedback() {
               : (t("index.finish") || "Concluir")
           }
           onPress={goNext}
-          disabled={phase === "causes" ? !canAdvanceCauses : false}
         />
       </Footer>
       )}
