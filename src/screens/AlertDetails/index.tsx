@@ -120,7 +120,7 @@ export function AlertDetails() {
             <DiagnoseDescriptionTitleDiv>
               {/* <DangerIcon fill={THEME.colors.gray} /> */}
               <DiagnoseDescriptionTitle>
-                Falha Identificada (
+                {t('index.identifiedFailure')} (
                 {t('index.securityStatus-'+data.hazardousness)})
               </DiagnoseDescriptionTitle>
             </DiagnoseDescriptionTitleDiv>
@@ -156,10 +156,18 @@ export function AlertDetails() {
             ))}
           </CardCauses>
         </Scroll>
-        {data.status === enums.Diagnoses.Status.Pending && (
-          <Button title="teste" />
+        {data.status === enums.Diagnoses.Status.Analyse ? (
+          <Button 
+            onPress={() => navigation.navigate("DiagnoseFeedback", data)} 
+            title={t('index.pendingDiagnosisFeedback')} 
+          />
+        ) : (
+          <Button 
+            variant="outline"
+            onPress={() => navigation.navigate("DiagnoseFeedback", data)} 
+            title={t('index.diagnosisFeedback')} 
+          />
         )}
-          <Button onPress={() => navigation.navigate("DiagnoseFeedback", data)} title="Feedback do diagnóstico pendente" />
         </ContainerData>
       ) : (
         <Scroll>

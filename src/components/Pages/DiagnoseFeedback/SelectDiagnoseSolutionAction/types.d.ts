@@ -5,7 +5,7 @@ export type SelectProps<T> = {
   placeholder?: string
   selected?: T
   onSelect: (selected: T) => void
-  editable: boolean;
+  editable?: boolean;
   error?: string;
   errorTextColor?: string;
 }

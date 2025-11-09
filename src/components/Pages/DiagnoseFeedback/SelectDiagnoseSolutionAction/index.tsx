@@ -5,11 +5,12 @@ import THEME from "../../../../global/styles/theme";
 import { t } from "i18next";
 import { enums } from "../../../../utils/enums";
 import type { SelectProps } from "./types";
+import { RotateCcwIcon } from 'lucide-react-native'
 
 type FeedbackValue =
-  | typeof enums.Diagnoses.Causes.Feedback.NotClassified
-  | typeof enums.Diagnoses.Causes.Feedback.NotConfirmed
-  | typeof enums.Diagnoses.Causes.Feedback.Confirmed;
+  | typeof enums.Diagnoses.Causes.Solutions.Feedback.NotClassified
+  | typeof enums.Diagnoses.Causes.Solutions.Feedback.Performed
+  | typeof enums.Diagnoses.Causes.Solutions.Feedback.NotPerformed;
 
 export default function SelectDiagnoseSolutionAction<T extends FeedbackValue>({
   key,
@@ -23,8 +24,8 @@ export default function SelectDiagnoseSolutionAction<T extends FeedbackValue>({
   const isInitial =
     selected == null || selected === enums.Diagnoses.Causes.Feedback.NotClassified;
 
-  const confirmed = enums.Diagnoses.Causes.Feedback.Confirmed;
-  const notConfirmed = enums.Diagnoses.Causes.Feedback.NotConfirmed;
+  const confirmed = enums.Diagnoses.Causes.Solutions.Feedback.Performed;
+  const notConfirmed = enums.Diagnoses.Causes.Solutions.Feedback.NotPerformed;
 
   const colors = {
     confirmed: {
@@ -70,7 +71,7 @@ export default function SelectDiagnoseSolutionAction<T extends FeedbackValue>({
               ]}
             >
               <Text style={[styles.btnText, { color: colors.neutral.text }]}>
-                {t("index.confirmed")}
+                {t("index.performed")}
               </Text>
             </TouchableOpacity>
 
@@ -87,7 +88,7 @@ export default function SelectDiagnoseSolutionAction<T extends FeedbackValue>({
               ]}
             >
               <Text style={[styles.btnText, { color: colors.neutral.text }]}>
-                {t("index.notConfirmed")}
+                {t("index.notPerformed")}
               </Text>
             </TouchableOpacity>
           </>
@@ -108,7 +109,7 @@ export default function SelectDiagnoseSolutionAction<T extends FeedbackValue>({
               ]}
             >
               <Text style={[styles.btnText, { color: colors.confirmed.text }]}>
-                {t("index.confirmed")}
+                {t("index.performed")}
               </Text>
             </TouchableOpacity>
 
@@ -138,7 +139,7 @@ export default function SelectDiagnoseSolutionAction<T extends FeedbackValue>({
               ]}
             >
               <Text style={[styles.btnText, { color: colors.notConfirmed.text }]}>
-                {t("index.notConfirmed")}
+                {t("index.notPerformed")}
               </Text>
             </TouchableOpacity>
 
@@ -148,7 +149,8 @@ export default function SelectDiagnoseSolutionAction<T extends FeedbackValue>({
               onPress={() => handleSelect(null)}
               style={styles.resetBtn}
             >
-              <Text style={styles.resetText}>↻</Text>
+              {/* <Text style={styles.resetText}>↻</Text> */}
+              <RotateCcwIcon size={15} />
             </TouchableOpacity>
           </>
         )}

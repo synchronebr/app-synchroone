@@ -1,3 +1,5 @@
+import { SolutionsTitle } from "../components/Pages/DiagnoseFeedback/CauseWithSolutions/styles";
+
 export const enums = {
     file: {
       type: {
@@ -76,6 +78,13 @@ export const enums = {
           Confirmed: 'C',
           PartiallyConfirmed: 'P',
           NotConfirmed: 'N',
+        },
+        Solutions: {
+          Feedback: {
+            NotClassified: 'I',
+            Performed: 'R',
+            NotPerformed: 'N',
+          }
         }
       }
     }

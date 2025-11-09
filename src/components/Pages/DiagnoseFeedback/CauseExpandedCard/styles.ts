@@ -25,11 +25,11 @@ export const CardHeaderLeft = styled.View`
 export const CardTitle = styled.Text`
   font-family: ${({ theme }) => theme.fonts.semiBold};
   font-size: ${({ theme }) => theme.fontSize.smaller + 1}px;
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
 `;
 
 export const CardDesc = styled.Text`
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
   opacity: 0.9;
   line-height: 18px;
 `;
@@ -50,7 +50,7 @@ export const StatusRow = styled.View`
 
 export const ChevronBtn = styled(Feather)`
   font-size: 18px;
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
 `;
 
 export const Footer = styled.View`

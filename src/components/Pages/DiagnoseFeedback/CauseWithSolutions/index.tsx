@@ -32,6 +32,7 @@ type Cause = {
 };
 
 type Props = {
+  editable?: boolean;
   cause: Cause;
   onChangeCauseStatus: (status: string) => void;
   onChangeCauseComment: (txt: string) => void;
@@ -41,7 +42,7 @@ type Props = {
 const needSolutions = (st?: string) => st !== enums.Diagnoses.Causes.Feedback.NotClassified;
 
 export const CauseWithSolutions: React.FC<Props> = ({
-  cause, onChangeCauseStatus, onChangeCauseComment, onChangeSolutionStatus,
+  editable, cause, onChangeCauseStatus, onChangeCauseComment, onChangeSolutionStatus,
 }) => {
   const showSolutions = needSolutions(cause.status);
 
@@ -58,13 +59,14 @@ export const CauseWithSolutions: React.FC<Props> = ({
 
         <SelectStatusDiagnose
           key={cause.causeId.toString()}
-          editable
+          editable={editable}
           selected={cause.status ? cause.status : enums.Diagnoses.Causes.Feedback.NotClassified}
           onSelect={onChangeCauseStatus}
         />
 
         {showSolutions && (
             <Input
+            editable={editable}
             placeholder={t('index.addCommentsIfNecessary')}
             value={cause.comments || ""}
             onChangeText={onChangeCauseComment}
@@ -90,16 +92,10 @@ export const CauseWithSolutions: React.FC<Props> = ({
                         <SolutionDesc>{s.solutionType.description}</SolutionDesc>
                         )}
 
-                        {/* <SelectStatusDiagnose
-                            key={s.solutionId.toString()}
-                            editable
-                            selected={s.status ? s.status : enums.Diagnoses.Causes.Feedback.NotClassified}
-                            onSelect={(value) => { onChangeSolutionStatus(s.solutionId, value); }}
-                        /> */}
                         <SelectDiagnoseSolutionAction
                             key={s.solutionId.toString()}
-                            editable
-                            selected={s.status ? s.status : enums.Diagnoses.Causes.Feedback.NotClassified}
+                            editable={editable}
+                            selected={s.status ? s.status : enums.Diagnoses.Causes.Solutions.Feedback.NotClassified}
                             onSelect={(value) => { onChangeSolutionStatus(s.solutionId, value); }}
                         />
                     </SolutionCard>

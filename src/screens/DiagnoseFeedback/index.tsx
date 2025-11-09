@@ -2,257 +2,203 @@ import React, { useMemo, useState } from "react";
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { t } from "i18next";
+import { useQueryClient } from "@tanstack/react-query";
 
-import {
-  Container, Content, Title, SubTitle, SummaryBlock, SummaryTitle,
-  SummarySubValue, SummarySolution, SummaryRow, SummaryLabel, SummaryValue,
-  SectionTitle, Row, CheckItem, CheckSquare, CheckLabel, Field, FieldLabel, Footer,
-  ActionContainer, ActionTitle, ActionSubTitle,
-} from "./styles";
-
+import { Container, Content, Title, Footer } from "./styles";
 import Header from "../../components/Pages/Header";
 import { Button } from "../../components/Button";
-import { IDiagnose } from "../../services/dtos/IDiagnose";
 import { CauseWithSolutions } from "../../components/Pages/DiagnoseFeedback/CauseWithSolutions";
-import { enums } from "../../utils/enums";
 import { Toast } from "react-native-toast-notifications";
-import { Input } from "../../components/Input";
-import { InputArea } from "../../components/InputArea";
+import FeedBackActionForm from "../../components/Pages/DiagnoseFeedback/FeedBackActionForm";
 
-// ----- CONFIG / ENUMS -----
-const FOOTER_HEIGHT = 72; // ajuste ao seu Button
-// status da causa vem de enums:
-const CauseFB = enums.Diagnoses.Causes.Feedback;
-// status da solução (ajuste se tiver em outro lugar)
-const SOL = { Confirmed: "C", NotConfirmed: "N", NotApplicable: "NA", Pending: "R" } as const;
-
-// todas as soluções classificadas (≠ pendente)
-const allSolutionsClassified = (cause: IDiagnose["causes"][number]) =>
-  (cause?.solutions ?? []).every((s) => s.status && s.status !== enums.Diagnoses.Causes.Feedback.NotClassified);
-
-// --------------------------
-
-type Phase = "causes" | "action" | "evidence";
+import { Phase, CauseFB, FeedBackActionData } from "./types.d";
+import { IDiagnose } from "../../services/dtos/IDiagnose";
+import api from "../../services/api";
+import { enums } from "../../utils/enums";
 
 export function DiagnoseFeedback() {
   const navigation = useNavigation();
   const route = useRoute();
-  const diagnose = route.params as IDiagnose;
+  const queryClient = useQueryClient();
+  const diagnose = (route.params as IDiagnose) ?? { causes: [] };
+  const [isLoading, setIsLoading] = useState(false);
+  const editable = diagnose.status === enums.Diagnoses.Status.Analyse;
 
-  // estado de causas/soluções
-  const [causes, setCauses] = useState<IDiagnose["causes"]>(diagnose?.causes ?? []);
+  // ===== Estado controlado =====
+  const [causes, setCauses] = useState<IDiagnose["causes"]>(cloneCauses(diagnose?.causes));
+  const [phase, setPhase] = useState<Phase>("causes");
   const [step, setStep] = useState(0);
+  const [formData, setFormData] = useState<FeedBackActionData>(hydrateFormFromDB(diagnose));
+
   const total = causes.length;
   const current = causes[step];
+  const isLastCause = step === total - 1;
 
-  // fase atual
-  const [phase, setPhase] = useState<Phase>("causes");
+  const allSolutionsClassified = (c: IDiagnose["causes"][number]) =>
+    (c?.solutions ?? []).every((s) => s.status && s.status !== CauseFB.NotClassified);
 
-  // campos finais do diagnóstico (etapa 2)
-  const [diagComments, setDiagComments] = useState(diagnose?.comments ?? "");
-  const [executed, setExecuted] = useState<boolean>(diagnose?.executed ?? false);
-  const [executedComment, setExecutedComment] = useState<string>(diagnose?.executed ?? "");
-  const [downtimeMinutes, setDowntimeMinutes] = useState<string>(
-    diagnose?.downtimeMinutes ? String(diagnose.downtimeMinutes) : ""
-  );
-  const [analysisAction, setAnalysisAction] = useState<string>(diagnose?.analysisAction ?? "");
-
-  // ---- updates (com regras) ----
-  const updateCauseStatus = (causeId: number, status: string) => {
-    setCauses((prev) =>
-      prev.map((c) => {
-        if (c.causeId !== causeId) return c;
-
-        // REGRAS:
-        // C -> todas as soluções = C
-        // if (status === CauseFB.Confirmed) {
-        //   return {
-        //     ...c,
-        //     status,
-        //     solutions: (c.solutions ?? []).map((s) => ({ ...s, status: SOL.Confirmed })),
-        //   };
-        // }
-
-        // // N -> todas as soluções = N
-        // if (status === CauseFB.NotConfirmed) {
-        //   return {
-        //     ...c,
-        //     status,
-        //     solutions: (c.solutions ?? []).map((s) => ({ ...s, status: SOL.NotConfirmed })),
-        //   };
-        // }
-
-        // P ou I -> não mexe nas soluções
-        return { ...c, status };
-      })
-    );
-  };
-
-  const updateCauseComment = (causeId: number, comment: string) =>
-    setCauses((prev) => prev.map((c) => (c.causeId === causeId ? { ...c, comments: comment } : c)));
-
-  const updateSolutionStatus = (causeId: number, solutionId: number, status: string) =>
-    setCauses((prev) =>
-      prev.map((c) =>
-        c.causeId !== causeId
-          ? c
-          : {
-              ...c,
-              solutions: (c.solutions ?? []).map((s) =>
-                s.solutionId === solutionId ? { ...s, status } : s
-              ),
-            }
-      )
-    );
-
-  // ---- validação / navegação ----
   const canAdvanceCauses = useMemo(() => {
     if (!current) return false;
     if (!current.status || current.status === CauseFB.NotClassified) return false;
     return allSolutionsClassified(current);
   }, [current]);
 
-  const isLastCause = step === total - 1;
+  // ===== Mutators =====
+  const updateCauseStatus = (causeId: number, status: string) => {
+    setCauses((prev) => prev.map((c) => c.causeId === causeId ? { ...c, status } : c));
+  };
 
+  const updateCauseComment = (causeId: number, comment: string) => {
+    setCauses((prev) => prev.map((c) => c.causeId === causeId ? { ...c, comment } : c)); // <-- usa 'comment' (não 'comments')
+  };
+
+  const updateSolutionStatus = (causeId: number, solutionId: number, status: string) => {
+    setCauses((prev) => prev.map((c) =>
+      c.causeId !== causeId
+        ? c
+        : { ...c, solutions: (c.solutions ?? []).map((s) => s.solutionId === solutionId ? { ...s, status } : s) }
+    ));
+  };
+
+  function toISODateOrNull(d: Date | string | null | undefined): string | null {
+    if (!d) return null;
+    try {
+      const date = typeof d === "string" ? new Date(d) : d;
+      if (Number.isNaN(date.getTime())) return null;
+      return date.toISOString();
+    } catch {
+      return null;
+    }
+  }
+
+  function minutesFromValue(value: number | null | undefined, unit: string | null | undefined): number | null {
+    if (value == null || Number.isNaN(value)) return null;
+    if (!unit || unit === "M") return Math.round(value);
+    return Math.round(value * 60);
+  }
+
+  function hydrateFormFromDB(d: Partial<IDiagnose> | undefined): FeedBackActionData {
+    console.log(d);
+    console.log(d?.executionDate ? new Date(d.executionDate as any) : null);
+    return {
+      executed: !!d?.executed,
+      executionDate: d?.executionDate ? new Date(d.executionDate as any) : null,
+      executedComment: d?.executedComment ?? "",
+      stopAsset: !!d?.stopAsset,
+      downtimeMinutes: d?.downtimeValue ?? null,
+      downtimeUnit: (d?.downtimeUnit) ?? "M",
+      analysisAction: d?.analysisAction ?? "",
+    };
+  }
+
+  function cloneCauses(src: IDiagnose["causes"] = []): IDiagnose["causes"] {
+    return JSON.parse(JSON.stringify(src));
+  }
+
+  // ===== Navegação =====
   const goNext = () => {
-    if (!canAdvanceCauses) {
-      Toast.show('Necessário classificar todas as causas e soluções', { type: 'danger' });
-      return false;
-    } 
-
+    console.log('next');
     if (phase === "causes") {
-      if (!isLastCause) {
-        setStep((s) => s + 1);
-      } else{
-        setPhase("action");
+      if (!canAdvanceCauses) {
+        Toast.show(t('index.mustClassifyAll') || 'Necessário classificar todas as causas e soluções', { type: 'danger' });
+        return;
       }
-    } else if (phase === "action") {
-        setPhase("evidence");
-    }else {
+      if (!isLastCause) setStep((s) => s + 1); else setPhase("action");
+    } else {
+      console.log(phase);
       onSubmit();
     }
   };
 
-  function normalizeStrKeepEmpty(value?: string) {
-    return value ?? "";
-  }
+  const goBack = () => {
+    if (phase === "action") { setPhase("causes"); return; }
+    if (step > 0) setStep((s) => s - 1); else navigation.goBack();
+  };
 
-  // monta o payload final e envia
+  // ===== Submit =====
   const onSubmit = async () => {
-    // const payload = {
-    //   executionDate: new Date().toDateString(),
-    //   comments: normalizeStrKeepEmpty(values.evidences.note),
-    //   stopAsset: values.evidences.active ?? null,
-    //   analysisAction: normalizeStrKeepEmpty(values.evidences.result),
-    //   executed: values.evidences.executed ?? null,
-    //   downtimeMinutes: downtime,
-    //   causes: values.causes?.map((c) => ({
-    //     causeId: c.causeId,
-    //     status: c.status,
-    //     comment: normalizeStrKeepEmpty(c.comment),
-    //   })) ?? [],
-    //   prescriptions: values.prescriptions?.map((p) => ({
-    //     causeId: p.causeId,
-    //     solutionId: p.solutionId,
-    //     status: p.status,
-    //     comment: normalizeStrKeepEmpty(p.comment),
-    //   })) ?? [],
-    // };
+    setIsLoading(true);
+    const downtimeMinutes = formData.maintenance ? minutesFromValue(formData.downtimeValue, formData.downtimeUnit) : null;
+
+    const payload = {
+      executed: formData.executed,
+      executionDate: formData.executed ? toISODateOrNull(formData.executionDate) : null,
+      comments: formData.executed ? (formData.executedComment ?? "") : "",
+      stopAsset: !!formData.maintenance,
+      analysisAction: formData.notes ?? "",
+      downtimeMinutes,
+      causes: causes.map((c) => ({
+        causeId: c.causeId,
+        status: c.status ?? null,
+        comment: c.comment ?? "",
+      })),
+      // Se sua API espera "prescriptions", mantenha este nome. Caso espere "solutions", renomeie a chave.
+      prescriptions: causes.flatMap((c) => (c.solutions ?? []).map((s) => ({
+        causeId: c.causeId,
+        solutionId: s.solutionId,
+        status: s.status ?? null,
+        comment: s.comment ?? "",
+      }))),
+    };
 
     try {
-      // TODO: troque pela sua chamada real
-      // await api.post('/diagnoses/feedback', payload)
+      await api.patch(`/diagnoses/${diagnose.id}/feedback`, payload);
+      queryClient.invalidateQueries({ queryKey: ["diagnose", diagnose.id ] });
       navigation.goBack();
-    } catch (e) {
-      // trate erro
-      console.log("submit error", e);
+      Toast.show(t('index.recordUpdatedSuccessfully'), { type: 'success' });
+    } catch (err) {
+      // if (err.response) {
+      //   console.log('📡 SERVER err');
+      //   console.log('Status:', err.response.status);
+      //   console.log('Headers:', err.response.headers);
+      //   console.log('Data:', err.response.data); // <= Aqui está o retorno do backend
+
+      // // Se a requisição foi feita mas não houve resposta (timeout, CORS, etc)
+      // } else if (err.request) {
+      //   console.log('⏳ NO RESPONSE');
+      //   console.log(err.request);
+
+      // // Se o erro ocorreu antes da requisição (configuração, etc)
+      // } else {
+      //   console.log('⚠️ AXIOS err');
+      console.log('Message:', err.message);
+      // }
     }
+    setIsLoading(false);
   };
 
   if (!current && phase === "causes") return null;
 
-  // ----- UI -----
   return (
     <Container>
-      <Header
-        title={t("index.diagnosisFeedback")}
-        backIcon="back"
-        backPress={() => navigation.goBack()}
-      />
+      <Header title={t("index.diagnosisFeedback")} backIcon="back" backPress={goBack} />
 
-      {/* Conteúdo rolável */}
-        {phase === "causes" ? (
-          <Content>
-            <Title>
-              {t("index.causeOfTotal", {
-                index: step + 1,
-                total,
-              })}
-            </Title>
+      {phase === "causes" ? (
+        <Content>
+          <Title>
+            {t("index.causeOfTotal", { index: step + 1, total })}
+          </Title>
+          <CauseWithSolutions
+            editable={editable}
+            cause={current!}
+            onChangeCauseStatus={(st) => updateCauseStatus(current!.causeId, st)}
+            onChangeCauseComment={(txt) => updateCauseComment(current!.causeId, txt)}
+            onChangeSolutionStatus={(solutionId, st) => updateSolutionStatus(current!.causeId, solutionId, st)}
+          />
+        </Content>
+      ) : (
+        <FeedBackActionForm editable={editable} value={formData} onChange={setFormData} />
+      )}
 
-            <CauseWithSolutions
-              cause={current!}
-              onChangeCauseStatus={(st) => updateCauseStatus(current!.causeId, st)}
-              onChangeCauseComment={(txt) => updateCauseComment(current!.causeId, txt)}
-              onChangeSolutionStatus={(solutionId, st) =>
-                updateSolutionStatus(current!.causeId, solutionId, st)
-              }
-            />
-          </Content>
-        ) : (
-          <>
-            {phase === "action" ? (
-              <ActionContainer>
-                <ActionTitle>{t("index.performedAnyAction")}</ActionTitle>
-                <ActionSubTitle>{t("index.procedureBasedOnDiagnosis")}</ActionSubTitle>
-                {executed ? (
-                  <></>
-                ) : (
-                  <View style={{ gap: 5 }}>
-                    <Button title={t('index.yes')} onPress={() => {setExecuted(true)}}/>
-                    <Button title={t('index.no')} onPress={() => {setExecuted(false);goNext();}}/>
-                  </View>
-                )}
-              </ActionContainer>
-            ) : (
-
-            <KeyboardAvoidingView
-              style={{ flex: 1 }}
-              behavior={Platform.OS === "ios" ? "padding" : undefined}
-            >
-              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <ActionContainer>
-                <ActionTitle>{executed ? t('index.actionExecuted') : t("index.noActionPerformed")}</ActionTitle>
-                <InputArea
-                  placeholder={executed ? t('index.describeExecutedAction') : t('index.describeReasonNoAction')}
-                  maxLength={500}
-                  minRows={3}
-                  maxRows={10}
-                  autoGrow
-                  value={executedComment}
-                  onChangeText={(text) => setExecutedComment(text)}
-                />
-              </ActionContainer>
-              </TouchableWithoutFeedback>
-              </KeyboardAvoidingView>
-            )}
-          </>
-        )}
-
-      {/* Rodapé fixo */}
-      {phase !== "action" && (
+      {(phase === "causes" || editable) && (
       <Footer>
         <Button
-          title={
-            phase === "causes"
-              ? (t("index.next") || "Avançar")
-              : (t("index.finish") || "Concluir")
-          }
+          title={phase === "causes" ? (t("index.next") || "Avançar") : (t("index.finish") || "Concluir")}
           onPress={goNext}
+          loading={isLoading}
         />
       </Footer>
       )}
     </Container>
   );
 }
-

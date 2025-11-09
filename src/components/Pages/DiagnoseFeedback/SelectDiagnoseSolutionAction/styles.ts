@@ -4,7 +4,6 @@ export const Text = styled.Text`
   color: ${({ theme }) => theme.colors.dark};
   font-family: ${({ theme }) => theme.fonts.semiBold};
   font-size: ${({ theme }) => theme.fontSize.normal}px;
-  margin-bottom: 8px;
 `;
 
 export const Container = styled.View`

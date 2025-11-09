@@ -26,7 +26,7 @@ export const SubTitle = styled.Text`
   margin-top: 6px;
   margin-bottom: 10px;
   font-size: ${({ theme }) => theme.fontSize.smaller}px;
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
   opacity: 0.8;
 `;
 
@@ -42,7 +42,7 @@ export const SectionTitle = styled.Text`
   margin-top: 12px;
   margin-bottom: 6px;
   font-family: ${({ theme }) => theme.fonts.semiBold};
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
 `;
 
 export const SummaryBlock = styled.View`
@@ -55,7 +55,7 @@ export const SummaryBlock = styled.View`
 
 export const SummaryTitle = styled.Text`
   font-family: ${({ theme }) => theme.fonts.semiBold};
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
   margin-bottom: 2px;
 `;
 
@@ -67,7 +67,7 @@ export const SummaryRow = styled.View`
 
 export const SummarySubValue = styled.Text`
   font-size: ${({ theme }) => theme.fontSize.smaller}px;
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
   opacity: 0.75;
   line-height: 17px;
   margin-left: 10px;
@@ -75,11 +75,11 @@ export const SummarySubValue = styled.Text`
 
 export const SummaryLabel = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium};
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
 `;
 
 export const SummaryValue = styled.Text`
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
   opacity: 0.9;
 `;
 
@@ -95,7 +95,7 @@ export const Field = styled.View`
   gap: 6px;
 `;
 export const FieldLabel = styled.Text`
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
 `;
 
 export const Row = styled.View`
@@ -114,7 +114,7 @@ export const CheckSquare = styled.Text`
   font-size: 16px;
 `;
 export const CheckLabel = styled.Text`
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
 `;
 
 export const ActionContainer = styled.View`
@@ -138,6 +138,6 @@ export const ActionSubTitle = styled.Text`
   margin-top: 6px;
   margin-bottom: 10px;
   font-size: ${({ theme }) => theme.fontSize.smaller}px;
-  color: ${({ theme }) => theme.colors.text_dark};
+  color: ${({ theme }) => theme.colors.dark};
   opacity: 0.8;
 `;

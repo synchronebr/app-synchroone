@@ -8,6 +8,7 @@ import {
   Text,
   ViewStyle,
   ColorValue,
+  StyleProp,
 } from "react-native";
 import THEME from "../../../global/styles/theme";
 
@@ -24,7 +25,7 @@ export type RNSwitchProps = {
   trackColorOn?: ColorValue;
   trackColorOff?: ColorValue;
   thumbColor?: ColorValue;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
   disableAnimation?: boolean;
 };
@@ -64,7 +65,7 @@ export function Switch({
       toValue: checked ? 1 : 0,
       duration: 150,
       easing: Easing.out(Easing.quad),
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
   }, [checked, anim, disableAnimation]);
 
@@ -78,9 +79,9 @@ export function Switch({
     outputRange: [String(trackColorOff), String(trackColorOn)],
   });
 
-  const containerStyle = useMemo<ViewStyle>(
+  const containerStyle = useMemo<StyleProp<ViewStyle>>(
     () => [
-      { opacity: disabled ? 0.6 : 1 },
+      { opacity: disabled ? 0.9 : 1 },
       style,
     ],
     [disabled, style]

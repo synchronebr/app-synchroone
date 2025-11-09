@@ -10,6 +10,10 @@ export interface IDiagnose {
     createdAt: Date; 
     percent: number;
     read: boolean;
+    downtimeMinutes: string;
+    downtimeValue: number;
+    executionDate: Date;
+    executedComment: string;
     reading: {
         id: string;
         type: string;
@@ -31,4 +35,7 @@ export interface IDiagnose {
         }
     },
     causes: ICause[];
+    executed?: boolean | null;
+    stopAsset?: boolean | null;
+    analysisAction?: string | null;
 }
