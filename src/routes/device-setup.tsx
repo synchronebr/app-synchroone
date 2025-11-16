@@ -3,12 +3,18 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "styled-components/native";
 import { Entypo } from "@expo/vector-icons";
 
-import { NewDevice1 } from "../screens/NewDevice1";
-import { NewDevice2 } from "../screens/NewDevice2";
+import { DeviceConfigStart } from "../screens/DeviceSetup/DeviceConfigStart";
+import { DeviceSetupChooseType } from "../screens/DeviceSetup/DeviceSetupChooseType";
+import { DeviceSetupOptionConfig } from "../screens/DeviceSetup/DeviceSetupOptionConfig";
+import { DeviceSetupNearbySensors } from "../screens/DeviceSetup/DeviceSetupNearbySensors";
+import { DeviceSetupStartPairingProtocol } from "../screens/DeviceSetup/DeviceSetupStartPairingProtocol";
 
 export type SensorSetupParamList = {
-  NewDevice1: undefined;
-  NewDevice2: undefined;
+  DeviceConfigStart: undefined;
+  DeviceSetupChooseType: undefined;
+  DeviceSetupOptionConfig: undefined;
+  DeviceSetupNearbySensors: undefined;
+  DeviceSetupStartPairingProtocol: undefined;
 };
 
 export function DeviceSetupStack() {
@@ -27,16 +33,40 @@ export function DeviceSetupStack() {
     <Navigator screenOptions={{ headerTitleAlign: "center" }}>
       <Group screenOptions={headerPrimary}>
         <Screen
-          name="NewDevice1"
-          component={NewDevice1}
+          name="DeviceConfigStart"
+          component={DeviceConfigStart}
           options={{ 
             title: "Configurar Sensor",
             headerShown: false,
           }}
         />
         <Screen
-          name="NewDevice2"
-          component={NewDevice2}
+          name="DeviceSetupChooseType"
+          component={DeviceSetupChooseType}
+          options={{ 
+            title: "Configurar Sensor",
+            headerShown: false,
+          }}
+        />
+        <Screen
+          name="DeviceSetupOptionConfig"
+          component={DeviceSetupOptionConfig}
+          options={{ 
+            title: "Configurar Sensor",
+            headerShown: false,
+          }}
+        />
+        <Screen
+          name="DeviceSetupNearbySensors"
+          component={DeviceSetupNearbySensors}
+          options={{ 
+            title: "Configurar Sensor",
+            headerShown: false,
+          }}
+        />
+        <Screen
+          name="DeviceSetupStartPairingProtocol"
+          component={DeviceSetupStartPairingProtocol}
           options={{ 
             title: "Configurar Sensor",
             headerShown: false,

@@ -104,11 +104,11 @@ export function Devices() {
         </ScrollArea>
 
         <Footer>
-          {/* <Button title={t('index.newDevice')} onPress={() => {
-            // navigation.navigate("DeviceSetupStack", {
-            //   screen: "NewDevice1",
-            // });
-          }}/> */}
+          <Button title={t('index.newDevice')} onPress={() => {
+            navigation.navigate("DeviceSetupStack", {
+              screen: "DeviceConfigStart",
+            });
+          }}/>
         </Footer>
       </Content>
     </Container>

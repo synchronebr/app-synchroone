@@ -8,14 +8,15 @@ import {
 } from "./styles";
 
 interface ICardSelectProps {
+    onPress: any;
     image: string;
     title: string;
     description: string;
 }
 
-export function CardSelect({ image, title, description }: ICardSelectProps) {
+export function CardSelect({ onPress, image, title, description }: ICardSelectProps) {
   return (
-    <Container>
+    <Container onPress={onPress}>
         <CardImage>
             <Image 
             source={image}

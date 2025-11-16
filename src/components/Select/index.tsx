@@ -12,8 +12,14 @@ export default function Select<T>({ label, placeholder, values, selected, onSele
     onSelect(newValue);
   }
 
+  const isDisabled = editable === false;
+
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[
+      styles.container, 
+      containerStyle,
+      editable === false && { opacity: 0.5 },
+    ]}>
       {label && (<Text style={[styles.label, error && { color: errorTextColor } ]}> { label } </Text>)}
 
       <View style={[styles.inputContainer, error && { borderColor: errorTextColor }]}>
@@ -35,7 +41,7 @@ export default function Select<T>({ label, placeholder, values, selected, onSele
             ],
           }}
           modalPropsIOS={{ presentationStyle: 'overFullScreen' }}
-          enabled={editable}
+          disabled={isDisabled} 
           placeholder={{ label: placeholder, value: null }}
           value={selected}
           onValueChange={onValueChange}

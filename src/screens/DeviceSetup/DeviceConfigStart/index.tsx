@@ -6,11 +6,11 @@ import {
   Title,
 } from "./styles";
 
-import Header from "../../components/Pages/Header";
+import Header from "../../../components/Pages/Header";
 import { useNavigation } from "@react-navigation/native";
-import { Button } from "../../components/Button";
+import { Button } from "../../../components/Button";
 
-export function NewDevice1() {
+export function DeviceConfigStart() {
   const navigation = useNavigation();
   return (
     <Container>
@@ -26,7 +26,7 @@ export function NewDevice1() {
         <Button 
           title={t('index.select')}
           onPress={ () => 
-            navigation.navigate("NewDevice2")
+            navigation.navigate("DeviceSetupChooseType")
           }
         />
       </Content>

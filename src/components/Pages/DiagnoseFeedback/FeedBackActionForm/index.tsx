@@ -99,6 +99,7 @@ export default function FeedBackActionForm({ value, onChange, editable = true }:
                 <S.DowntimeRow>
                   <S.DowntimeInput
                     value={form.downtimeMinutes?.toString() ?? ""}
+                    editable={editable}
                     onChangeText={handleDowntimeChange}
                     keyboardType="number-pad"
                     maxLength={4}
@@ -106,7 +107,7 @@ export default function FeedBackActionForm({ value, onChange, editable = true }:
                   <S.UnitWrapper>
                     <Select<DowntimeUnit>
                       containerStyle={{ alignSelf: "flex-start", minWidth: 120 }}
-                      editable
+                      editable={editable}
                       values={[
                         { label: t("index.minutes"), value: "M" },
                         { label: t("index.hours"), value: "H" },
@@ -125,6 +126,7 @@ export default function FeedBackActionForm({ value, onChange, editable = true }:
             <S.SectionLabel>{t("index.observations")}</S.SectionLabel>
             <InputArea
               placeholder={t("index.writeHere")}
+              editable={editable}
               maxLength={800}
               minRows={3}
               maxRows={10}

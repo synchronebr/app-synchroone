@@ -113,14 +113,16 @@ export default function SelectDiagnoseSolutionAction<T extends FeedbackValue>({
               </Text>
             </TouchableOpacity>
 
+            {editable && (
             <TouchableOpacity
               activeOpacity={0.8}
               disabled={!editable}
               onPress={() => handleSelect(null)}
               style={styles.resetBtn}
             >
-              <Text style={styles.resetText}>↻</Text>
+              <RotateCcwIcon size={15} />
             </TouchableOpacity>
+            )}
           </>
         )}
 
@@ -143,15 +145,16 @@ export default function SelectDiagnoseSolutionAction<T extends FeedbackValue>({
               </Text>
             </TouchableOpacity>
 
+            {editable && (
             <TouchableOpacity
               activeOpacity={0.8}
               disabled={!editable}
               onPress={() => handleSelect(null)}
               style={styles.resetBtn}
             >
-              {/* <Text style={styles.resetText}>↻</Text> */}
               <RotateCcwIcon size={15} />
             </TouchableOpacity>
+            )}
           </>
         )}
       </View>

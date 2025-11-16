@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { t } from "i18next";
 import { useQueryClient } from "@tanstack/react-query";
@@ -77,15 +77,14 @@ export function DiagnoseFeedback() {
     return Math.round(value * 60);
   }
 
-  function hydrateFormFromDB(d: Partial<IDiagnose> | undefined): FeedBackActionData {
-    console.log(d);
-    console.log(d?.executionDate ? new Date(d.executionDate as any) : null);
+  function hydrateFormFromDB(d: Partial<any> | undefined): FeedBackActionData {
+    console.log('hydrateFormFromDB ---- ', d);
     return {
       executed: !!d?.executed,
       executionDate: d?.executionDate ? new Date(d.executionDate as any) : null,
-      executedComment: d?.executedComment ?? "",
+      executedComment: d?.comments ?? "",
       stopAsset: !!d?.stopAsset,
-      downtimeMinutes: d?.downtimeValue ?? null,
+      downtimeMinutes: d?.downtimeMinutes ?? null,
       downtimeUnit: (d?.downtimeUnit) ?? "M",
       analysisAction: d?.analysisAction ?? "",
     };
@@ -118,14 +117,14 @@ export function DiagnoseFeedback() {
   // ===== Submit =====
   const onSubmit = async () => {
     setIsLoading(true);
-    const downtimeMinutes = formData.maintenance ? minutesFromValue(formData.downtimeValue, formData.downtimeUnit) : null;
+    const downtimeMinutes = formData.downtimeMinutes ? minutesFromValue(formData.downtimeMinutes, formData.downtimeUnit) : null;
 
     const payload = {
       executed: formData.executed,
       executionDate: formData.executed ? toISODateOrNull(formData.executionDate) : null,
       comments: formData.executed ? (formData.executedComment ?? "") : "",
-      stopAsset: !!formData.maintenance,
-      analysisAction: formData.notes ?? "",
+      stopAsset: !!formData.stopAsset,
+      analysisAction: formData.analysisAction ?? "",
       downtimeMinutes,
       causes: causes.map((c) => ({
         causeId: c.causeId,
@@ -141,11 +140,17 @@ export function DiagnoseFeedback() {
       }))),
     };
 
+    // console.log(payload)
+    // console.log(payload.causes[0])
+    // console.log(payload.causes[0].solutions)
+    console.log('formData----->', formData)
+    console.log('payload----->', payload)
+
     try {
-      await api.patch(`/diagnoses/${diagnose.id}/feedback`, payload);
-      queryClient.invalidateQueries({ queryKey: ["diagnose", diagnose.id ] });
-      navigation.goBack();
-      Toast.show(t('index.recordUpdatedSuccessfully'), { type: 'success' });
+      // await api.patch(`/diagnoses/${diagnose.id}/feedback`, payload);
+      // queryClient.invalidateQueries({ queryKey: ["diagnose", diagnose.id ] });
+      // navigation.goBack();
+      // Toast.show(t('index.recordUpdatedSuccessfully'), { type: 'success' });
     } catch (err) {
       // if (err.response) {
       //   console.log('📡 SERVER err');
@@ -187,7 +192,7 @@ export function DiagnoseFeedback() {
           />
         </Content>
       ) : (
-        <FeedBackActionForm editable={editable} value={formData} onChange={setFormData} />
+        <ScrollView><FeedBackActionForm editable={editable} value={formData} onChange={setFormData} /></ScrollView>
       )}
 
       {(phase === "causes" || editable) && (
