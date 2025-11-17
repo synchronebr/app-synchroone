@@ -68,22 +68,22 @@ export function ConfigureGateway( { route } ) {
     }
   
     await connectedDevice.discoverAllServicesAndCharacteristics();
-    sendCommand(connectedDevice, "GSYNC-OK#end");
-    sendCommand(connectedDevice, `SN:${route.params.bluetoothDeviceName}#end`);
-    sendCommand(connectedDevice, "PASS:5enh@SYNC24#end");
-    sendCommand(connectedDevice, `SYNC-TD:10#end`);
-    sendCommand(connectedDevice, "SYNC-MODE:1#end");
-    if (ssid) sendCommand(connectedDevice, `SSID:${ssid}#end`);
-    if (password) sendCommand(connectedDevice, `PS:${password}#end`);
-    sendCommand(connectedDevice, "URL1:https://sensors.synchroone.com/sensors#end");
-    sendCommand(connectedDevice, "URL2:https://sensors.synchroone.com/sensors/api_key#end");
-    sendCommand(connectedDevice, "URL2:https://sensors.synchroone.com/sensors/gateways#end");
-    sendCommand(connectedDevice, "API-KEY:d554752e-4e64-4efw-ac2d-d1vv996f627a#end");
-    sendCommand(connectedDevice, "PORT:3334#end");
-    sendCommand(connectedDevice, `APN:${device.apn}#end`);
-    sendCommand(connectedDevice, "SYNC-TPB:10#end");
-    sendCommand(connectedDevice, "SYNC-TBLE:10#end");
-    sendCommand(connectedDevice, "SYNC-FINISH#end");
+    await sendCommand(connectedDevice, "GSYNC-OK#end");
+    await sendCommand(connectedDevice, `SN:${route.params.bluetoothDeviceName}#end`);
+    await sendCommand(connectedDevice, "PASS:5enh@SYNC24#end");
+    await sendCommand(connectedDevice, `SYNC-TD:10#end`);
+    await sendCommand(connectedDevice, "SYNC-MODE:1#end");
+    if (ssid) await sendCommand(connectedDevice, `SSID:${ssid}#end`);
+    if (password) await sendCommand(connectedDevice, `PS:${password}#end`);
+    await sendCommand(connectedDevice, "URL1:https://sensors.synchroone.com/sensors#end");
+    await sendCommand(connectedDevice, "URL2:https://sensors.synchroone.com/sensors/api_key#end");
+    await sendCommand(connectedDevice, "URL2:https://sensors.synchroone.com/sensors/gateways#end");
+    await sendCommand(connectedDevice, "API-KEY:d554752e-4e64-4efw-ac2d-d1vv996f627a#end");
+    await sendCommand(connectedDevice, "PORT:3334#end");
+    await sendCommand(connectedDevice, `APN:${device.apn}#end`);
+    await sendCommand(connectedDevice, "SYNC-TPB:10#end");
+    await sendCommand(connectedDevice, "SYNC-TBLE:10#end");
+    await sendCommand(connectedDevice, "SYNC-FINISH#end");
   }
 
   const verifyConnecton = async () => {

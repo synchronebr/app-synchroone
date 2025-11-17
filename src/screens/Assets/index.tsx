@@ -36,6 +36,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { getPathsForSelect } from "../../services/Companies/Paths";
 import Header from "../../components/Pages/Header";
 import { QRCodeButton } from "../../components/QRCodeButton";
+import { t } from "i18next";
 
 const DEBUG = false;
 
@@ -398,7 +399,7 @@ export function Assets() {
   return (
     <Container>
       <Header
-        title="Ativos Monitorados"
+        title={t('index.monitoredAssets')}
         rightContent={
           <>
             {/* <QRCodeButton /> */}
@@ -410,7 +411,7 @@ export function Assets() {
       <SearchContainer>
         <Input
           onChangeText={setSearchFieldValue}
-          placeholder="Pesquisar ativo"
+          placeholder={t('index.searchAssets')}
           searchable
           value={searchFieldValue}
           editable={!isLoading && !isFiltering}
@@ -428,7 +429,7 @@ export function Assets() {
         >
           <View style={styles.filterWrapper}>
             <View style={styles.filterHeader}>
-              <Text style={styles.title}>Filtrar ativos</Text>
+              <Text style={styles.title}>{t('index.filterAssets')}</Text>
               <CrossIcon onPress={closeFilter} />
             </View>
 
@@ -440,8 +441,8 @@ export function Assets() {
                     values={path}
                     selected={selectedPaths[i]}
                     onSelect={(value) => handleChangePathLevel(i, value)}
-                    label={`Nível ${i + 1}`}
-                    placeholder="Selecione um nível"
+                    label={t('index.level', { level: i + 1 })}
+                    placeholder={t('index.selectLevel')}
                   />
                 </DropdownWrapper>
               ))}
@@ -454,7 +455,7 @@ export function Assets() {
                 disabled={isFiltering}
               >
                 <Text style={styles.applyButtonText}>
-                  {isFiltering ? "Aplicando..." : "Aplicar filtro"}
+                  {isFiltering ? t('index.applying') : t('index.applyFilter')}
                 </Text>
               </TouchableOpacity>
 
@@ -463,7 +464,7 @@ export function Assets() {
                 onPress={clearFilters}
                 disabled={isFiltering}
               >
-                <Text style={styles.clearFilterButtonText}>Limpar filtro</Text>
+                <Text style={styles.clearFilterButtonText}>{t('index.clearFilters')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -495,7 +496,7 @@ export function Assets() {
             />
           ) : (
             <Content>
-              <Text>Você ainda não cadastrou um ativo...</Text>
+              <Text>{t('index.noAssetsRegistered')}...</Text>
             </Content>
           )}
         </>
@@ -517,7 +518,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: THEME.colors.light,
     padding: 16,
-    borderRadius: 10,
+    borderRadius: 4,
   },
   filterHeader: {
     display: "flex",

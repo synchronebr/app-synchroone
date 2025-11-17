@@ -15,6 +15,7 @@ import {
   Separator
 } from "./styles";
 import { useTheme } from "styled-components/native";
+import { t } from "i18next";
 
 export type AttentionPiece = {
   pieceId: number;
@@ -58,8 +59,8 @@ const ListItem = memo(function ListItem({
   const paths = (item.pathNames ?? []).join(" - ");
 
   const STATUS: Record<string, { label: string; bg: string; fg: string }> = {
-        W: { label: "Alerta", bg: THEME.colors.warning_dark, fg: THEME.colors.light }, 
-        D: { label: "Perigo", bg: THEME.colors.danger, fg: THEME.colors.light }, 
+        W: { label: t('index.securityStatus-W'), bg: THEME.colors.warning_dark, fg: THEME.colors.light }, 
+        D: { label: t('index.securityStatus-D'), bg: THEME.colors.danger, fg: THEME.colors.light }, 
     };
 
   const s = STATUS[item.securityStatus] ?? {

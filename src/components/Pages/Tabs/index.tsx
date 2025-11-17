@@ -35,7 +35,7 @@ export default function Tabs({
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     gap: 8,
   },

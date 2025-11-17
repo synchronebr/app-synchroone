@@ -19,11 +19,16 @@ import { Manuals } from "../screens/Manuals";
 import { MyData } from "../screens/MyData";
 import { Languages } from "../screens/Languages";
 import { Countries } from "../screens/Countries";
+import { UserPreferences } from "../screens/UserPreferences";
 import { AlertDetails } from "../screens/AlertDetails";
 import { AlertPrescriptionDetails } from "../screens/AlertPrescriptionDetails";
 import { DiagnosesByPiece } from "../screens/DiagnosesByPiece";
 import { Device } from "../screens/Device";
 import { DeviceGateway } from "../screens/DeviceGateway";
+import { t } from "i18next";
+import { DeviceSetupStack } from "./device-setup";
+import { HomeOld } from "../screens/HomeOld";
+import { DiagnoseFeedback } from "../screens/DiagnoseFeedback";
 
 export function Dashboard() {
   const { Navigator, Screen } = createStackNavigator();
@@ -60,6 +65,13 @@ export function Dashboard() {
       <Screen
         component={Companies}
         name="Companies"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={HomeOld}
+        name="HomeOld"
         options={{
           headerShown: false,
         }}
@@ -154,7 +166,7 @@ export function Dashboard() {
         component={EditAssetDetails}
         name="EditAssetDetails"
         options={{
-          headerTitle: "Detalhes do Ativo",
+          headerTitle: t('index.pieceDetails'),
         }}
       />
       <Screen
@@ -182,7 +194,7 @@ export function Dashboard() {
         component={MeasurementHistory}
         name="MeasurementHistory"
         options={{
-          title: "Histórico de medições",
+          title: t('index.diagnosesHistory'),
         }}
       />
       <Screen
@@ -196,7 +208,7 @@ export function Dashboard() {
         component={Manuals}
         name="Manuals"
         options={{
-          title: "Acessar Manuais",
+          title: t('index.accessManuals'),
         }}
       />
       <Screen
@@ -221,10 +233,24 @@ export function Dashboard() {
         }}
       />
       <Screen
+        component={UserPreferences}
+        name="UserPreferences"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
         component={AlertDetails}
         name="AlertDetails"
         options={{
           title: "Detalhes alerta",
+          headerShown: false,
+        }}
+      />
+      <Screen
+        component={DiagnoseFeedback}
+        name="DiagnoseFeedback"
+        options={{
           headerShown: false,
         }}
       />
@@ -242,6 +268,11 @@ export function Dashboard() {
         options={{
           title: "Diagnósticos",
         }}
+      />
+      <Screen
+        name="DeviceSetupStack"
+        component={DeviceSetupStack}
+        options={{ headerShown: false }} // o stack interno já desenha o header
       />
     </Navigator>
   );

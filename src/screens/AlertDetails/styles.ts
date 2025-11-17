@@ -5,12 +5,18 @@ export const Container = styled.View`
   flex: 1;
 `;
 
+export const ContainerData = styled.View`
+  flex: 1;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+`;
+
 export const Scroll = styled.ScrollView.attrs({
   contentContainerStyle: {
-    paddingHorizontal: 20
+    // paddingHorizontal: 20
   },
 })``;
-
 
 export const PieceDiv = styled.View`
   align-items: start;

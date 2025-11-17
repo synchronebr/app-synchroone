@@ -3,4 +3,5 @@ export interface IDevice {
     readingWindow: number;
     status: string;
     battery: number;
+    connectionStatus: string;
 }

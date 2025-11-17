@@ -7,19 +7,26 @@ import THEME from "../../global/styles/theme";
 import { SelectProps } from "./types";
 import { Text, Container, ErrorText } from "./styles";
 
-export default function Select<T>({ label, placeholder, values, selected, onSelect, editable, error, errorTextColor }: SelectProps<T>) {
+export default function Select<T>({ label, placeholder, values, selected, onSelect, editable, error, errorTextColor, containerStyle }: SelectProps<T>) {
   function onValueChange(newValue: T) {
     onSelect(newValue);
   }
 
+  const isDisabled = editable === false;
+
   return (
-    <View style={styles.container}>
-      <Text style={[styles.label, error && { color: errorTextColor } ]}> { label } </Text>
+    <View style={[
+      styles.container, 
+      containerStyle,
+      editable === false && { opacity: 0.5 },
+    ]}>
+      {label && (<Text style={[styles.label, error && { color: errorTextColor } ]}> { label } </Text>)}
 
       <View style={[styles.inputContainer, error && { borderColor: errorTextColor }]}>
         <Picker
           style={{
             ...pickerSelectStyles,
+            inputIOSContainer: { height: 40, justifyContent: "center" },
             placeholder: [
               pickerSelectStyles.placeholder,
               error && { color: errorTextColor }, // Cor vermelha no texto para iOS
@@ -33,7 +40,8 @@ export default function Select<T>({ label, placeholder, values, selected, onSele
               error && { color: errorTextColor }, // Cor vermelha no texto para Android
             ],
           }}
-          enabled={editable}
+          modalPropsIOS={{ presentationStyle: 'overFullScreen' }}
+          disabled={isDisabled} 
           placeholder={{ label: placeholder, value: null }}
           value={selected}
           onValueChange={onValueChange}
@@ -51,10 +59,10 @@ export default function Select<T>({ label, placeholder, values, selected, onSele
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 8,
   },
   label: {
-    fontSize: THEME.fontSize.medium,
+    marginTop: 8,
+    fontSize: THEME.fontSize.normal,
     fontFamily: THEME.fonts.semiBold,
     marginBottom: 6,
     color: THEME.colors.dark,
@@ -62,7 +70,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderWidth: 1,
     borderColor: THEME.colors.gray_dark,
-    borderRadius: 10,
+    borderRadius: 5,
     overflow: "hidden",
     backgroundColor: "#f9f9f9",
     justifyContent: "center",

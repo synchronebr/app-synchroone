@@ -19,6 +19,7 @@ import { Loading } from "../../components/Loading";
 
 import {
   Container,
+  ContainerData,
   Scroll,
   PieceDiv,
   PieceText,
@@ -43,11 +44,8 @@ import {
 } from "./styles";
 import Header from "../../components/Pages/Header";
 import { t } from "i18next";
-
-const STATUS_HAZARDOUSNESS = {
-  D: { title: "Perigo" },
-  W: { title: "Alerta" },
-};
+import { enums } from "../../utils/enums";
+import { Button } from "../../components/Button";
 
 export function AlertDetails() {
   const navigation = useNavigation<AlertCardNavigationProps>();
@@ -59,6 +57,7 @@ export function AlertDetails() {
     queryKey: ["diagnose", id],
     queryFn: async () => {
       const response = await api.get(`/diagnoses/${id}`);
+      console.log(response.data);
       return response.data || {};
     },
   });
@@ -91,6 +90,7 @@ export function AlertDetails() {
           <ActivityIndicator color={THEME.colors.light} />
         </View>
       ) : data ? (
+        <ContainerData>
         <Scroll>
           <PieceDiv>
             <PieceText>
@@ -120,8 +120,8 @@ export function AlertDetails() {
             <DiagnoseDescriptionTitleDiv>
               {/* <DangerIcon fill={THEME.colors.gray} /> */}
               <DiagnoseDescriptionTitle>
-                Falha Identificada (
-                {STATUS_HAZARDOUSNESS[data.hazardousness]?.title})
+                {t('index.identifiedFailure')} (
+                {t('index.securityStatus-'+data.hazardousness)})
               </DiagnoseDescriptionTitle>
             </DiagnoseDescriptionTitleDiv>
             <DiagnoseDescriptionSubtitle>
@@ -131,7 +131,7 @@ export function AlertDetails() {
 
           <Divider />
 
-          <Title>Possíveis causas</Title>
+          <Title>{t('index.possibleCausas')}</Title>
           <CardCauses>
             {data?.causes.map((cause, index) => (
               <React.Fragment key={index}>
@@ -156,6 +156,19 @@ export function AlertDetails() {
             ))}
           </CardCauses>
         </Scroll>
+        {data.status === enums.Diagnoses.Status.Analyse ? (
+          <Button 
+            onPress={() => navigation.navigate("DiagnoseFeedback", data)} 
+            title={t('index.pendingDiagnosisFeedback')} 
+          />
+        ) : (
+          <Button 
+            variant="outline"
+            onPress={() => navigation.navigate("DiagnoseFeedback", data)} 
+            title={t('index.diagnosisFeedback')} 
+          />
+        )}
+        </ContainerData>
       ) : (
         <Scroll>
           <Text>{t('index.dataNotFound')}</Text>

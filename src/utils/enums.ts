@@ -1,3 +1,5 @@
+import { SolutionsTitle } from "../components/Pages/DiagnoseFeedback/CauseWithSolutions/styles";
+
 export const enums = {
     file: {
       type: {
@@ -29,6 +31,12 @@ export const enums = {
         Offline: 'O',
         Active: 'A',
         Disabled: 'D',
+      },
+      ConnectionStatus: {
+        Online: 'ON',
+        Offline: 'OF',
+        NotConnectedGateway: 'NG',
+        NotConfigured: 'NC',
       }
     },
     Claims: {
@@ -56,6 +64,28 @@ export const enums = {
       Status: {
         Analyzed: 'A',
         FailurePending: 'FP',
+      }
+    },
+    Diagnoses: {
+      Status: {
+        Pending: 'P',
+        Analyse: 'A',
+        Concluded: 'C',
+      },
+      Causes: {
+        Feedback: {
+          NotClassified: 'I',
+          Confirmed: 'C',
+          PartiallyConfirmed: 'P',
+          NotConfirmed: 'N',
+        },
+        Solutions: {
+          Feedback: {
+            NotClassified: 'I',
+            Performed: 'R',
+            NotPerformed: 'N',
+          }
+        }
       }
     }
   }

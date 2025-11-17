@@ -1,12 +1,19 @@
+import { ICause } from "./ICause";
+
 export interface IDiagnose {
     id: number;
     title: string; 
+    status: string; 
     description: string; 
     type: 'S' | 'W' | 'D' | 'IN';
     hazardousness: string;
     createdAt: Date; 
     percent: number;
     read: boolean;
+    downtimeMinutes: string;
+    downtimeValue: number;
+    executionDate: Date;
+    executedComment: string;
     reading: {
         id: string;
         type: string;
@@ -27,18 +34,8 @@ export interface IDiagnose {
             }
         }
     },
-    causes: {
-        causesType: {
-            id: string;
-            title: string;
-            description: string;
-        },
-        solutions: {
-            solutionType: {
-                id: string;
-                title: string;
-                description: string;
-            }
-        }[]
-    }[];
+    causes: ICause[];
+    executed?: boolean | null;
+    stopAsset?: boolean | null;
+    analysisAction?: string | null;
 }

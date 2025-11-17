@@ -1,8 +1,20 @@
 // styles.ts
 import styled from "styled-components/native";
 
-export const Container = styled.View`
-  background-color: ${({ theme }) => theme.colors.light};
+interface IProps {
+  variant: string;
+}
+
+export const Container = styled.View<IProps>`
+  background-color: ${({ theme, variant }) => {
+    switch (variant) {
+      case 'secondary':
+        return theme.colors.primary
+    
+      default:
+        return theme.colors.light
+    }
+  }};
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -39,8 +51,16 @@ export const TitleWrapper = styled.View`
   align-items: center; 
 `;
 
-export const Title = styled.Text`
-  color: ${({ theme }) => theme.colors.primary};
+export const Title = styled.Text<IProps>`
+  color: ${({ theme, variant }) => {
+    switch (variant) {
+      case 'secondary':
+        return theme.colors.light
+    
+      default:
+        return theme.colors.primary
+    }
+  }};
   font-family: ${({ theme }) => theme.fonts.bold};
   font-size: ${({ theme }) => theme.fontSize.larger};
 `;

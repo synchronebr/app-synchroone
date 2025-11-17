@@ -26,10 +26,10 @@ import { t } from "i18next";
 // };
 
 const statusMapping = {
-  D: { color: "#EF4444", title: "Perigo", iconName: "siren" },
-  S: { color: "#10B981", title: "Seguro", iconName: "check-icon" },
-  W: { color: "#F59E0B", title: "Alarme", iconName: "alert-triangle" },
-  default: { color: "#64748B", title: "Offline", iconName: "minus-circled" },
+  D: { color: "#EF4444", title: t('index.securityStatus-D'), iconName: "siren" },
+  S: { color: "#10B981", title: t('index.securityStatus-S'), iconName: "check-icon" },
+  W: { color: "#F59E0B", title: t('index.securityStatus-W'), iconName: "alert-triangle" },
+  default: { color: "#64748B", title: t('index.offline'), iconName: "minus-circled" },
 };
 
 export const MeasuringPointPartTimeLastReadingsStepper = ({ id, status, date, doneBy, lastOne=false, diagnoseId=undefined }) => {

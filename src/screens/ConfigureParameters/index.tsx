@@ -33,6 +33,7 @@ import { getPathsForSelect } from "../../services/Companies/Paths";
 import { useAccessLevels } from "../../hooks/useAccessLevels";
 import { getPiecesForSelect } from "../../services/Companies/Pieces";
 import { useAuth } from "../../hooks/useAuth";
+import { t } from "i18next";
 
 export function ConfigureParameters( { route } ) {
   const { user } = useAuth();
@@ -121,21 +122,21 @@ export function ConfigureParameters( { route } ) {
     } 
     
     await connectedDevice.discoverAllServicesAndCharacteristics();
-    sendCommand(connectedDevice, "SSYNC-OK");
-    sendCommand(connectedDevice, `SN:${route.params.bluetoothDeviceName}`);
-    sendCommand(connectedDevice, "PASS:5enh@SYNC24");
-    sendCommand(connectedDevice, `SYNC-TD:${interval}`);
-    sendCommand(connectedDevice, "SYNC-STH:100");
-    sendCommand(connectedDevice, "SYNC-SM:10");
-    sendCommand(connectedDevice, "SYNC-SI:300");
-    sendCommand(connectedDevice, "SYNC-SME:10");
-    sendCommand(connectedDevice, "SYNC-SB:10");
-    sendCommand(connectedDevice, "SYNC-TPB:10");
-    sendCommand(connectedDevice, "SYNC-TBLE:30");
-    sendCommand(connectedDevice, "SYNC-FS:16");
-    sendCommand(connectedDevice, "SYNC-BW:00");
-    sendCommand(connectedDevice, "SYNC-AVD:123");
-    sendCommand(connectedDevice, "SYNC-FINISH");
+    await sendCommand(connectedDevice, "SSYNC-OK");
+    await sendCommand(connectedDevice, `SN:${route.params.bluetoothDeviceName}`);
+    await sendCommand(connectedDevice, "PASS:5enh@SYNC24");
+    await sendCommand(connectedDevice, `SYNC-TD:${interval}`);
+    await sendCommand(connectedDevice, "SYNC-STH:100");
+    await sendCommand(connectedDevice, "SYNC-SM:10");
+    await sendCommand(connectedDevice, "SYNC-SI:300");
+    await sendCommand(connectedDevice, "SYNC-SME:10");
+    await sendCommand(connectedDevice, "SYNC-SB:10");
+    await sendCommand(connectedDevice, "SYNC-TPB:10");
+    await sendCommand(connectedDevice, "SYNC-TBLE:30");
+    await sendCommand(connectedDevice, "SYNC-FS:16");
+    await sendCommand(connectedDevice, "SYNC-BW:00");
+    await sendCommand(connectedDevice, "SYNC-AVD:123");
+    await sendCommand(connectedDevice, "SYNC-FINISH");
   }
 
   const verifyConnecton = async () => {
@@ -226,8 +227,8 @@ export function ConfigureParameters( { route } ) {
                 values={path}
                 selected={selectedPaths[i]}
                 onSelect={(value) => handleChangePathLevel(i, value)}
-                label={`Nível ${i + 1}`}
-                placeholder="Selecione um nível"
+                label={t('index.level', { level: i + 1 })}
+                placeholder={t('index.selectLevel')}
               />
             </DropdownWrapper>
           ))}

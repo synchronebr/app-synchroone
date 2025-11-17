@@ -8,5 +8,6 @@ export type SelectProps<T> = {
   editable: boolean;
   error?: string;
   errorTextColor?: string;
+  containerStyle: StyleProp<ViewStyle>;
 }
 

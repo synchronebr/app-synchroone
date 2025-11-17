@@ -22,6 +22,7 @@ import {
 } from "./styles";
 import { IMeasuringPoint } from "../../services/dtos/IMeasuringPoint";
 import { enums } from "../../utils/enums";
+import { t } from "i18next";
 
 interface IMeasurementPointCard extends MeasurementPointCardProps {
   equipmentId: number;
@@ -50,17 +51,17 @@ export function MeasurementPointCard({ equipmentId, item, ...rest }: IMeasuremen
       />
       {item.securityStatus === "S" && (
         <CardStatusSafe status={item.securityStatus}>
-          <CardStatusSafeText>Seguro</CardStatusSafeText>
+          <CardStatusSafeText>{t('index.securityStatus-S')}</CardStatusSafeText>
         </CardStatusSafe>
       )}
       {item.securityStatus === "W" && (
         <CardStatusSafe status={item.securityStatus}>
-          <CardStatusSafeText>Alerta</CardStatusSafeText>
+          <CardStatusSafeText>{t('index.securityStatus-W')}</CardStatusSafeText>
         </CardStatusSafe>
       )}
       {item.securityStatus === "D" && (
         <CardStatusSafe status={item.securityStatus}>
-          <CardStatusSafeText>Perigo</CardStatusSafeText>
+          <CardStatusSafeText>{t('index.securityStatus-D')}</CardStatusSafeText>
         </CardStatusSafe>
       )}
 
@@ -69,20 +70,20 @@ export function MeasurementPointCard({ equipmentId, item, ...rest }: IMeasuremen
 
 
         {item.type === enums.MeasuringPoints.Type.PartTime ? (
-          <Subtitle>Leituras feitas por um técnico</Subtitle>
+          <Subtitle>{t('index.readingsByTechnician')}</Subtitle>
         ) : (
           <>
             {item.device ? (
               <Subtitle>{item.device.code}</Subtitle>
             ) : (
-              <Subtitle>Nenhum sensor vinculado</Subtitle>
+              <Subtitle>{t('index.noSensorsLinked')}</Subtitle>
             )}
           </>
         )}
 
         {item && item.device && item.device.readingWindow && (
           <LastMeasurementInfo>
-            <Text>{item.device.readingWindow} min</Text>
+            <Text>{t('index.minutesMin', { minutes: item.device.readingWindow })}</Text>
           </LastMeasurementInfo>
         )}
       </Content>

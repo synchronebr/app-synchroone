@@ -2,7 +2,7 @@
   "expo": {
     "name": "synchroone",
     "slug": "synchroone",
-    "version": "1.0.5",
+    "version": "1.0.7",
     "icon": "./src/assets/images/app-icon.png",
     "assetBundlePatterns": [
       "**/*"
@@ -29,10 +29,11 @@
     },
     "android": {
       "package": "com.synchroone",
-      "versionCode": 22
+      "versionCode": 23
     },
     "ios": {
-      "newArchEnabled": true
+      "newArchEnabled": true,
+      "version": "1.0.7"
     }
   }
 }

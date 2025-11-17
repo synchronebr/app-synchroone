@@ -27,6 +27,13 @@ export type RequestUserRequest = {
   email: string;
 };
 
+export type UserPreferences = {
+  code: string;
+  field: string;
+  name: string;
+  content: string;
+};
+
 export type User = {
   id: number;
   name: string;
@@ -37,4 +44,5 @@ export type User = {
   locale: string;
   isAdmin?: boolean;
   avatar?: string;
+  preferences?: UserPreferences[]
 };

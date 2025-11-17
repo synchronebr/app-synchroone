@@ -17,6 +17,7 @@ import {
 
 export default function Header<T>({ 
   title, 
+  variant = 'primary',
   backIcon, 
   backPress, 
   leftContent,
@@ -24,20 +25,25 @@ export default function Header<T>({
  }: HeaderProps<T>) {
   const THEME = useTheme();
 
+  const colors = {
+    'primary': { color: THEME.colors.primary },
+    'secondary': { color: THEME.colors.light },
+  }
+
   return (
-    <Container>
+    <Container variant={variant}>
       <LeftIcons>
       {backIcon && (
         <>
-        {backIcon === "entypo" && (<LeftIcon onPress={() => backPress?.()} ><Entypo name="menu" size={24} color={THEME.colors.primary} /></LeftIcon>)}
-        {backIcon === "back" && (<LeftIcon onPress={() => backPress?.()} ><Entypo color={THEME.colors.primary} name="chevron-left" size={24} /></LeftIcon>)}
+        {backIcon === "entypo" && (<LeftIcon onPress={() => backPress?.()} ><Entypo name="menu" size={24} color={colors[variant].color} /></LeftIcon>)}
+        {backIcon === "back" && (<LeftIcon onPress={() => backPress?.()} ><Entypo color={colors[variant].color} name="chevron-left" size={24} /></LeftIcon>)}
         </>
       )}
       {leftContent}
       </LeftIcons>
       
       <TitleWrapper>
-        <Title>{title}</Title>
+        <Title variant={variant}>{title}</Title>
       </TitleWrapper>
 
       <RightIcons>

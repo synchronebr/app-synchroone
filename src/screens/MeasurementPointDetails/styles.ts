@@ -112,6 +112,7 @@ export const CardText = styled.Text`
   line-height: 21px;
   align-items: center;
   justify-content: center;
+  text-align: center;
 `;
 
 export const CardSubtitle = styled.Text`
